@@ -48,3 +48,12 @@ APIs de Parceiros (Partner APIs): São APIs disponibilizadas apenas para parceir
 
 Cada tipo de API tem um propósito e um nível de controle diferente. As APIs públicas facilitam a inovação aberta, enquanto as privadas garantem segurança dentro da empresa. Já as APIs de parceiros criam integrações estratégicas com controle de acesso.
 
+# Arquiteturas de APIs
+
+O estilo de arquitetura de uma API define como os dados são organizados, trocados e estruturados. Existem diferentes abordagens, cada uma com vantagens e desvantagens.
+
+REST (Representational State Transfer): É o modelo mais utilizado atualmente para comunicações entre sistemas na web. É baseado em HTTP e faz uso dos métodos padrões (GET, POST, PUT, DELETE). Os dados geralmente retornam em tipos JSON ou XML.
+
+SOAP (Simple Object Access Protocol): Protocolo mais antigo, ainda usado em sistemas que exigem segurança e confiabilidade, é completamente baseado em XML e suporta transações seguras (WS-Security), funciona sobre vários protocolos (HTTP, SMTP, etc.)
+
+GraphQL: Criado pelo Facebook, permite que o cliente peça apenas os dados que precisa, reduzindo requisições desnecessárias. Faz uso apenas de um endpoint, o cliente define os dados que deseja receber e reduz o volume de dados transferidos
