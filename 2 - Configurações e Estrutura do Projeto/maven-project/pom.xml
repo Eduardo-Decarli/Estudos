@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Declaração do documento XML e especificação da versão e codificação -->
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- Declaração do namespace e esquema do Maven POM -->
+
+    <modelVersion>4.0.0</modelVersion>
+    <!-- Versão do modelo do POM que está sendo usada -->
+
+    <!-- Identificação do projeto -->
+    <groupId>com.decarli</groupId>
+    <!-- Grupo ou organização do projeto -->
+    <artifactId>maven-project</artifactId>
+    <!-- Nome do projeto (identificador único dentro do grupo) -->
+    <version>1.0-SNAPSHOT</version>
+    <!-- Versão do projeto (SNAPSHOT indica que é uma versão em desenvolvimento) -->
+
+    <!-- Definição de propriedades que podem ser reutilizadas no POM -->
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <!-- Versão do Java usada para compilar o código-fonte -->
+        <maven.compiler.target>21</maven.compiler.target>
+        <!-- Versão do Java usada para compilar o código alvo -->
+        <java.version>21</java.version>
+        <!-- Versão do Java usada no projeto -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Codificação de caracteres usada no projeto -->
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <!-- Versão do MapStruct, uma biblioteca para mapeamento de objetos -->
+        <org.projectlombok.version>1.18.30</org.projectlombok.version>
+        <!-- Versão do Lombok, uma biblioteca para reduzir código boilerplate -->
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
+        <!-- Versão do binding entre Lombok e MapStruct -->
+    </properties>
+
+    <!-- Dependências do projeto -->
+    <dependencies>
+        <!-- Dependência do MapStruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <!-- Dependência do processador do MapStruct (usado em tempo de compilação) -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${org.mapstruct.version}</version>
+        </dependency>
+
+        <!-- Dependência do Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${org.projectlombok.version}</version>
+        </dependency>
+
+        <!-- Dependência do binding entre Lombok e MapStruct -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct-binding.version}</version>
+        </dependency>
+    </dependencies>
+
+    <!-- Configurações de build do projeto -->
+    <build>
+        <plugins>
+            <!-- Plugin do compilador do Maven -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.12.1</version>
+                <configuration>
+                    <!-- Configuração da versão do Java para compilação -->
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <!-- Caminhos dos processadores de anotações -->
+                    <annotationProcessorPaths>
+                        <!-- Processador do Lombok -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${org.projectlombok.version}</version>
+                        </path>
+                        <!-- Processador do MapStruct -->
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <!-- Binding entre Lombok e MapStruct -->
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
