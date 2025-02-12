@@ -65,41 +65,121 @@ Primeiro criados uma classe-entidade para servir como modelo de respostas de err
 
 ``` Java
 
-import java.time.LocalDateTime;
+public class ErrorMessage {
 
-public class ErrorResponse {
+    private String path;
+    private String method;
     private int status;
+    private String statusText;
     private String message;
-    private LocalDateTime timestamp;
 
-    public ErrorResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
-        this.timestamp = LocalDateTime.now();
+    private Map<String, String> errors;
+
+    public ErrorMessage() {
     }
 
-    // Getters e setters
+    public ErrorMessage(HttpServletRequest request, HttpStatus status, String message) {
+        this.path = request.getRequestURI();
+        this.method = request.getMethod();
+        this.status = status.value();
+        this.statusText = status.getReasonPhrase();
+        this.message = message;
+    }
+
+    public ErrorMessage(HttpServletRequest request, HttpStatus status, String message, BindingResult result) {
+        this.path = request.getRequestURI();
+        this.method = request.getMethod();
+        this.status = status.value();
+        this.statusText = status.getReasonPhrase();
+        this.message = message;
+        addErrors(result);
+    }
+
+    private void addErrors(BindingResult result) {
+        this.errors = new HashMap<>();
+        for (FieldError fieldError : result.getFieldErrors()) {
+            this.errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+        }
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getMethod() {
+        return method;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
     public int getStatus() {
         return status;
     }
+
     public void setStatus(int status) {
         this.status = status;
     }
+
+    public String getStatusText() {
+        return statusText;
+    }
+
+    public void setStatusText(String statusText) {
+        this.statusText = statusText;
+    }
+
     public String getMessage() {
         return message;
     }
+
     public void setMessage(String message) {
         this.message = message;
     }
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+
+    public Map<String, String> getErrors() {
+        return errors;
     }
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+
+    public void setErrors(Map<String, String> errors) {
+        this.errors = errors;
+    }
+
+    @Override
+    public String toString() {
+        return "ErrorMessage{" +
+                "path='" + path + '\'' +
+                ", method='" + method + '\'' +
+                ", status=" + status +
+                ", statusText='" + statusText + '\'' +
+                ", message='" + message + '\'' +
+                ", errors=" + errors +
+                '}';
     }
 }
 
 ```
+
+- path: Caminho da requisição (/usuarios/1, por exemplo).
+
+- method: Método HTTP (GET, POST, PUT, etc.).
+
+- status: Código HTTP (exemplo: 400 para erro de requisição inválida).
+
+- statusText: Texto do status HTTP (exemplo: "Bad Request").
+
+- message: Mensagem descritiva do erro.
+
+- errors: Mapeia campos inválidos e mensagens correspondentes (usado para erros de validação).
+
+O segundo construtor adiciona um parâmetro extra, **BindingResult**, que contém detalhes dos erros de validação.
+
+Ele inicializa os atributos e chama addErrors(result) para extrair os erros de validação de formulário, permitindo integração com Jakarta Validation por exemplo.
 
 Após isso, podemos criar uma classe que irá capturar as exceptions no projeto e irá incorporar o modelo de mensagem de erro em todas as exceptions automaticamente, desse jeito podemos deixar organizado e adequado para receber diversos tipos de erros.
 
@@ -118,10 +198,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorResponse> handleArgumentoInvalido(IllegalArgumentException ex) {
-        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), "Argumento inválido: " + ex.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorMessage> handlerMethodArgumentNotValidException(MethodArgumentNotValidException ex, HttpServletRequest request, BindingResult result){
+        ErrorMessage error = new ErrorMessage(request, HttpStatus.BAD_REQUEST, "The fields entered are invalid", result);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).contentType(MediaType.APPLICATION_JSON).body(error);
     }
 
     @ExceptionHandler(Exception.class)
@@ -134,15 +214,38 @@ public class GlobalExceptionHandler {
 
 ```
 
-Com essa abordagem, a API retorna um objeto JSON com os detalhes do erro, por exemplo:
+Este código define um GlobalExceptionHandler em um aplicativo Spring, com o objetivo de centralizar o tratamento de exceções. Quando uma exceção ocorre durante a execução de um controller, o GlobalExceptionHandler captura e processa essas exceções, retornando respostas adequadas ao cliente. 
+
+**MethodArgumentNotValidException** é uma exceção gerada quando a validação dos dados de entrada falha. Ela é comum em APIs REST, onde os parâmetros enviados para o servidor (como um corpo JSON) não atendem às regras de validação (como as anotações @NotNull, @Pattern, etc.).
+**BindingResult** contém os detalhes dos erros de validação, como quais campos falharam e a mensagem de erro associada a cada falha.
+
+Um ErrorMessage é criado com os seguintes parâmetros:
+
+- HttpServletRequest: Usado para obter informações sobre a requisição (por exemplo, caminho e método).
+
+- HttpStatus.BAD_REQUEST: O código de status HTTP 400 (Bad Request) indica que a requisição do cliente contém erros (no caso, erros de validação).
+
+- A mensagem padrão "The fields entered are invalid" é usada para indicar que houve um erro de validação.
+
+- result: O objeto BindingResult contém os erros de validação que são passados para o ErrorMessage.
+
+A resposta é retornada com o status 400 e o tipo de conteúdo como JSON (contentType(MediaType.APPLICATION_JSON)).
+O corpo da resposta conterá os detalhes do erro de validação, incluindo os campos inválidos e as mensagens associadas a eles.
 
 ``` JSON
 
 {
-    "status": 404,
-    "message": "Usuário com ID 10 não encontrado",
-    "timestamp": "2025-02-12T15:30:00"
+    "path": "/api/v1/user",
+    "method": "POST",
+    "status": 400,
+    "statusText": "Bad Request",
+    "message": "The fields entered are invalid",
+    "errors": {
+        "firstName": "First name must start with a capital letter.",
+        "email": "Email must be a valid format."
+    }
 }
+
 
 ```
 
