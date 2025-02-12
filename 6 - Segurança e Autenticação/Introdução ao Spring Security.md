@@ -143,6 +143,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 Agora vamos configurar a autenticação com o banco, vamos dizer ao spring Security para buscar usuários no banco.
 
 ``` java
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -172,6 +173,7 @@ public class SecurityConfig {
         };
     }
 }
+
 
 ```
 
@@ -210,7 +212,7 @@ public class DataLoader implements CommandLineRunner {
 
 ```
 
-Por segurança, nunca devemos armazenar senhas em texto puro no banco!
+Por segurança, nunca devemos armazenar senhas em texto puro no banco! então vamos configurar a criptografia de senhas
 
 ``` Java
 
