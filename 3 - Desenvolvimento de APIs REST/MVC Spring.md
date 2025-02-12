@@ -259,3 +259,109 @@ public class UserController {
 # Serialização e Desserialização com Jackson
 
 Vamos explorar como o Jackson é utilizado no Spring Boot para converter objetos Java em JSON (serialização) e JSON em objetos Java (desserialização). Essa funcionalidade é essencial para o desenvolvimento de APIs REST, pois permite o intercâmbio de informações entre o cliente e o servidor.
+
+## Introdução ao Jackson
+
+Jackson é uma biblioteca de processamento de JSON amplamente utilizada no ecossistema Spring.
+
+Quando você adiciona o starter spring-boot-starter-web em seu projeto, o Spring Boot já configura automaticamente o Jackson para serializar e desserializar objetos.
+
+No contexto de controllers REST, quando você retorna um objeto Java, o Spring Boot converte esse objeto para JSON antes de enviá-lo na resposta HTTP. Da mesma forma, dados JSON enviados no corpo de uma requisição são convertidos para um objeto Java.
+
+## Serialização (Java → JSON)
+
+Serialização é o processo de converter um objeto Java em uma representação JSON. O Jackson analisa os atributos do objeto e os transforma em pares chave/valor no JSON.
+
+``` Java
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class User {
+    private Long id;
+    
+    private String name;
+    
+    @JsonProperty("email_address")
+    private String email;
+    
+    @JsonIgnore
+    private String password;
+
+    // Construtores, getters e setters
+    public User() {}
+
+    public User(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+    
+    // Getters e Setters...
+}
+
+```
+
+- @JsonProperty("email_address"): O campo email será mapeado para a chave email_address no JSON.
+
+- @JsonIgnore: O campo password não será incluído na saída JSON, protegendo informações sensíveis.
+
+## Desserialização (JSON → Java)
+
+Desserialização é o processo de converter dados JSON recebidos em um objeto Java. O Jackson mapeia as chaves do JSON para os atributos do objeto, utilizando os setters ou construtores.
+
+Você pode utilizar anotações para desserializar via construtor, garantindo imutabilidade ou preenchimento obrigatório dos atributos.
+
+``` Java
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class User {
+
+    private Long id;
+    private String name;
+    private String email;
+
+    @JsonCreator
+    public User(@JsonProperty("id") Long id, 
+                @JsonProperty("name") String name, 
+                @JsonProperty("email_address") String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+    
+    // Getters (não precisamos de setters se o objeto for imutável)
+}
+
+```
+
+## Customizações e Anotações Adicionais
+
+Você pode customizar a formatação de datas e outros tipos
+
+``` Java
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.time.LocalDateTime;
+
+public class Event {
+    private String title;
+    
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+    private LocalDateTime eventDate;
+
+    // Construtores, getters e setters...
+}
+
+```
+
+Ao serializar ou desserializar o atributo **eventDate**, o Jackson utilizará o padrão especificado.
+
+Outras Anotações Úteis:
+
+- @JsonInclude: Controla quais valores serão incluídos na serialização (por exemplo, ignorar null).
+
+- @JsonIgnoreProperties: Permite ignorar propriedades desconhecidas ao desserializar.
