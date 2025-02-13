@@ -2,17 +2,17 @@
 
 O Spring Security é um framework da família Spring focado em prover autenticação e autorização para aplicações Java. Ele é altamente configurável e permite integrar diversos mecanismos de segurança, como:
 
-- Autenticação baseada em banco de dados
-- LDAP
-- JWT (JSON Web Tokens)
-- OAuth2
-- Outros provedores (ex.: Keycloak, Auth0)
+**Autenticação baseada em banco de dados:** A autenticação baseada em banco de dados é um processo de segurança que verifica a identidade de um usuário para que ele possa acessar um banco de dados. 
 
-O Spring Security permite a autenticação, garantindo que o usuário legítimo possa acessar a aplicação, a autorização, restringindo ações ou aceesso a recursos com base em permissões (role) atribuidas ao usuário e Proteção contra vulnerabilidades como CSRF (Cross-Site Request Forgery), XSS (Cross-Site Scripting), SQL Injection e ataques de força bruta.
+**LDAP:** é um protocolo amplamente usado para autenticação e gerenciamento de diretórios de usuários. ele é utilizado no Spring Security para autenticar usuários e controlar o acesso com base em diretórios organizacionais, como o Active Directory da Microsoft ou OpenLDAP.
 
-# Introdução ao Spring Security
+**JWT (JSON Web Tokens):** JWT (JSON Web Token) é um formato de token usado para autenticação e autorização entre partes diferentes de um sistema. Ele é amplamente utilizado em aplicações web para permitir que usuários façam login e mantenham a autenticação sem precisar reenviar credenciais a cada requisição.
 
-Spring Security é um framework do Spring que adiciona recursos de autenticação e autorização às aplicações Java. Ele é altamente configurável e pode ser integrado com diferentes mecanismos de segurança, como autenticação baseada em banco de dados, LDAP, JWT, OAuth2 e muito mais.
+**OAuth2:** é um protocolo de autorização amplamente utilizado para conceder acesso seguro a recursos protegidos sem expor credenciais do usuário. OAuth2 permite que aplicações acessem recursos em nome de um usuário sem precisar armazenar sua senha. Ele é usado por grandes plataformas como Google, Facebook e GitHub para login e permissões de acesso a APIs.
+
+Outros provedores (ex.: Keycloak, Auth0)
+
+O Spring Security permite a autenticação, garantindo que o usuário legítimo possa acessar a aplicação, a autorização, restringindo ações ou aceesso a recursos com **base em permissões (role)** atribuidas ao usuário e Proteção contra vulnerabilidades como **CSRF (Cross-Site Request Forgery)**, **XSS (Cross-Site Scripting)**, **SQL Injection** e ataques de força bruta.
 
 ## Como o Spring Security Funciona?
 
@@ -32,35 +32,101 @@ Quando um usuário faz uma requisição, o Spring Security intercepta a requisi�
 
 4. Resposta: Se tudo estiver correto, a requisição é encaminhada ao controlador; caso contrário, o acesso é bloqueado ou redirecionado para uma página de login.
 
+# Arquitetura Recomendada do Spring Security
+
+Cada classe tem um papel específico dentro do fluxo de autenticação e autorização da aplicação. Vamos detalhar as responsabilidades de cada uma, mas antes vamos ver como deveria ser uma estrutura bem arquitetada para o Spring Security.
+
+``` bash
+
+src/
+├── main/
+│   ├── java/com/seuprojeto/
+│   │   ├── config/               # Configuração do Spring Security
+│   │   │   ├── SecurityConfig.java
+│   │   ├── jwt/                  # Configuração do sistema do JWT
+│   │   │   ├── JwtAuthFilter.java
+│   │   │   ├── JwtToken.java
+│   │   │   ├── JwtUserDetails.java
+│   │   │   ├── JwtUserDetailsService.java
+│   │   │   ├── JwtUtil.java
+│   │   ├── controller/           # Endpoints protegidos
+│   │   │   ├── AuthController.java
+│   │   │   ├── UserController.java
+│   │   ├── model/                # Representação do usuário
+│   │   │   ├── Usuario.java
+│   │   ├── repository/           # Acesso ao banco de dados
+│   │   │   ├── UsuarioRepository.java
+│   │   ├── service/              # Regras de negócio e autenticação
+│   │   │   ├── UsuarioService.java
+│   │   ├── Application.java       # Classe principal
+
+```
+
+SecurityConfig.java: Responsável por configurar as regras de segurança da aplicação, definir quais endpoints precisam de autenticação e quais são públicos, alem de adicionar o filtro JWT para processar tokens e definir o provedor de autenticação e condificação.
+
+JwtAuthFilter.java: Intercepta todas as requisições HTTP, verifica se o cabeçalho contém um token JWT válido e se o token for válido, autentica o usuário dentro do contexto do Spring Security
+
+JwtToken.java: A classe JwtToken é um modelo de dados (DTO - Data Transfer Object) usado para encapsular o token JWT quando ele é retornado como resposta para o cliente.
+
+JwtUserDetails.java: A classe JwtUserDetails estende a classe User do Spring Security e é usada para representar os detalhes do usuário autenticado no contexto da segurança. Ela converte um objeto de uma entidade Person em um UserDetails, que é o formato esperado pelo Spring Security para gerenciar autenticação e autorização.
+
+JwtUserDetailsService.java: A classe JwtUserDetailsService implementa a interface UserDetailsService do Spring Security, sendo responsável por carregar os detalhes do usuário com base no email informado durante a autenticação.
+
+JwtUtil.java: Gera tokens JWT para usuários autenticados, extrai informações do token, como o nome do usuário e valida se o token recebido ainda é valido e corresponde ao usuário correto.
+
+AuthController.java: Expor endpoints de autenticação, como login e registro, além de processar requisições de login e retornar um token JWT para o usuário autenticado.
+
+JwtService.java: Gerencia a criação, extração e validação de tokens JWT, garante que um token pertence a um usuário válido e não expirou.
+
 # Configurando o Spring Security
 
-Se estiver usando Maven, adicione a dependência do Spring Security:
+1. Adicionando as dependências
+
+Para adicionar o Spring Security ao seu projeto Spring Boot, adicione as seguintes dependências no seu pom.xml (para Maven):
 
 ``` XML
 
+<!-- Spring Security -->
 <dependency>
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-security</artifactId>
 </dependency>
 
+<!-- JWT (Java JWT - com a biblioteca jjwt) -->
+<dependency>
+    <groupId>io.jsonwebtoken</groupId>
+    <artifactId>jjwt</artifactId>
+    <version>0.11.5</version>
+</dependency>
+
+<!-- Spring Boot Web (para APIs REST) -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<!-- Spring Boot Starter para manipular JSON (Jackson) -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
+</dependency>
+
 ```
 
-Se você rodar a aplicação agora sem uma configuração personalizada, verá que qualquer requisição a endpoints será bloqueada por padrão e exigirá autenticação.
-
-O Spring cria um usuário padrão com login "user" e gera uma senha aleatória no terminal. O login pode ser feito com essas credenciais.
+Se você rodar a aplicação agora sem uma configuração personalizada, verá que qualquer requisição a endpoints será bloqueada por padrão e exigirá autenticação. O Spring cria um usuário padrão com login "user" e gera uma senha aleatória no terminal. O login pode ser feito com essas credenciais.
 
 ## Criar uma configuração personalizada
 
 Por padrão, o Spring Security protege todas as rotas. Vamos criar uma configuração personalizada para liberar algumas rotas e definir um usuário fixo.
 
 ``` Java
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -69,24 +135,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+            .csrf(csrf -> csrf.disable()) // Desabilita CSRF para facilitar testes (não recomendado para produção)
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/publico").permitAll()  // Libera a rota "/publico"
-                .anyRequest().authenticated()            // Exige autenticação para demais rotas
+                .requestMatchers("/public/**").permitAll()  // Rotas públicas
+                .requestMatchers("/admin/**").hasRole("ADMIN") // Apenas para ADMIN
+                .anyRequest().authenticated()  // Qualquer outra requisição precisa de autenticação
             )
-            .formLogin(); // Ativa o login via formulário (página padrão do Spring Security)
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)); // Sem estado (para APIs)
 
         return http.build();
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        // Cria um usuário fixo (in-memory) para autenticação
-        UserDetails user = User.withDefaultPasswordEncoder()
-            .username("admin")
-            .password("1234")
-            .roles("USER")
-            .build();
-        return new InMemoryUserDetailsManager(user);
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
 
@@ -173,7 +235,6 @@ public class SecurityConfig {
         };
     }
 }
-
 
 ```
 
