@@ -61,14 +61,6 @@ Após adicionar a dependência do Spring Security, crie uma classe que implement
 
 ``` Java
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
-
 @Configuration
 public class SecurityConfig {
 
@@ -149,12 +141,6 @@ Desde o Spring Security 5.7, a anotação @EnableWebSecurity não é mais obriga
 
 ``` Java
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -184,15 +170,6 @@ public class SecurityConfig {
 Com SecurityFilterChain, podemos definir como a autenticação e autorização serão tratadas. Vamos personalizar a autenticação criando um usuário em memória:
 
 ``` Java
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
@@ -277,13 +254,6 @@ O **InMemoryUserDetailsManager** permite armazenar usuários e senhas diretament
 
 ``` Java
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-
 @Configuration
 public class SecurityConfig {
 
@@ -319,9 +289,6 @@ Então primeiro vamos criar uma entidade e um repositório para um usuário
 
 ``` Java
 
-import jakarta.persistence.*;
-import java.util.Set;
-
 @Entity
 public class Usuario {
 
@@ -349,11 +316,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 Após a criação, vamos elaborar uma classe responsável pelo service do usuário ao implementar UserDetailsService
 
 ``` Java
-
-import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -384,11 +346,6 @@ public class UsuarioService implements UserDetailsService {
 E por fim, vamos definir um @Bean para o SpringBoot entender qual PasswordEncoder queremos utilizar no contexto do SpringSecurity
 
 ``` Java
-
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 public class SecurityConfig {
@@ -432,11 +389,6 @@ public class AdminController {
 
 ``` Java
 
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -461,9 +413,6 @@ O UserDetailsService é uma interface do Spring Security que permite carregar us
 Primeiro, definimos a entidade Usuario para armazenar credenciais no banco:
 
 ``` Java
-
-import jakarta.persistence.*;
-import java.util.Set;
 
 @Entity
 public class Usuario {
@@ -495,10 +444,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 Agora implementamos o serviço de autenticação para buscar usuários no banco de dados.
 
 ``` Java
-
-import org.springframework.security.core.userdetails.*;
-import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -534,11 +479,6 @@ Nunca devemos armazenar senhas em texto puro no banco! O BCryptPasswordEncoder �
 
 ``` Java
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 @Configuration
 public class SecurityConfig {
 
@@ -553,9 +493,6 @@ public class SecurityConfig {
 Antes de salvar um usuário, devemos codificar a senha:
 
 ``` Java
-
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 public class CadastroUsuarioService {
@@ -582,3 +519,117 @@ public class CadastroUsuarioService {
 - Antes de salvar a senha no banco, aplicamos passwordEncoder.encode(senha).
 
 - Isso protege os dados do usuário contra ataques de vazamento de credenciais.
+
+# Métodos Avançados de Segurança
+
+Vamos explorar métodos avançados de segurança no Spring Security. 🚀
+
+## Segurança Baseada em Métodos
+
+O Spring Security permite restringir o acesso a métodos usando anotações, garantindo que apenas usuários autorizados possam executá-los.
+
+Para ativar essa funcionalidade, basta adicionar **@EnableMethodSecurity** na classe de configuração.
+
+``` Java
+
+@Configuration
+@EnableMethodSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+            )
+            .formLogin();
+
+        return http.build();
+    }
+}
+
+```
+
+Também podemos estabelecer permissões baseadas em **roles (cargos)** pela anotação **@Secured**.
+
+``` Java
+
+@Service
+public class ProdutoService {
+
+    @Secured("ROLE_ADMIN") // Apenas usuários com a role ADMIN podem executar esse método
+    public String excluirProduto(Long id) {
+        return "Produto excluído com sucesso!";
+    }
+}
+
+```
+
+Ou também podemos fazer uso da anotação @PreAuthorize que permite expressões mais flexíveis, como verificar permissões antes de executar um método.
+
+``` Java
+
+@Service
+public class PedidoService {
+
+    @PreAuthorize("hasRole('ADMIN') or hasRole('GERENTE')")
+    public String aprovarPedido(Long id) {
+        return "Pedido aprovado!";
+    }
+}
+
+```
+
+- Admins e Gerentes podem aprovar pedidos, outros usuários serão bloqueados.
+
+## Configuração de CORS e CSRF no Spring Security
+
+
+O CORS (Cross-Origin Resource Sharing) controla quais domínios podem fazer requisições para sua API e O CSRF (Cross-Site Request Forgery) impede que ataques forjem requisições autenticadas sem o conhecimento do usuário.
+
+Podemos configurar o CORS e desativar o CSRF (se estiver usando JWT, por exemplo).
+
+``` Java
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable()) // Desativa CSRF (cuidado ao usar!)
+            .cors(cors -> cors.configure(http)) // Habilita CORS
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().authenticated()
+            )
+            .formLogin();
+
+        return http.build();
+    }
+}
+
+```
+
+- Agora sua API aceita requisições de outros domínios, desde que estejam configurados no CORS.
+
+CSRF ocorre quando um usuário autenticado é induzido a executar ações indesejadas. Se NÃO estiver usando JWT, **mantenha CSRF ativado!**
+
+## Proteção Contra Ataques Comuns
+
+Proteção contra XSS (Cross-Site Scripting), XSS ocorre quando um atacante injeta código malicioso (JavaScript) em uma página web.
+
+- Solução: Spring Security já vem com proteção contra XSS ativada.
+
+Para reforçar, sempre escape dados antes de exibir no frontend.
+
+``` Java
+
+import org.springframework.web.util.HtmlUtils;
+
+public String protegerXSS(String input) {
+    return HtmlUtils.htmlEscape(input); // Evita a execução de scripts injetados
+}
+
+```
+

@@ -116,3 +116,40 @@ spring:
 ```
 
 Isso permite que o Spring receba um ID Token, que contém informações do usuário autenticado.
+
+Como próximo passo, podemos obter informações do usuário autenticado para recuperar seus dados com Oauth2User
+
+``` Java
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@RestController
+@RequestMapping("/user")
+public class UserController {
+
+    @GetMapping
+    public Map<String, Object> getUserInfo(@AuthenticationPrincipal OAuth2User user) {
+        return user.getAttributes();
+    }
+}
+
+```
+
+Exemplo de resposta ao acessar /user após login com Google:
+
+``` Java
+
+{
+  "sub": "1234567890",
+  "name": "João Silva",
+  "email": "joao@gmail.com",
+  "picture": "https://lh3.googleusercontent.com/url-da-foto"
+}
+
+```
