@@ -453,3 +453,132 @@ public class UsuarioController {
 # Autenticação Customizada
 
 gora vamos personalizar a autenticação no Spring Security. 🚀
+
+## Criando um Serviço de Autenticação Personalizada (UserDetailsService)
+
+O UserDetailsService é uma interface do Spring Security que permite carregar usuários do banco de dados para autenticação. Vamos implementá-la para buscar usuários armazenados no banco.
+
+Primeiro, definimos a entidade Usuario para armazenar credenciais no banco:
+
+``` Java
+
+import jakarta.persistence.*;
+import java.util.Set;
+
+@Entity
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(unique = true, nullable = false)
+    private String username;
+
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles; // Ex: ["USER", "ADMIN"]
+
+    // Getters e Setters
+}
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    Optional<Usuario> findByUsername(String username);
+}
+
+```
+
+Agora implementamos o serviço de autenticação para buscar usuários no banco de dados.
+
+``` Java
+
+import org.springframework.security.core.userdetails.*;
+import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
+
+@Service
+public class UsuarioService implements UserDetailsService {
+
+    private final UsuarioRepository usuarioRepository;
+
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        return User.builder()
+                .username(usuario.getUsername())
+                .password(usuario.getPassword())
+                .roles(usuario.getRoles().toArray(new String[0]))
+                .build();
+    }
+}
+
+```
+
+- Carrega um usuário do banco pelo username.
+
+- Converte a entidade Usuario em um objeto UserDetails que o Spring Security entende.
+
+## Implementando um PasswordEncoder Seguro
+
+Nunca devemos armazenar senhas em texto puro no banco! O BCryptPasswordEncoder é uma das melhores opções para hash de senhas.
+
+``` Java
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+
+```
+
+Antes de salvar um usuário, devemos codificar a senha:
+
+``` Java
+
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CadastroUsuarioService {
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public CadastroUsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public Usuario salvarUsuario(String username, String senha, Set<String> roles) {
+        Usuario usuario = new Usuario();
+        usuario.setUsername(username);
+        usuario.setPassword(passwordEncoder.encode(senha)); // Hash da senha
+        usuario.setRoles(roles);
+        return usuarioRepository.save(usuario);
+    }
+}
+
+```
+
+- Antes de salvar a senha no banco, aplicamos passwordEncoder.encode(senha).
+
+- Isso protege os dados do usuário contra ataques de vazamento de credenciais.

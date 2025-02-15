@@ -2,9 +2,11 @@
 
 JWT (JSON Web Token) é um token de autenticação baseado em JSON usado para autorizar usuários sem a necessidade de sessões no servidor. Ele é amplamente utilizado em APIs RESTful e contém três partes:
 
-Header – Contém o algoritmo de criptografia e o tipo de token.
-Payload – Contém as informações do usuário (claims), como ID e roles.
-Signature – Garante a integridade do token e impede alterações maliciosas.
+- Header – Contém o algoritmo de criptografia e o tipo de token.
+
+- Payload – Contém as informações do usuário (claims), como ID e roles.
+
+- Signature – Garante a integridade do token e impede alterações maliciosas.
 
 ``` lua
 
@@ -15,6 +17,14 @@ eyJzdWIiOiJ1c3VyMSIsInJvbGUiOiJVU0VSIn0  <-- Payload (Base64)
 SG93X2RvZXNfdGhpcyB3b3JrPyAtIEVuY3J5cHRlZA  <-- Assinatura (HMAC, RSA, etc.)
 
 ```
+
+## Por que usar JWT?
+
+- Autenticação stateless → Não há necessidade de armazenar sessões no servidor.
+
+- Seguro → Usa assinaturas digitais (HMAC ou RSA) para evitar falsificação.
+
+- Escalável → Ideal para aplicações distribuídas e microsserviços.
 
 # Arquitetura Recomendada do Spring Security com JWT
 
@@ -46,27 +56,29 @@ src/
 
 ```
 
-SecurityConfig.java: Responsável por configurar as regras de segurança da aplicação, definir quais endpoints precisam de autenticação e quais são públicos, alem de adicionar o filtro JWT para processar tokens e definir o provedor de autenticação e condificação.
+**SecurityConfig.java:** Responsável por configurar as regras de segurança da aplicação, definir quais endpoints precisam de autenticação e quais são públicos, alem de adicionar o filtro JWT para processar tokens e definir o provedor de autenticação e condificação.
 
-JwtAuthFilter.java: Intercepta todas as requisições HTTP, verifica se o cabeçalho contém um token JWT válido e se o token for válido, autentica o usuário dentro do contexto do Spring Security
+**JwtAuthFilter.java:** Intercepta todas as requisições HTTP, verifica se o cabeçalho contém um token JWT válido e se o token for válido, autentica o usuário dentro do contexto do Spring Security
 
-JwtToken.java: A classe JwtToken é um modelo de dados (DTO - Data Transfer Object) usado para encapsular o token JWT quando ele é retornado como resposta para o cliente.
+**JwtToken.java:** A classe JwtToken é um modelo de dados (DTO - Data Transfer Object) usado para encapsular o token JWT quando ele é retornado como resposta para o cliente.
 
-JwtUserDetails.java: A classe JwtUserDetails estende a classe User do Spring Security e é usada para representar os detalhes do usuário autenticado no contexto da segurança. Ela converte um objeto de uma entidade Person em um UserDetails, que é o formato esperado pelo Spring Security para gerenciar autenticação e autorização.
+**JwtUserDetails.java:** A classe JwtUserDetails estende a classe User do Spring Security e é usada para representar os detalhes do usuário autenticado no contexto da segurança. Ela converte um objeto de uma entidade Person em um UserDetails, que é o formato esperado pelo Spring Security para gerenciar autenticação e autorização.
 
-JwtUserDetailsService.java: A classe JwtUserDetailsService implementa a interface UserDetailsService do Spring Security, sendo responsável por carregar os detalhes do usuário com base no email informado durante a autenticação.
+**JwtUserDetailsService.java:** A classe JwtUserDetailsService implementa a interface UserDetailsService do Spring Security, sendo responsável por carregar os detalhes do usuário com base no email informado durante a autenticação.
 
-JwtUtil.java: Gera tokens JWT para usuários autenticados, extrai informações do token, como o nome do usuário e valida se o token recebido ainda é valido e corresponde ao usuário correto.
+**JwtUtil.java:** Gera tokens JWT para usuários autenticados, extrai informações do token, como o nome do usuário e valida se o token recebido ainda é valido e corresponde ao usuário correto.
 
-AuthController.java: Expor endpoints de autenticação, como login e registro, além de processar requisições de login e retornar um token JWT para o usuário autenticado.
+**AuthController.java:** Expor endpoints de autenticação, como login e registro, além de processar requisições de login e retornar um token JWT para o usuário autenticado.
 
-JwtService.java: Gerencia a criação, extração e validação de tokens JWT, garante que um token pertence a um usuário válido e não expirou.
+**JwtService.java:** Gerencia a criação, extração e validação de tokens JWT, garante que um token pertence a um usuário válido e não expirou.
 
 ## Iniciando a manipulação de tokens JWT no Spring Security
 
 Vamos detalhar um passo a passo com exemplos de classes e como devem ser implementadas para entendermos melhor como configurar o JWT no Spring Security.
 
-### Adicionar as Dependências do Spring Security
+## Configuração do Spring Security para JWT
+
+Agora, vamos configurar o Spring Security para usar JWT em vez de autenticação por sessão.
 
 No arquivo pom.xml, adicione a dependência do Spring Security
 
@@ -99,127 +111,186 @@ No arquivo pom.xml, adicione a dependência do Spring Security
 
 ```
 
-### Criar um modelo de usuário e um repository JPA
-
-Crie uma entidade User para armazenar os usuários no banco de dados.
-
-``` java
-
-import jakarta.persistence.*;
-import lombok.*;
-
-@Entity
-@Table(name = "users")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(unique = true, nullable = false)
-    private String username;
-
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String role; // Exemplo: ROLE_USER, ROLE_ADMIN
-}
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
-
-public interface UserRepository extends JpaRepository<User, Long> {
-    Optional<User> findByUsername(String username);
-}
-
-
-```
-
-### Criar uma Configuração Personalizada do Spring Security
-
-Essa classe é importante para podermos definir limites de endpoints a serem bloqueados para autenticação, já que por padrão o Spring Security bloqueia tudo, além também de nos permitir um método de codificação de passwords
+Agora, vamos criar um serviço para gerar e validar tokens JWT.
 
 ``` Java
 
-import com.compass.Desafio_02.jwt.JwtAuthorizationFilter;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
+import java.security.Key;
+import java.util.Date;
+import java.util.function.Function;
 
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+@Service
+public class JwtService {
 
-@EnableMethodSecurity // Habilita a segurança baseada em anotações, permitindo usar @PreAuthorize, @Secured, etc.
-@EnableWebMvc // Ativa configurações do Spring MVC para lidar com requisições web
-@Configuration // Indica que esta classe é uma configuração do Spring
-public class SpringSecurityConfig {
+    private static final String SECRET_KEY = "SEU_SEGREDO_MUITO_SEGURO_AQUI_DEVE_SER_MAIOR_QUE_256_BITS";
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(csrf -> csrf.disable()) // Desabilita a proteção contra CSRF (não recomendado para aplicações web com sessão)
-                .formLogin(form -> form.disable()) // Desabilita autenticação via formulário padrão do Spring Security
-                .httpBasic(basic -> basic.disable()) // Desabilita autenticação HTTP Basic
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                antMatcher(HttpMethod.POST, "/api/v1/product") // Permite requisições POST para "/api/v1/product" sem autenticação
-                        ).permitAll()
-                        .anyRequest().authenticated() // Todas as outras requisições precisam estar autenticadas
-                )
-                .sessionManagement(
-                        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS) 
-                        // Define que a aplicação será stateless, ou seja, não armazenará sessão de usuário
-                )
-                .addFilterBefore(
-                        jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class 
-                        // Adiciona o filtro de autenticação JWT antes do UsernamePasswordAuthenticationFilter
-                )
-                .build();
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
-    @Bean
-    public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(); 
-        // Bean responsável por interceptar requisições e validar o token JWT
+    public String generateToken(UserDetails userDetails) {
+        return Jwts.builder()
+                .setSubject(userDetails.getUsername())
+                .claim("roles", userDetails.getAuthorities()) 
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60)) // 1 hora
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); 
-        // Define o encoder de senhas usando BCrypt, tornando as senhas armazenadas mais seguras
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
-        return authenticationConfiguration.getAuthenticationManager(); 
-        // Gerenciador de autenticação do Spring, usado para processar autenticação de usuários
+    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(getSigningKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+    }
+
+    private boolean isTokenExpired(String token) {
+        return extractClaim(token, Claims::getExpiration).before(new Date());
     }
 }
 
 ```
 
-### Criar um Endpoint de Login
+- Gera um token JWT com **generateToken()**.
 
-Agora vamos criar um endpoint para o usuário poder fazer o login e receber o Token no corpo de retorno do endpoint
+- Valida um token JWT com **isTokenValid()**.
 
-``` java
+- Extrai informações do token, como username e roles.
+
+Após isso, vamos criar um filtro para interceptar requisições e autenticar usuários via JWT.
+
+``` Java
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+
+import java.io.IOException;
+
+@Component
+public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private final JwtService jwtService;
+    private final UserDetailsService userDetailsService;
+
+    public JwtAuthenticationFilter(JwtService jwtService, UserDetailsService userDetailsService) {
+        this.jwtService = jwtService;
+        this.userDetailsService = userDetailsService;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        
+        final String authHeader = request.getHeader("Authorization");
+        final String token;
+        final String username;
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
+        token = authHeader.substring(7);
+        username = jwtService.extractUsername(token);
+
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+
+            if (jwtService.isTokenValid(token, userDetails)) {
+                UsernamePasswordAuthenticationToken authToken = 
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                
+                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            }
+        }
+        
+        filterChain.doFilter(request, response);
+    }
+}
+
+```
+
+- Captura o token do header Authorization.
+
+- Valida e extrai o username do token.
+
+- Se válido, autentica o usuário no contexto do Spring Security.
+
+Agora, vamos configurar o SecurityFilterChain para usar o filtro JWT
+
+``` Java
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+@Configuration
+public class SecurityConfig {
+
+    private final JwtAuthenticationFilter jwtAuthFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthFilter) {
+        this.jwtAuthFilter = jwtAuthFilter;
+    }
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/auth/login").permitAll()
+                .requestMatchers("/admin").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+}
+
+```
+
+E por fim, Criamos um endpoint para gerar o token JWT após o login.
+
+``` Java
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -228,120 +299,21 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+    public AuthController(AuthenticationManager authenticationManager, JwtService jwtService, UserDetailsService userDetailsService) {
         this.authenticationManager = authenticationManager;
-        this.jwtUtil = jwtUtil;
+        this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
 
     @PostMapping("/login")
     public String login(@RequestParam String username, @RequestParam String password) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, password)
-        );
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return jwtUtil.generateToken(userDetails.getUsername());
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+        UserDetails user = userDetailsService.loadUserByUsername(username);
+        return jwtService.generateToken(user);
     }
 }
 
 ```
-
-Agora, quando um usuário faz login em POST /auth/login com um JSON:
-
-``` JSON
-
-{
-    "username": "admin",
-    "password": "1234"
-}
-
-```
-
-### Criação de um Filtro para o JWT
-
-Esse filtro permite autenticar as requisições em endpoints protegidos por JWT, validando o token e configurando o contexto de segurança com as informações do usuário.
-
-``` Java
-
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.web.filter.OncePerRequestFilter;
-
-import java.io.IOException;
-
-@Slf4j // Adiciona suporte a logs para a classe
-public class JwtAuthorizationFilter extends OncePerRequestFilter {
-
-    @Autowired
-    private JwtUserDetailsService detailsService; // Serviço para carregar detalhes do usuário (usuário autenticado)
-
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        // Obtém o token JWT do cabeçalho da requisição
-        final String token = request.getHeader(JwtUtils.JWT_AUTHORIZATION);
-
-        // Verifica se o token está presente e começa com "Bearer "
-        if (token == null || !token.startsWith(JwtUtils.JWT_BEARER)) {
-            log.info("JWT Token is null, empty or not starting with 'Bearer '."); // Loga caso o token não seja encontrado ou não tenha o prefixo correto
-            filterChain.doFilter(request, response); // Continua o fluxo sem autenticar
-            return;
-        }
-
-        // Verifica se o token é válido
-        if (!JwtUtils.isTokenValid(token)) {
-            log.warn("JWT Token is invalid or expired."); // Loga caso o token seja inválido ou expirado
-            filterChain.doFilter(request, response); // Continua o fluxo sem autenticar
-            return;
-        }
-
-        // Extrai o nome de usuário (email ou identificação) do token
-        String username = JwtUtils.getEmailFromToken(token);
-
-        // Chama o método para autenticar o usuário
-        toAuthentication(request, username);
-
-        // Continua o fluxo da requisição
-        filterChain.doFilter(request, response);
-    }
-
-    private void toAuthentication(HttpServletRequest request, String username) {
-        // Carrega os detalhes do usuário a partir do username (email) extraído do token
-        UserDetails userDetails = detailsService.loadUserByUsername(username);
-
-        // Cria um token de autenticação com base nos detalhes do usuário
-        UsernamePasswordAuthenticationToken authenticationToken =
-                UsernamePasswordAuthenticationToken.authenticated(userDetails, null, userDetails.getAuthorities());
-
-        // Configura os detalhes de autenticação, como a origem da requisição
-        authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-        // Armazena o token de autenticação no contexto de segurança do Spring Security
-        SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-    }
-}
-
-```
-
-6.  Agora, podemos testar a autenticação com JWT, primeiro fazemos o login com POST /auth/login e obter o token, depois usar esse token nas próximas requisições com um header
-
-``` makefile
-
-Authorization: Bearer <TOKEN_AQUI>
-
-```
-
-E por fim se o token for válido, a requisição será autorizada. Caso contrário, será negada.
-
-
