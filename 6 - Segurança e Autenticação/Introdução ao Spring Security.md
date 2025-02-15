@@ -1,6 +1,25 @@
+- [O que é o Spring Security](#o-que-é-o-spring-security)
+  - [Como o Spring Security Funciona?](#como-o-spring-security-funciona)
+  - [Configurando básica do Spring Security](#configurando-básica-do-spring-security)
+  - [Entendendo Autenticação e Autorização padrão](#entendendo-autenticação-e-autorização-padrão)
+- [Configuração Padrão do Spring Security](#configuração-padrão-do-spring-security)
+  - [Configuração Automática do Spring Security](#configuração-automática-do-spring-security)
+  - [Trabalhando com o Usuário Padrão Gerado pelo Spring Security](#trabalhando-com-o-usuário-padrão-gerado-pelo-spring-security)
+  - [Customizando Credenciais no application.properties](#customizando-credenciais-no-applicationproperties)
+- [Configuração Personalizada com java Config](#configuração-personalizada-com-java-config)
+  - [Criando uma classe de configuração com @Configuration e @EnableWebSecurity](#criando-uma-classe-de-configuração-com-configuration-e-enablewebsecurity)
+  - [Personalizando a autenticação e autorização com SecurityFilterChain](#personalizando-a-autenticação-e-autorização-com-securityfilterchain)
+  - [Definição de Regra de Segurança com HttpSecurity](#definição-de-regra-de-segurança-com-httpsecurity)
+- [Trabalhando com usuários e Roles](#trabalhando-com-usuários-e-roles)
+  - [Definição de Usuários em Memória com InMemoryUserDetailsManager](#definição-de-usuários-em-memória-com-inmemoryuserdetailsmanager)
+  - [Definição de Usuários em Banco de Dados com UserDetailsService e PasswordEncoder](#definição-de-usuários-em-banco-de-dados-com-userdetailsservice-e-passwordencoder)
+  - [Trabalhando com Roles e Authorities (@PreAuthorize, @Secured)](#trabalhando-com-roles-e-authorities-preauthorize-secured)
+- [Autenticação Customizada](#autenticação-customizada)
+
+
 # O que é o Spring Security
 
-O Spring Security é um framework da família Spring focado em prover autenticação e autorização para aplicações Java. Ele é altamente configurável e permite integrar diversos mecanismos de segurança, como:
+O Spring Security é um framework do ecossistema Spring que fornece autenticação, autorização e outras funcionalidades de segurança para aplicações Java. Ele é amplamente utilizado para proteger aplicações web e serviços RESTful, garantindo que apenas usuários ou sistemas autorizados possam acessar recursos específicos.
 
 **Autenticação baseada em banco de dados:** A autenticação baseada em banco de dados é um processo de segurança que verifica a identidade de um usuário para que ele possa acessar um banco de dados. 
 
@@ -10,31 +29,13 @@ O Spring Security é um framework da família Spring focado em prover autentica�
 
 **OAuth2:** é um protocolo de autorização amplamente utilizado para conceder acesso seguro a recursos protegidos sem expor credenciais do usuário. OAuth2 permite que aplicações acessem recursos em nome de um usuário sem precisar armazenar sua senha. Ele é usado por grandes plataformas como Google, Facebook e GitHub para login e permissões de acesso a APIs.
 
-Outros provedores (ex.: Keycloak, Auth0)
-
 O Spring Security permite a autenticação, garantindo que o usuário legítimo possa acessar a aplicação, a autorização, restringindo ações ou aceesso a recursos com **base em permissões (role)** atribuidas ao usuário e Proteção contra vulnerabilidades como **CSRF (Cross-Site Request Forgery)**, **XSS (Cross-Site Scripting)**, **SQL Injection** e ataques de força bruta.
 
 ## Como o Spring Security Funciona?
 
-Quando um usuário faz uma requisição, o Spring Security intercepta a requisição antes que ela chegue ao controlador da aplicação. Ele verifica se o usuário está autenticado e autorizado para acessar aquele recurso.
+Internamente, o Spring Security opera através de uma cadeia de filtros (filter chain) que interceptam as requisições HTTP antes que elas alcancem os endpoints da aplicação. Cada filtro na cadeia tem uma responsabilidade específica, como autenticação, proteção contra CSRF, entre outros. Quando uma requisição é recebida, ela passa por essa cadeia de filtros, onde cada um processa e, se necessário, modifica a requisição ou resposta, garantindo que apenas usuários autenticados e autorizados acessem os recursos protegidos.
 
-- Filtros de segurança: O Spring Security utiliza uma cadeia de filtros que intercepta todas as requisições antes que cheguem aos controladores da aplicação. Cada filtro tem a responsabilidade de verificar aspectos de segurança, como autenticação e autorização.
-
-- Contexto de segurança: Uma vez que um usuário é autenticado, suas informações são armazenadas no Security Context, permitindo que a aplicação acesse detalhes do usuário durante o processamento da requisição.
-
-### Fluxo Básico de Segurança
-
-1. Intercepção: Uma requisição chega à aplicação e é interceptada pelos filtros.
-
-2. Verificação: O Spring Security verifica se o usuário está autenticado.
-
-3. Autorização: Caso o usuário esteja autenticado, verifica se ele possui permissão para acessar o recurso solicitado.
-
-4. Resposta: Se tudo estiver correto, a requisição é encaminhada ao controlador; caso contrário, o acesso é bloqueado ou redirecionado para uma página de login.
-
-# Configurando o Spring Security
-
-## Adicionando as dependências
+## Configurando básica do Spring Security
 
 Para adicionar o Spring Security ao seu projeto Spring Boot, adicione as seguintes dependências no seu pom.xml (para Maven):
 
@@ -56,51 +57,399 @@ Para adicionar o Spring Security ao seu projeto Spring Boot, adicione as seguint
 
 Se você rodar a aplicação agora sem uma configuração personalizada, verá que qualquer requisição a endpoints será bloqueada por padrão e exigirá autenticação. O Spring cria um usuário padrão com login "user" e gera uma senha aleatória no terminal. O login pode ser feito com essas credenciais.
 
-## Criando a Configuração de Segurança
-
-Por padrão, o Spring Security bloqueia tudo. Vamos configurar para permitir requisições públicas e proteger outras:
+Após adicionar a dependência do Spring Security, crie uma classe que implemente a configuração de segurança personalizada. A partir das versões mais recentes do Spring Security, recomenda-se usar a abordagem baseada em SecurityFilterChain:
 
 ``` Java
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests(auth -> auth
+                .anyRequest().authenticated()
+            )
+            .formLogin(withDefaults());
+        return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        var user = User.withUsername("user")
+                       .password("{noop}password")
+                       .roles("USER")
+                       .build();
+        return new InMemoryUserDetailsManager(user);
+    }
+}
+
+```
+
+Nesse exemplo, todas as requisições exigem autenticação, e o login é feito via formulário padrão do Spring Security. Um usuário em memória é definido com o nome de usuário "user" e senha "password".
+
+## Entendendo Autenticação e Autorização padrão
+
+**Autenticação:** É o processo de verificar a identidade do usuário. No exemplo acima, a autenticação é realizada contra um usuário em memória. Em aplicações reais, é comum integrar com sistemas de autenticação externos, como bancos de dados, LDAP ou serviços OAuth2.
+
+**Autorização:** Após a autenticação, a autorização determina quais recursos o usuário pode acessar. No Spring Security, isso é configurado através de regras que especificam quais roles ou authorities têm acesso a determinados endpoints.
+
+# Configuração Padrão do Spring Security
+
+vamos abordar a Configuração Padrão do Spring Security, incluindo a configuração automática, o usuário padrão gerado e como customizar as credenciais no application.properties.
+
+## Configuração Automática do Spring Security
+
+Ao adicionar a dependência spring-boot-starter-security ao seu projeto Spring Boot, o framework aplica automaticamente configurações de segurança padrão à sua aplicação. Isso inclui a proteção de todas as URLs, exigindo autenticação para acessá-las. Além disso, o Spring Security gera uma página de login padrão e cria um usuário padrão com uma senha gerada aleatoriamente a cada execução da aplicação.
+
+## Trabalhando com o Usuário Padrão Gerado pelo Spring Security
+
+Após iniciar a aplicação com a configuração padrão, o Spring Security cria um usuário com o nome de usuário user e uma senha gerada aleatoriamente. Essa senha é exibida no console de logs durante a inicialização da aplicação, em uma linha semelhante a:
+
+``` bash
+
+Using generated security password: 78fa095d-3f4c-48b1-ad50-e24c31d5cf35
+
+```
+
+Para fazer login na aplicação, utilize o nome de usuário user e a senha gerada exibida no console. No entanto, como essa senha muda a cada reinicialização, não é prático utilizá-la em ambientes de desenvolvimento ou produção.
+
+## Customizando Credenciais no application.properties
+
+Para definir um nome de usuário e senha fixos, você pode configurar as propriedades no arquivo application.properties da seguinte forma:
+
+``` properties
+
+spring.security.user.name=meuUsuario
+spring.security.user.password=minhaSenha
+
+```
+
+Com essas configurações, o Spring Security utilizará as credenciais especificadas para autenticação, em vez de gerar uma senha aleatória. Isso é especialmente útil durante o desenvolvimento ou em ambientes onde um usuário padrão é necessário.
+
+**Observação Importante:** As propriedades **spring.security.user.name** e **spring.security.user.password** são adequadas para ambientes de desenvolvimento ou para aplicações simples. Para aplicações em produção ou mais complexas, é recomendável implementar um sistema de gerenciamento de usuários mais robusto, como a integração com um banco de dados ou um serviço de diretório, garantindo uma gestão de credenciais mais segura e escalável.
+
+# Configuração Personalizada com java Config
+
+Agora vamos aprofundar a Configuração Personalizada com Java Config no Spring Security.
+
+## Criando uma classe de configuração com @Configuration e @EnableWebSecurity
+
+Quando utilizamos o Spring Security, podemos personalizar a configuração criando uma classe Java anotada com @Configuration e @EnableWebSecurity.
+
+Desde o Spring Security 5.7, a anotação @EnableWebSecurity não é mais obrigatória, pois o Spring Boot já aplica essa configuração automaticamente. No entanto, ela ainda pode ser usada explicitamente para indicar que estamos configurando a segurança manualmente.
+
+``` Java
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Define um usuário em memória (para testes)
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
-                .username("admin")
-                .password("1234")
-                .roles("USER")
-                .build();
-        return new InMemoryUserDetailsManager(user);
-    }
-
-    // Se quisermos liberar algumas URLs, usamos SecurityFilterChain
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/publico").permitAll()  // Rota acessível a todos
-                .anyRequest().authenticated()  // Protege o restante
+                .anyRequest().authenticated()
             )
-            .formLogin(); // Habilita formulário de login padrão
+            .formLogin()
+            .and()
+            .httpBasic();
+
         return http.build();
     }
 }
 
 ```
 
-- @EnableWebSecurity → Habilita o Spring Security.
+- Todas as requisições precisam estar autenticadas **(.anyRequest().authenticated())**.
+- Habilita login por formulário padrão **(.formLogin())**.
+- Ativa autenticação básica **(.httpBasic())**, útil para APIs.
 
-- userDetailsService() → Define um usuário na memória (admin / 1234).
+## Personalizando a autenticação e autorização com SecurityFilterChain
 
-- UserDetailsService → Interface usada para buscar usuários.
+Com SecurityFilterChain, podemos definir como a autenticação e autorização serão tratadas. Vamos personalizar a autenticação criando um usuário em memória:
 
-Agora, ao rodar o projeto, será necessário usar admin / 1234 para acessar as páginas protegidas.
+``` Java
 
-- A URL /publico pode ser acessada sem login.
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
-- Qualquer outra URL precisa de autenticação.
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/publico").permitAll()  // Permite acesso sem autenticação
+                .requestMatchers("/admin").hasRole("ADMIN") // Apenas usuários com ROLE_ADMIN podem acessar
+                .anyRequest().authenticated()
+            )
+            .formLogin()
+            .and()
+            .httpBasic();
+
+        return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("usuario")
+                .password("1234")
+                .roles("USER")
+                .build();
+
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("admin123")
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
+    }
+}
+
+```
+
+- Criamos usuários na memória: um usuário comum e um administrador.
+- O usuário "usuario" tem a role "USER".
+- O usuário "admin" tem a role "ADMIN".
+- Definimos permissões para rotas:
+  - **/publico** pode ser acessado por qualquer um.
+  - **/admin** só pode ser acessado por "ADMIN".
+  - Todas as outras rotas precisam de autenticação.
+
+## Definição de Regra de Segurança com HttpSecurity
+
+Com HttpSecurity, podemos configurar regras mais avançadas. como por exemplo: Desativando CSRF e permitindo chamadas a uma API REST
+
+Se você estiver criando uma API RESTful e não precisar do formulário de login, pode desativar o CSRF e o login padrão:
+
+``` Java
+
+@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())  // Desativa proteção CSRF
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/publico").permitAll()
+            .requestMatchers("/api/privado").authenticated()
+        )
+        .httpBasic();
+
+    return http.build();
+}
+
+```
+
+- O endpoint **/api/publico** pode ser acessado sem autenticação.
+- O endpoint **/api/privado** precisa de autenticação.
+- O CSRF foi desativado, útil para APIs REST (não recomendado para aplicações web com formulários).
+
+# Trabalhando com usuários e Roles
+
+Agora vamos ver como trabalhar com Usuários e Roles no Spring Security.
+
+## Definição de Usuários em Memória com InMemoryUserDetailsManager
+
+O **InMemoryUserDetailsManager** permite armazenar usuários e senhas diretamente na memória, útil para testes e aplicações simples.
+
+``` Java
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("1234")
+                .roles("USER") // ROLE_USER
+                .build();
+
+        UserDetails admin = User.withDefaultPasswordEncoder()
+                .username("admin")
+                .password("admin123")
+                .roles("ADMIN") // ROLE_ADMIN
+                .build();
+
+        return new InMemoryUserDetailsManager(user, admin);
+    }
+}
+
+```
+
+- Define dois usuários em memória: user (ROLE_USER) e admin (ROLE_ADMIN).
+
+- Usa **User.withDefaultPasswordEncoder()** (apenas para testes, não recomendado para produção).
+
+## Definição de Usuários em Banco de Dados com UserDetailsService e PasswordEncoder
+
+Para armazenar usuários no banco de dados, precisamos implementar UserDetailsService e usar um PasswordEncoder para armazenar senhas de forma segura.
+
+Então primeiro vamos criar uma entidade e um repositório para um usuário
+
+``` Java
+
+import jakarta.persistence.*;
+import java.util.Set;
+
+@Entity
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String username;
+    private String password;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
+
+    // Getters e Setters
+}
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import java.util.Optional;
+
+public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
+    Optional<Usuario> findByUsername(String username);
+}
+
+```
+
+Após a criação, vamos elaborar uma classe responsável pelo service do usuário ao implementar UserDetailsService
+
+``` Java
+
+import org.springframework.security.core.userdetails.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import java.util.stream.Collectors;
+
+@Service
+public class UsuarioService implements UserDetailsService {
+
+    private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public UsuarioService(UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+
+        return User.builder()
+                .username(usuario.getUsername())
+                .password(usuario.getPassword())
+                .roles(usuario.getRoles().toArray(new String[0]))
+                .build();
+    }
+}
+
+```
+
+E por fim, vamos definir um @Bean para o SpringBoot entender qual PasswordEncoder queremos utilizar no contexto do SpringSecurity
+
+``` Java
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+
+```
+
+- Define um **repositório JPA** para buscar usuários no banco de dados.
+ 
+- Implementa **UserDetailsService** para carregar usuários no Spring Security.
+
+- Usa **BCryptPasswordEncoder** para armazenar senhas criptografadas.
+
+## Trabalhando com Roles e Authorities (@PreAuthorize, @Secured)
+
+Podemos definir permissões para métodos com @PreAuthorize e @Secured.
+
+1. Usando **@PreAuthorize**
+
+``` Java
+
+@RestController
+@RequestMapping("/admin")
+public class AdminController {
+
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')") // Somente ADMIN pode acessar
+    public String acessoAdmin() {
+        return "Bem-vindo, Administrador!";
+    }
+}
+
+```
+
+2. Usando **@Secured**
+
+``` Java
+
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/usuario")
+public class UsuarioController {
+
+    @GetMapping
+    @Secured("ROLE_USER") // Apenas usuários com ROLE_USER podem acessar
+    public String acessoUsuario() {
+        return "Bem-vindo, Usuário!";
+    }
+}
+
+```
+
+# Autenticação Customizada
+
+gora vamos personalizar a autenticação no Spring Security. 🚀
