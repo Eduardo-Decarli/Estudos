@@ -1,22 +1,3 @@
-- [O que é o Spring Security](#o-que-é-o-spring-security)
-  - [Como o Spring Security Funciona?](#como-o-spring-security-funciona)
-  - [Configurando básica do Spring Security](#configurando-básica-do-spring-security)
-  - [Entendendo Autenticação e Autorização padrão](#entendendo-autenticação-e-autorização-padrão)
-- [Configuração Padrão do Spring Security](#configuração-padrão-do-spring-security)
-  - [Configuração Automática do Spring Security](#configuração-automática-do-spring-security)
-  - [Trabalhando com o Usuário Padrão Gerado pelo Spring Security](#trabalhando-com-o-usuário-padrão-gerado-pelo-spring-security)
-  - [Customizando Credenciais no application.properties](#customizando-credenciais-no-applicationproperties)
-- [Configuração Personalizada com java Config](#configuração-personalizada-com-java-config)
-  - [Criando uma classe de configuração com @Configuration e @EnableWebSecurity](#criando-uma-classe-de-configuração-com-configuration-e-enablewebsecurity)
-  - [Personalizando a autenticação e autorização com SecurityFilterChain](#personalizando-a-autenticação-e-autorização-com-securityfilterchain)
-  - [Definição de Regra de Segurança com HttpSecurity](#definição-de-regra-de-segurança-com-httpsecurity)
-- [Trabalhando com usuários e Roles](#trabalhando-com-usuários-e-roles)
-  - [Definição de Usuários em Memória com InMemoryUserDetailsManager](#definição-de-usuários-em-memória-com-inmemoryuserdetailsmanager)
-  - [Definição de Usuários em Banco de Dados com UserDetailsService e PasswordEncoder](#definição-de-usuários-em-banco-de-dados-com-userdetailsservice-e-passwordencoder)
-  - [Trabalhando com Roles e Authorities (@PreAuthorize, @Secured)](#trabalhando-com-roles-e-authorities-preauthorize-secured)
-- [Autenticação Customizada](#autenticação-customizada)
-
-
 # O que é o Spring Security
 
 O Spring Security é um framework do ecossistema Spring que fornece autenticação, autorização e outras funcionalidades de segurança para aplicações Java. Ele é amplamente utilizado para proteger aplicações web e serviços RESTful, garantindo que apenas usuários ou sistemas autorizados possam acessar recursos específicos.
