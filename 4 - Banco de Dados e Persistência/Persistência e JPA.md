@@ -116,15 +116,15 @@ spring.jpa.hibernate.ddl-auto=update
 
 Aqui estão algumas anotações JPA essenciais:
 
-- @Entity: Indica que a classe é uma entidade mapeada para uma tabela no banco de dados.
+- **@Entity:** Indica que a classe é uma entidade mapeada para uma tabela no banco de dados.
 
-- @Table: Especifica o nome da tabela no banco de dados.
+- **@Table:** Especifica o nome da tabela no banco de dados.
 
-- @Id: Indica que o campo é a chave primária da entidade.
+- **@Id:** Indica que o campo é a chave primária da entidade.
 
-- @GeneratedValue: Define a estratégia de geração de valores para a chave primária.
+- **@GeneratedValue:** Define a estratégia de geração de valores para a chave primária.
 
-- @Column: Personaliza o mapeamento de um campo para uma coluna no banco de dados.
+- **@Column:** Personaliza o mapeamento de um campo para uma coluna no banco de dados.
 
 ``` Java
 

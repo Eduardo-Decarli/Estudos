@@ -44,7 +44,7 @@ O Spring Boot já adiciona todas as bibliotecas necessárias automaticamente.
 
 Os Starters seguem o padrão de nome: **spring-boot-starter-<funcionalidade>** e aqui estão os principais:
 
-- spring-boot-starter-web: Para criar aplicações Web e APIs REST, ele inclui o Spring MVC, Jackson (para JSON) e Tomcat embutido.
+- **spring-boot-starter-web:** Para criar aplicações Web e APIs REST, ele inclui o Spring MVC, Jackson (para JSON) e Tomcat embutido.
 
 ``` XML
 
@@ -55,7 +55,7 @@ Os Starters seguem o padrão de nome: **spring-boot-starter-<funcionalidade>** e
 
 ```
 
-- spring-boot-starter-data-jpa: Para trabalhar com banco de dados usando JPA (Hibernate), ele inclui Hibernate (ORM para java), Spring Data JPA (facilita acesso a dados) e suporte a vários bancos de dados (MySQL, PostgreSQL, H2, etc.)
+- **spring-boot-starter-data-jpa:** Para trabalhar com banco de dados usando JPA (Hibernate), ele inclui Hibernate (ORM para java), Spring Data JPA (facilita acesso a dados) e suporte a vários bancos de dados (MySQL, PostgreSQL, H2, etc.)
 
 ``` XML
 
@@ -66,7 +66,7 @@ Os Starters seguem o padrão de nome: **spring-boot-starter-<funcionalidade>** e
 
 ```
 
-- spring-boot-starter-security: Para adicionar autenticação e segurança à aplicação. Ele inclui Spring Security (Configuração padrão com login e senha), proteção contra CSRF e autenticação com banco de dados ou OAuth.
+- **spring-boot-starter-security:** Para adicionar autenticação e segurança à aplicação. Ele inclui Spring Security (Configuração padrão com login e senha), proteção contra CSRF e autenticação com banco de dados ou OAuth.
 
 ``` XML
 
@@ -77,7 +77,7 @@ Os Starters seguem o padrão de nome: **spring-boot-starter-<funcionalidade>** e
 
 ```
 
-- spring-boot-starter-thymeleaf: Para criar aplicações web com HTML dinâmico. inclui o motor de templates Thymeleaf, que permite criar páginas HTML com integração direta ao backend.
+- **spring-boot-starter-thymeleaf:** Para criar aplicações web com HTML dinâmico. inclui o motor de templates Thymeleaf, que permite criar páginas HTML com integração direta ao backend.
 
 ``` XML
 
@@ -96,7 +96,7 @@ No HTML, podemos usar o Thymeleaf para exibir variáveis do backend:
 
 ```
 
-- spring-boot-starter-test: Para testes unitários e de integração, inclui JUnit 5, Mockito e Spring Boot Test (para testes de integração).
+- **spring-boot-starter-test:** Para testes unitários e de integração, inclui JUnit 5, Mockito e Spring Boot Test (para testes de integração).
 
 ``` XML
 
@@ -108,7 +108,7 @@ No HTML, podemos usar o Thymeleaf para exibir variáveis do backend:
 
 ```
 
-- spring-boot-starter-actuator: Para monitoramento e métricas da aplicação, inclui endpoints REST para ver o status da aplicação, como: **/actuator/health** (mostra se a aplicação está rodando) e **/actuator/metrics** (exibe métricas de desempenho).
+- **spring-boot-starter-actuator:** Para monitoramento e métricas da aplicação, inclui endpoints REST para ver o status da aplicação, como: **/actuator/health** (mostra se a aplicação está rodando) e **/actuator/metrics** (exibe métricas de desempenho).
 
 ``` XML
 

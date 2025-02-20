@@ -57,11 +57,11 @@ public class ExemploController {
 
 ```
 
-- @RestController → Declara que esta classe é um controlador REST.
+- **@RestController** → Declara que esta classe é um controlador REST.
 
-- @RequestMapping("/api") → Define um prefixo para todas as rotas dentro desta classe.
+- **@RequestMapping("/api")** → Define um prefixo para todas as rotas dentro desta classe.
 
-- @GetMapping("/mensagem") → Define um endpoint que responde a requisições GET na URL http://localhost:8080/api/mensagem.
+- **@GetMapping("/mensagem")** → Define um endpoint que responde a requisições GET na URL http://localhost:8080/api/mensagem.
 
 - O retorno do método obterMensagem() é uma string, que será convertida automaticamente para JSON.
 
