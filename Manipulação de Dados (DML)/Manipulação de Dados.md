@@ -14,3 +14,44 @@ O comando SELECT é a principal instrução do SQL para recuperar dados de um ba
 
 ### Conceitos Fundamentais
 
+Vamos começar estudanod a sintáxe básica de uma consulta de **SELECT**
+
+``` SQL
+
+SELECT colunas FROM tabela;
+
+```
+
+- **Colunas:** Define quais colunas serão exibidas no resultado (0u * para todas).
+
+- **Tabela**: Nome da tabela de onde os dados serão buscados. como por exemplo:
+
+![Tabela de Cliente](Tabela_SELECT.png)
+
+---
+
+- Selecionar todas as colunas de uma tabela
+
+``` SQL
+
+SELECT * FROM clientes;
+
+```
+
+Resultado:
+
+![Tabela de Cliente](Tabela_SELECT.png)
+
+---
+
+- Selecionar colunas específicas
+
+``` SQL 
+
+SELECT nome, idade FROM clientes;
+
+```
+
+Resultado:
+
+![Tabela Filtrada](SELECT_nome_idade.png)
