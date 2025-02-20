@@ -106,3 +106,106 @@ SQL e NoSQL são dois modelos de bancos de dados usados para armazenar e gerenci
 - ACID: Atomicidade, Consistencia, Isolamento e Durabilidade - garante a confiabilidade das transações no SQL.
 
 - BASE: Basicamente Disponivel, Estado Suave, Eventuamente Consistente - Prioriza performance e flexibilidade no NoSQL.
+
+## Exemplos
+
+Criando e consultando um banco SQL tradicional
+
+``` SQL
+
+CREATE TABLE produtos (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    preco DECIMAL(10,2) NOT NULL
+);
+
+INSERT INTO produtos (nome, preco) VALUES ('Notebook', 2500.00);
+
+SELECT nome, preco FROM produtos;
+
+```
+
+Criando e consultando um banco NoSQL (MongoDB - Banco de Documentos)
+
+``` JSON
+
+{
+    "id": 1,
+    "nome": "Notebook",
+    "preco": 2500.00
+}
+
+``` 
+
+``` JavaScript
+
+db.produtos.insertOne({ nome: "Notebook", preco: 2500.00 });
+db.produtos.find();
+
+```
+
+## Boas Práticas
+
+- Use SQL quando precisar de dados altamente estruturados e relações complexas.
+
+- Use NoSQL para dados dinâmicos, que mudam de estrutura com frequência.
+
+- Entenda o tipo de escalabilidade necessário antes de escolher entre SQL e NoSQL.
+
+- Em sistemas híbridos, pode-se usar SQL para dados transacionais e NoSQL para logs, cache e dados não estruturados.
+
+# Tipos de Bancos de Dados Relacionais
+
+Bancos de dados relacionais armazenam informações estruturadas em tabelas interconectadas. Cada tabela contém colunas (atributos) e linhas (registros), permitindo consultas eficientes e garantindo a integridade dos dados.
+
+Esses bancos seguem o modelo relacional e utilizam SQL para manipulação de dados. Eles são ideais para sistemas que exigem alta confiabilidade, como ERPs, CRMs e aplicações financeiras.
+
+![Tipos de Bancos de Dados](Tipos_de_bancos.png)
+
+- MySQL e MariaDB são leves e ideais para aplicações web.
+
+- PostgreSQL é excelente para aplicações complexas e escaláveis.
+
+- SQL Server e Oracle são voltados para grandes empresas e bancos de dados críticos.
+
+# Instalação e Configuração de um SGBD (Sistema Gerenciador de Banco de Dados)
+
+SGBD (Sistema Gerenciador de Banco de Dados) é um software responsável por armazenar, organizar e gerenciar dados de forma eficiente. Os dois mais populares são:
+
+- MySQL: Amplamente usado em aplicações web, como WordPress, e-commerce e sistemas empresariais.
+
+- PosrgreSQL: Mais robusto, ideal para sistemas que precisam de escalabilidade e manipulações complexas de dados.
+
+# Instalação do PostgreSQL
+
+1. Baixe o instalador no site oficial: [PostgreSQL Download](https://www.postgresql.org/download/)
+
+2. Durante a instalação, escolha uma senha para o usuário postgres.
+
+3. Instale a ferramenta pgAdmin para gerenciar o banco graficamente.
+
+## Configuração Básica
+
+Como primeira configuração a se realizar em um banco Postgre, precisamos fazer a criação de um usuário e um banco.
+
+``` SQL
+
+CREATE DATABASE loja;
+CREATE USER usuario WHITH ENCRYPTED PASSWORD 'senha123';
+GRANT ALL PRIVILEGES ON DATABASE loja TO usuario;
+
+```
+
+## Boas práticas
+
+- Sempre defina senhas fortes para usuários administrativos.
+
+- Restrinja acessos com privilégios mínimos necessários.
+
+- Habilite backups automáticos para evitar perda de dados.
+
+- Monitore o uso do banco para evitar gargalos de desempenho.
+
+- Evite deixar o usuário **root** sem senha.
+
+- Configure firewall e regras de acesso para evitar ataques
