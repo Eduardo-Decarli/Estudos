@@ -125,3 +125,61 @@ VALUES ('Fernanda Lima', 'Brasília');
 - Validar os dados antes da inserção para evitar valores inconsistentes.
 
 - Usar transações **(BEGIN TRANSACTION)** quando precisar inserir vários registros e garantir consistência.
+
+## UPDATE - Atualização de Dados
+
+O comando UPDATE é utilizado para alterar os valores de registros existentes em uma tabela do banco de dados. Com ele, podemos modificar um ou mais campos de um conjunto específico de registros.
+
+- Atualizar o endereço de um cliente.
+
+- Corrigir a idade de um usuário.
+
+- Alterar o status de um pedido.
+
+Agora vamos ver a sua Sintaxe
+
+``` SQL
+
+UPDATE tabela SET coluna1 = valor1, coluna2 = valor2 WHERE condição;
+
+```
+
+**Tabela:** Nome da tabela onde os dados serão atualizados
+
+**SET coluna1 = valor1, coluna2 = valor2:** Define quais colunas terão seus valores alterados.
+
+**WHERE condição:** Define quais registros serão atualizados (evita modificar todos os dados da tabela).
+
+### Usos do UPDATE
+
+``` SQL
+
+-- Atualizando um único registro
+
+UPDATE clientes  
+SET idade = 31  
+WHERE id = 1;
+
+
+-- Atualizando múltiplas colunas
+
+UPDATE clientes  
+SET idade = 26, cidade = 'Niterói'  
+WHERE nome = 'Maria Souza';
+
+
+-- Atualizando vários registros ao mesmo tempo
+
+UPDATE clientes  
+SET cidade = 'São Paulo'  
+WHERE cidade = 'Niterói';
+
+```
+
+## Boas Práticas
+
+- Sempre usar WHERE para evitar atualizar todos os registros da tabela.
+
+- Verificar os dados antes da atualização para evitar alterações incorretas.
+
+- Testar a consulta com um **SELECT** antes do **UPDATE** para garantir que os registros certos serão alterados.
