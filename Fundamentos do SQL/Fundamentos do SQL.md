@@ -101,4 +101,8 @@ SQL e NoSQL são dois modelos de bancos de dados usados para armazenar e gerenci
 
 - NoSQL (Bancos não Relacionais): é mais flexível, permitindo armazenar dados de maneira menos estruturada, sem a necessidade de esquemas fixos.
 
-![alt text](image.png)![alt text](image-1.png)
+![Tabela SQL vs NoSQL](Tabela_SQLxNoSQL.png)
+
+- ACID: Atomicidade, Consistencia, Isolamento e Durabilidade - garante a confiabilidade das transações no SQL.
+
+- BASE: Basicamente Disponivel, Estado Suave, Eventuamente Consistente - Prioriza performance e flexibilidade no NoSQL.
