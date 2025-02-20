@@ -12,9 +12,7 @@ O comando SELECT é a principal instrução do SQL para recuperar dados de um ba
 
 - Contar quantos pedidos foram feitos em um determinado período.
 
-### Conceitos Fundamentais
-
-Vamos começar estudanod a sintáxe básica de uma consulta de **SELECT**
+Agora vamos começar estudanod a sintáxe básica de uma consulta de **SELECT**
 
 ``` SQL
 
@@ -30,7 +28,7 @@ SELECT colunas FROM tabela;
 
 ---
 
-- Selecionar todas as colunas de uma tabela
+### Selecionar todas as colunas de uma tabela
 
 ``` SQL
 
@@ -44,7 +42,7 @@ Resultado:
 
 ---
 
-- Selecionar colunas específicas
+### Selecionar colunas específicas
 
 ``` SQL 
 
