@@ -20,36 +20,108 @@ SELECT colunas FROM tabela;
 
 ```
 
-- **Colunas:** Define quais colunas serão exibidas no resultado (0u * para todas).
+**Colunas:** Define quais colunas serão exibidas no resultado (0u * para todas).
 
-- **Tabela**: Nome da tabela de onde os dados serão buscados. como por exemplo:
+**Tabela**: Nome da tabela de onde os dados serão buscados. como por exemplo:
 
 ![Tabela de Cliente](Tabela_SELECT.png)
 
 ---
 
-### Selecionar todas as colunas de uma tabela
+### Usos do SELECT
 
 ``` SQL
 
+-- Selecionar todas as colunas de uma tabela
+
 SELECT * FROM clientes;
 
-```
 
-Resultado:
-
-![Tabela de Cliente](Tabela_SELECT.png)
-
----
-
-### Selecionar colunas específicas
-
-``` SQL 
+-- Selecionar colunas específicas
 
 SELECT nome, idade FROM clientes;
 
+
+-- Renomear colunas no Resultado (AS)
+
+SELECT nome AS "Nome do Cliente", idade AS "Idade" FROM clientes;
+
+
+-- Contar quantos registros existem (COUNT)
+
+SELECT COUNT(*) AS total_clientes FROM clientes;
+
 ```
 
-Resultado:
+Resultados:
 
-![Tabela Filtrada](SELECT_nome_idade.png)
+![SELECT * FROM clientes;](Tabela_SELECT.png)
+
+![SELECT nome, idade FROM clientes;](SELECT_nome_idade.png)
+
+![SELECT COUNT(*) AS total_clientes FROM clientes;](total_clientes.png)
+
+### Boas Práticas
+
+- Especifique apenas as colunas necessárias (**SELECT nome, idade** ao invés de **SELECT ***).
+
+- Use apelidos (**AS**) para tornar os resultados mais legíveis.
+
+- Combine com filtros (**WHERE**) para evitar retornos desnecessários.
+
+## INSERT - Inserção de Dados
+
+O comando INSERT é utilizado para adicionar novos registros em uma tabela do banco de dados. Ele permite inserir valores manualmente ou a partir de outra consulta.
+
+- Cadastrar um novo cliente em um sistema
+
+- Adicionar um pedido na tabela de vendas
+
+- Registrar um novo produto no estoque
+
+Agora vamos entender sua Sintaxe básica
+
+``` SQL
+
+INSERT INTO tabela (coluna1, coluna2, ...) VALUES (valor1, valor2, ...);
+
+```
+
+**Tabela:** Nome da tabela onde os dados serão inseridos.
+
+**coluna1, coluna2, ...:** As colunas onde os valores serão armazenados.
+
+**valor1, valor2, ...:** Os valores que serão inseridos
+
+### Usos do INSERT
+
+``` SQL
+
+-- Inserindo um único registro
+
+INSERT INTO clientes (nome, idade, cidade)  
+VALUES ('Carlos Mendes', 35, 'Belo Horizonte');
+
+
+-- Inserindo vários registros de uma vez
+
+INSERT INTO clientes (nome, idade, cidade)  
+VALUES 
+    ('Ana Pereira', 28, 'Porto Alegre'),  
+    ('Ricardo Alves', 45, 'Salvador');
+
+
+-- Inserindo um registro sem especificar todas as colunas
+
+INSERT INTO clientes (nome, cidade)  
+VALUES ('Fernanda Lima', 'Brasília');
+
+```
+
+### Boas Práticas
+
+- Sempre listar as colunas explicitamente ao invés de **INSERT INTO clientes VALUES (...)**, para evitar erros caso a estrutura da tabela mude.
+
+- Validar os dados antes da inserção para evitar valores inconsistentes.
+
+- Usar transações **(BEGIN TRANSACTION)** quando precisar inserir vários registros e garantir consistência.
