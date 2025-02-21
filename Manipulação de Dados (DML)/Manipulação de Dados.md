@@ -176,10 +176,72 @@ WHERE cidade = 'Niterói';
 
 ```
 
-## Boas Práticas
+### Boas Práticas
 
 - Sempre usar WHERE para evitar atualizar todos os registros da tabela.
 
 - Verificar os dados antes da atualização para evitar alterações incorretas.
 
 - Testar a consulta com um **SELECT** antes do **UPDATE** para garantir que os registros certos serão alterados.
+
+## DELETE - Remoção de Dados
+
+O comando DELETE é usado para remover registros de uma tabela do banco de dados. Ele permite excluir um ou mais registros com base em uma condição.
+
+- Remover um cliente que cancelou sua conta.
+
+- Excluir produtos que não estão mais no catálogo.
+
+- Apagar pedidos cancelados de um sistema.
+
+Sua sintáxe basica é
+
+``` SQL
+
+DELETE FROM tabela WHERE condição;
+
+```
+
+**tabela:** Nome da tabela onde os dados serão removidos
+
+**WHERE condição:** Define quais registros serão excluídos, se não houver o **WHERE**, todos os registros serão excluídos!
+
+### Uso do DELETE
+
+``` SQL
+
+-- Excluíndo um único registro
+
+DELETE FROM clientes WHERE id = 2;
+
+
+-- Excluindo vários registros ao mesmo tempo
+
+DELETE FROM clientes WHERE cidade = 'curitiba';
+
+
+-- Excluindo todos os registros
+
+DELETE FROM clientes;
+
+```
+
+### Boas práticas
+
+- Sempre usar **WHERE** para evitar excluir todos os dados por acidente.
+
+- Criar backups antes de deletar registros importantes.
+
+- Testar a consulta com **SELECT** antes de executar o **DELETE** para garantir que os registros certos serão removidos.
+
+# Filtragem de Resultados com WHERE
+
+A cláusula WHERE é usada para filtrar registros de uma tabela com base em uma condição específica.
+
+Ela pode ser utilizada em comandos como SELECT, UPDATE e DELETE para selecionar apenas os dados desejados.
+
+- Buscar clientes de uma cidade específica
+
+- Atualizar a idade de um usuário com base no ID
+
+- Excluir produtos que estão fora de estoque
