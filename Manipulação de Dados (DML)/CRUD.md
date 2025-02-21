@@ -233,15 +233,3 @@ DELETE FROM clientes;
 - Criar backups antes de deletar registros importantes.
 
 - Testar a consulta com **SELECT** antes de executar o **DELETE** para garantir que os registros certos serão removidos.
-
-# Filtragem de Resultados com WHERE
-
-A cláusula WHERE é usada para filtrar registros de uma tabela com base em uma condição específica.
-
-Ela pode ser utilizada em comandos como SELECT, UPDATE e DELETE para selecionar apenas os dados desejados.
-
-- Buscar clientes de uma cidade específica
-
-- Atualizar a idade de um usuário com base no ID
-
-- Excluir produtos que estão fora de estoque
