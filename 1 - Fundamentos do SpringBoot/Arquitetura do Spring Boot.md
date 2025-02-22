@@ -1,34 +1,34 @@
 # Arquitetura do Spring Boot
 
-O Spring Boot segue uma arquitetura baseada no Spring Framework, mas com diversas camadas e módulos que facilitam o desenvolvimento. Ele é projetado para permitir que os desenvolvedores foquem na lógica de negócio, enquanto o framework cuida da configuração e infraestrutura.
+O Spring Boot segue uma arquitetura baseada no **Spring Framework**, mas com diversas camadas e módulos que facilitam o desenvolvimento. Ele é projetado para permitir que os desenvolvedores foquem na lógica de negócio, enquanto o framework cuida da configuração e infraestrutura.
 
 ## Componentes Principais da Arquitetura do Spring Boot
 
 A arquitetura do Spring Boot pode ser dividida nas seguintes partes:
 
-1. Spring Core: Base da Arquitetura
+- **Spring Core:** Base da Arquitetura
 
-2. Camada de Configuração Automática: Facilita o Desenvolvimento
+- **Camada de Configuração Automática:** Facilita o Desenvolvimento
 
-3. Spring Boot Starters: Gerenciamento de Dependências
+- **Spring Boot Starters:** Gerenciamento de Dependências
 
-4. Embedded Servers (Servidores Embutidos): Aplicação Autossuficiente
+- **Embedded Servers (Servidores Embutidos):** Aplicação Autossuficiente
 
-5. Spring Boot Actuator: Monitoramento e métricas
+- **Spring Boot Actuator:** Monitoramento e métricas
 
-6. Spring Boot CLI: Execução de aplicações sem necessidade de compilação
+- **Spring Boot CLI:** Execução de aplicações sem necessidade de compilação
 
 ## Spring Core (Núcleo do Spring)
 
 O Spring Boot é construido sobre o Spring Framework, que fornece funcionalidades essenciais como:
 
-- Inversão de Controle (IoC): O Spring gerencia os objetos da aplicação automaticamente
+- **Inversão de Controle (IoC):** O Spring gerencia os objetos da aplicação automaticamente
 
-- Injeção de Dependências (DI): Facilita a comunicação entre componentes, eliminando a necessidade de instanciá-los manualmente.
+- **Injeção de Dependências (DI):** Facilita a comunicação entre componentes, eliminando a necessidade de instanciá-los manualmente.
 
-- Programação Orientada a Aspector (AOP): Permite separar funcionalidades transversais, como logging e segurança.
+- **Programação Orientada a Aspector (AOP):** Permite separar funcionalidades transversais, como logging e segurança.
 
-- Spring MVC: Implementação do padrão MVC para desenvolvimento de aplicações web.
+- **Spring MVC:** Implementação do padrão MVC para desenvolvimento de aplicações web.
 
 Esse núcleo permite que a arquitetura seja modular e flexível, garantindo a escalabilidade do sistema.
 
@@ -50,7 +50,7 @@ Os Spring Boot Starters são pacotes que contêm um conjunto de bibliotecas pré
 
 Em vez de adicionar várias dependências separadamente, você pode usar um único Starter que já traz tudo pronto.
 
-Para usar o Spring Boot com o Spring MVC, em vez de adicionar várias dependências, basta usar:
+Para usar o **Spring Boot** com o **Spring MVC**, em vez de adicionar várias dependências, basta usar:
 
 ``` XML
 
@@ -61,7 +61,7 @@ Para usar o Spring Boot com o Spring MVC, em vez de adicionar várias dependênc
 
 ```
 
-Isso já inclui Spirng MVC, Jackson (para JSON) e em servidores embutidos automaticamente.
+Isso já inclui **Spirng MVC**, **Jackson (para JSON)** e servidores embutidos automaticamente.
 
 ## Servidores Embutidos (Embedded Servers)
 
