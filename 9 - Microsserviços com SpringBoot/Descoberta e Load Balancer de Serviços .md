@@ -347,3 +347,11 @@ spring:
 ```
 
 Agora, qualquer mudança no repositório Git pode ser aplicada dinamicamente aos microsserviços!
+
+## Boas Práticas
+
+- Armazene configurações no Git para versionamento.
+
+- Use **@RefreshScope** para atualizar valores sem reiniciar.
+
+- Mantenha variáveis sensíveis (senhas, tokens) protegidas no Vault.
