@@ -4,15 +4,15 @@ O Spring Boot Actuator é um módulo do Spring Boot que adiciona funcionalidades
 
 O Actuator facilita a observação e a manutenção da aplicação ao expor endpoints HTTP que fornecem informações úteis, como:
 
-- /actuator/health → Mostra se a aplicação está saudável.
+**/actuator/health** → Mostra se a aplicação está saudável.
 
-- /actuator/info → Exibe informações personalizadas da aplicação.
+**/actuator/info** → Exibe informações personalizadas da aplicação.
 
-- /actuator/metrics → Apresenta métricas como uso de memória, CPU e tempo de resposta.
+**/actuator/metrics** → Apresenta métricas como uso de memória, CPU e tempo de resposta.
 
-- /actuator/env → Exibe variáveis de ambiente.
+**/actuator/env** → Exibe variáveis de ambiente.
 
-- /actuator/beans → Lista todos os beans gerenciados pelo Spring.
+**/actuator/beans** → Lista todos os beans gerenciados pelo Spring.
 
 ## Como usar?
 
@@ -31,7 +31,13 @@ Ao adicionar a dependência, o actuator já está funcionando, porem não irá l
 
 ``` properties
 
+# Ativa todos os endpoints
 management.endpoints.web.exposure.include=*
+
+# Exibe métricas detalhadas
+management.endpoint.metrics.enabled=true
+management.metrics.export.prometheus.enabled=true
+
 
 ```
 
