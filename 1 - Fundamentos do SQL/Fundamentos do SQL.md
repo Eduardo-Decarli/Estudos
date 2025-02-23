@@ -1,9 +1,5 @@
 # Fundamentos do SQL
 
-SQL é uma habilidade essencial para lidar com bancos de dados de forma eficiente.
-
-## O que é SQL e para que serve?
-
 SQL (Structured Query Language) é uma linguagem de programação usada para gerenciar e manipular bancos de dados relacionais. Ela permite criar, ler, atualizar e excluir dados (CRUD), além de realizar consultas complexas para análise e geração de relatórios. Usamos SQL para:
 
 - Consultar e filtrar dados de forma eficiente
@@ -53,23 +49,28 @@ CREATE TABLE usuarios (
     idade INT
 );
 
+
 -- Inserindo dados
 
 INSERT INTO usuarios (nome, email, idade) VALUES
 ('Alice', 'alice@gmail.com', 25),
 ('Bob', 'bob@gmail.com', 30);
 
+
 -- Consultando dados
 
 SELECT * FROM usuarios;
+
 
 -- Filtrando Registros
 
 SELECT nome, email FROM usuarios WHERE idade > 25
 
+
 -- Atualizando Registros
 
 UPDATE usuarios SET idade = 31 WHERE nome = 'Bob';
+
 
 -- Removendo registros
 
@@ -77,7 +78,7 @@ DELETE FROM usuarios WHERE nome = 'Alice';
 
 ```
 
-Boa práticas
+## Boa práticas
 
 - Sempre defina chaves primárias e estrangeiras para manter a integridade dos dados.
 
@@ -97,13 +98,13 @@ Boa práticas
 
 SQL e NoSQL são dois modelos de bancos de dados usados para armazenar e gerenciar informações, mas com abordagens diferentes:
 
-- SQL (Bancos Relacionais): usa tabelas estruturadas, com esquemas rígidos e relacionamentos bem definidos.
+**SQL (Bancos Relacionais):** usa tabelas estruturadas, com esquemas rígidos e relacionamentos bem definidos.
 
-- NoSQL (Bancos não Relacionais): é mais flexível, permitindo armazenar dados de maneira menos estruturada, sem a necessidade de esquemas fixos.
+**NoSQL (Bancos não Relacionais):** é mais flexível, permitindo armazenar dados de maneira menos estruturada, sem a necessidade de esquemas fixos.
 
 ![Tabela SQL vs NoSQL](Tabela_SQLxNoSQL.png)
 
-- ACID: Atomicidade, Consistencia, Isolamento e Durabilidade - garante a confiabilidade das transações no SQL.
+- ACID: ACID é um conjunto de propriedades que garantem a confiabilidade das transações em bancos de dados relacionais. O termo vem do inglês e representa: Atomicidade, Consistencia, Isolamento e Durabilidade.
 
 - BASE: Basicamente Disponivel, Estado Suave, Eventuamente Consistente - Prioriza performance e flexibilidade no NoSQL.
 
@@ -125,7 +126,7 @@ SELECT nome, preco FROM produtos;
 
 ```
 
-Criando e consultando um banco NoSQL (MongoDB - Banco de Documentos)
+Agora vamos consultar um banco NoSQL (MongoDB - Banco de Documentos)
 
 ``` JSON
 
@@ -158,7 +159,7 @@ db.produtos.find();
 
 Bancos de dados relacionais armazenam informações estruturadas em tabelas interconectadas. Cada tabela contém colunas (atributos) e linhas (registros), permitindo consultas eficientes e garantindo a integridade dos dados.
 
-Esses bancos seguem o modelo relacional e utilizam SQL para manipulação de dados. Eles são ideais para sistemas que exigem alta confiabilidade, como ERPs, CRMs e aplicações financeiras.
+Esses bancos seguem o modelo relacional e utilizam SQL para manipulação de dados. Eles são ideais para sistemas que exigem alta confiabilidade, como ERPs(É um software que ajuda a gerir uma empresa de forma integrada e automatizada), CRMs(conjunto de práticas, estratégias de negócio e tecnologias focadas no relacionamento com o cliente) e aplicações financeiras.
 
 ![Tipos de Bancos de Dados](Tipos_de_bancos.png)
 
@@ -172,11 +173,11 @@ Esses bancos seguem o modelo relacional e utilizam SQL para manipulação de dad
 
 SGBD (Sistema Gerenciador de Banco de Dados) é um software responsável por armazenar, organizar e gerenciar dados de forma eficiente. Os dois mais populares são:
 
-- MySQL: Amplamente usado em aplicações web, como WordPress, e-commerce e sistemas empresariais.
+**MySQL:** Amplamente usado em aplicações web, como WordPress, e-commerce e sistemas empresariais.
 
-- PosrgreSQL: Mais robusto, ideal para sistemas que precisam de escalabilidade e manipulações complexas de dados.
+**PosrgreSQL:** Mais robusto, ideal para sistemas que precisam de escalabilidade e manipulações complexas de dados.
 
-# Instalação do PostgreSQL
+## Instalação do PostgreSQL
 
 1. Baixe o instalador no site oficial: [PostgreSQL Download](https://www.postgresql.org/download/)
 
@@ -184,7 +185,7 @@ SGBD (Sistema Gerenciador de Banco de Dados) é um software responsável por arm
 
 3. Instale a ferramenta pgAdmin para gerenciar o banco graficamente.
 
-## Configuração Básica
+### Configuração Básica
 
 Como primeira configuração a se realizar em um banco Postgre, precisamos fazer a criação de um usuário e um banco.
 

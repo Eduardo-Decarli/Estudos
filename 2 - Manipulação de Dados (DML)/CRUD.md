@@ -1,6 +1,6 @@
 # Manipulação de Dados (DML - Data Manipulation Language)
 
-Vamos começar a estudar a manipulação de dados em quarrys SQL para termos um profundo entendimento sobre seus usos, limitações e serviços.
+Vamos começar a estudar a manipulação de dados em quarrys SQL para termos um profundo entendimento sobre seus usos, limitações e serviços. O DML é um subconjunto de instruções do próprio SQL. contido no DML nós temos, SELECT, INSERT, UPDATE, DELETE.
 
 ## SELECT - Consulta de Dados
 
@@ -12,7 +12,7 @@ O comando SELECT é a principal instrução do SQL para recuperar dados de um ba
 
 - Contar quantos pedidos foram feitos em um determinado período.
 
-Agora vamos começar estudanod a sintáxe básica de uma consulta de **SELECT**
+Agora vamos começar estudando a sintáxe básica de uma consulta de **SELECT**
 
 ``` SQL
 
@@ -63,7 +63,7 @@ Resultados:
 
 ### Boas Práticas
 
-- Especifique apenas as colunas necessárias (**SELECT nome, idade** ao invés de **SELECT ***).
+- Especifique apenas as colunas necessárias (**SELECT nome, idade** ao invés de SELECT *).
 
 - Use apelidos (**AS**) para tornar os resultados mais legíveis.
 
