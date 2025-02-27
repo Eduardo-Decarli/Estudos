@@ -50,7 +50,7 @@ Um documento HTML segue sempre essa estrutura padrão:
 
 ``` HTML
 
-<!DOCTYPE html>  <!-- Define a versão do HTML (HTML5) -->
+<!DOCTYPE html>  <!-- Define  a versão do HTML (HTML5) -->
 <html lang="pt-BR">  <!-- Define o idioma do documento -->
 <head>
     <meta charset="UTF-8">  <!-- Configuração de caracteres -->
