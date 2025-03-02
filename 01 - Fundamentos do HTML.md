@@ -75,6 +75,26 @@ Um documento HTML segue sempre essa estrutura padrão:
 
 Os atributos são informações adicionais dentro de uma tag que modificam seu comportamento.
 
-| Atributo | Descrição                              | Exemplo |
-|----------|----------------------------------------|---------|
-| id       | Identifica um elemento único na página |
+| **Atributo** | **Descrição**                               | **Exemplo**                             |
+|--------------|---------------------------------------------|-----------------------------------------|
+| class        | Agrupa elementos para estilização via CSS.  | <p class="destaque">Texto</p>           |
+| id           | Identifica um elemento único na página.     | <h1 id="titulo">Título</h1>             |
+| src          | Define a origem de um recurso (ex: imagem). | <img src="foto.jpg" alt="Foto">         |
+| href         | Define o destino de um link.                | <a href="https://google.com">Google</a> |
+
+``` HTML
+
+<h2 id="meuTitulo">Meu Título</h2>
+<img src="imagem.jpg" alt="Imagem de exemplo">
+<a href="https://www.exemplo.com">Visite o site</a>
+
+```
+
+## Boas Práticas
+
+- Use sempre HTML semântico(<header>, <article>, <section>, etc)
+- Use atributos descritivos (**alt** para imagens, **title** para links)
+- Sempre feche tags corretamente
+- Não use <div> para tudo(prefira as tags semânticas)
+- Evite atributos inline (style="" dentro da tag). Use CSS externo
+- Nunca use <br> excessivamente para espaçamento.
