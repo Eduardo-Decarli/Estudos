@@ -121,6 +121,56 @@ public class UsuarioService {
 
 ```
 
+## Consultas Avançadas
+
+O Spring Data MongoDB nos permite realizar consultas poderosas através de MongoRepository, @Query (JPQL para MongoDB) e MongoTemplate. Com isso podemos:
+
+- Colsultar com filtros complexos
+- Ordenação e Paginação ()
+- Consultas Regex (Expressões Regulares)
+- Consulta por Intervalos (Range Queries)
+- Operações Lógicas (AND, OR, IN, NOT, etc)
+- Busca textual (Full-Text Search)
+
+### Usando o MongoRepository para Consultas Personalizadas
+
+O MongoRepository permite criar métodos personalizados baseados na nomenclatura dos métodos.
+
+``` Java
+
+// Buscar usuário por idade mínima
+
+List<Usuario> findByIdadeGreaterThan(int idade);
+
+
+// Buscar usuários por nome contendo um trecho de texto
+
+List<Usuario> findByNomeContaining(String nome);
+
+
+// Buscar usuário por múltiplos critérios (idade e e-mail)
+
+List<Usuario> findByIdadeGreaterThanEmailContaining(int idade, String email);
+
+```
+
+### Consultas Personalizadas com @Query
+
+Se precisarmos de mais flexibilidade, podemos usar **MongoDB Query Language** com **@Query**.
+
+``` Java
+
+// Buscar usuários com idade maior que 30
+
+@Query("{ 'idade' : { $gt: ?0 } }") // gt = greater than
+List<Usuario> buscarUsuarioComIdadeMaiorQue(int idade)
+
+// Buscar usuários com nome começando com "J" e idade maior que 25
+
+@Query("{ 'nome' : { $regex: '^J', $options: 'i' }, 'idade': { $gt: 25 } }") // $regex: '^J' → Encontra nomes que começam com "J". e $options: 'i' → Ignora diferenças entre maiúsculas e minúsculas.
+List<Usuario> buscarUsuariosNomeJMaior25();
+
+
 ## Boas Práticas
 
 **Usar repositórios do Spring Data:** Aproveite MongoRepository para evitar código repetitivo.
