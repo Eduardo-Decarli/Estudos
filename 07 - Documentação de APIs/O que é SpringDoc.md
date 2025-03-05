@@ -1,11 +1,18 @@
-(O que é SpringDoc)[#o-que-é-springdoc]
-(O que é OpenAPI?)[#o-que-é-openapi]
-(Como o SpringDoc funciona no SpringBoot)[#como-o-springdoc-funciona-no-springboot]
-(Swagger UI e os Endpoints Padrão)[#swagger-ui-e-os-endpoints-padrão]
-(Customização da Documentação com Anotações OpenAPI)[#customização-da-documentação-com-anotações-openapi]
-(Trabalhando com Segurança na Documentação)[#trabalhando-com-segurança-na-documentação]
-(Configurações Avançadas do SpringDoc)[#configurações-avançadas-do-springdoc]
-(Alternativas ao Swagger UI)[#alternativas-ao-swagger-ui]
+[O que é SpringDoc](#o-que-é-springdoc)
+
+[O que é OpenAPI?](#o-que-é-openapi)
+
+[Como o SpringDoc funciona no SpringBoot](#como-o-springdoc-funciona-no-springboot)
+
+[Swagger UI e os Endpoints Padrão](#swagger-ui-e-os-endpoints-padrão)
+
+[Customização da Documentação com Anotações OpenAPI](#customização-da-documentação-com-anotações-openapi)
+
+[Trabalhando com Segurança na Documentação](#trabalhando-com-segurança-na-documentação)
+
+[Configurações Avançadas do SpringDoc](#configurações-avançadas-do-springdoc)
+
+[Alternativas ao Swagger UI](#alternativas-ao-swagger-ui)
 
 # O que é SpringDoc
 
