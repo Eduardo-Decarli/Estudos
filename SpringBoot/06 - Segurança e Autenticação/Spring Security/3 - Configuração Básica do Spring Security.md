@@ -19,9 +19,9 @@ Essa dependência inclui todas as configurações básicas de segurança no proj
 
 ## 2. Configuração Padrão do Spring Security
 
-Assim que adicionamos a dependência spring-boot-starter-security, algumas configurações são ativadas automaticamente:
+Assim que adicionamos a dependência **spring-boot-starter-security**, algumas configurações são ativadas automaticamente:
 
-- Usuário e senha gerados automaticamente: O Spring Boot cria um usuário chamado user e gera uma senha aleatória, exibida no console na inicialização:
+- **Usuário e senha gerados automaticamente:** O Spring Boot cria um usuário chamado user e gera uma senha aleatória, exibida no console na inicialização:
 
 ``` JSON
 
@@ -125,14 +125,16 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll() // Permite registro sem autenticação
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll() // Permite login sem autenticação
-                        .anyRequest().authenticated() // Exige autenticação para qualquer outra requisição
+                        .anyRequest().authenticated()
                 )
-                .httpBasic(Customizer.withDefaults()); // Habilita autenticação básica HTTP
-
+                .formLogin()
+                    .permitAll()
+                .and()
+                .httpBasic()
+                .and()
+                .logout()
+                    .permitAll();
         return http.build();
     }
 
@@ -154,6 +156,15 @@ public class SecurityConfig {
 
 ```
 
-**httpBasic(Customizer.withDefaults()):** Configura a autenticação básica HTTP, onde o cliente envia o nome de usuário e a senha no cabeçalho da requisição (com a chave Authorization).
+**Método securityFilterChain:** O método securityFilterChain define as regras de segurança para as requisições HTTP da aplicação.
+
+- **http.authorizeHttpRequests:** Define as permissões de acesso para as requisições HTTP. A linha .anyRequest().authenticated() significa que todas as requisições precisam de autenticação.
+  
+- **http.formLogin():** Ativa o login baseado em formulário. Por padrão, o Spring Security fornece uma página de login, mas aqui, qualquer um pode acessar a página de login, já que o permitAll() foi configurado logo abaixo.
+
+- **httpBasic():** Possibilita a autenticação via httpBasic, alem de permitir o acesso via forms também
+  
+- **http.logout():** Configura o logout. A linha permitAll() garante que qualquer usuário pode realizar o logout.
+Por fim, o método retorna a configuração construída com http.build().
 
 Conclusão: Com essa configuração, a aplicação estará segura com autenticação básica e usuários em memória com senhas criptografadas. Além disso, endpoints como o de registro e login estarão acessíveis sem autenticação, enquanto os outros endpoints exigem autenticação.
