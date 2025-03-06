@@ -111,3 +111,49 @@ public class SecurityConfig {
 Agora, a senha admin123 será criptografada antes de ser armazenada.
 
 - Melhor prática: Sempre usar PasswordEncoder para armazenar senhas de forma segura!
+
+## 5. Configurando uma autenticação basica
+
+Além da autenticação padrão via formulário, podemos configurar a autenticação básica (Basic Authentication), que é um método simples e direto para autenticação via cabeçalho HTTP. Para isso, você pode ajustar a configuração da seguinte maneira:
+
+``` Java
+
+@Configuration
+@EnableWebSecurity
+public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable()) // Desabilita CSRF para APIs
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll() // Permite registro sem autenticação
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll() // Permite login sem autenticação
+                        .anyRequest().authenticated() // Exige autenticação para qualquer outra requisição
+                )
+                .httpBasic(Customizer.withDefaults()); // Habilita autenticação básica HTTP
+
+        return http.build();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        UserDetails user = User.withUsername("eduardo")
+                .password(passwordEncoder.encode("2004")) // Senha criptografada
+                .roles("ADMIN")
+                .build();
+
+        return new InMemoryUserDetailsManager(user);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+}
+
+```
+
+**httpBasic(Customizer.withDefaults()):** Configura a autenticação básica HTTP, onde o cliente envia o nome de usuário e a senha no cabeçalho da requisição (com a chave Authorization).
+
+Conclusão: Com essa configuração, a aplicação estará segura com autenticação básica e usuários em memória com senhas criptografadas. Além disso, endpoints como o de registro e login estarão acessíveis sem autenticação, enquanto os outros endpoints exigem autenticação.

@@ -2,9 +2,9 @@
 
 O Spring Security fornece um modelo de segurança robusto baseado em autenticação, autorização e controle de permissões. Vamos entender cada um desses conceitos essenciais.
 
-Autenticação: Processo de verificar a identidade do usuário. Normalmente feito com usuário e senha ou outros métodos (OAuth, JWT, etc.). Se autenticado com sucesso, o usuário recebe um token de sessão ou um contexto de segurança.
+**Autenticação:** Processo de verificar a identidade do usuário. Normalmente feito com usuário e senha ou outros métodos (OAuth, JWT, etc.). Se autenticado com sucesso, o usuário recebe um token de sessão ou um contexto de segurança.
 
-Autorização: Define o que o usuário pode acessar dentro da aplicação. Baseia-se em roles (funções) ou permissões específicas. Exemplo: Admin pode acessar /admin/dashboard, mas User não.
+**Autorização:** Define o que o usuário pode acessar dentro da aplicação. Baseia-se em roles (funções) ou permissões específicas. Exemplo: Admin pode acessar /admin/dashboard, mas User não.
 
 ## UserDetails e UserDetailsService
 
@@ -113,7 +113,7 @@ boolean senhaValida = encoder.matches("minhaSenha123", senhaCriptografada);
 
 ```
 
-## Security Context e SecurityContextHolder
+## SecurityContext e SecurityContextHolder
 
 **SecurityContext:** Armazena informações sobre o usuário autenticado na aplicação. Ele é acessado através do **SecurityContextHolder**.
 
