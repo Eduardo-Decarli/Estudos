@@ -99,3 +99,36 @@ public class LoginController {
 ```
 
 Agora, ao acessar /custom-login, o Spring mostrará nossa página HTML personalizada.
+
+## Implementando Logout Seguro
+
+Para adicionar um logout seguro, usamos **logoutSuccessUrl()** para redirecionar o usuário após o logout.
+
+``` Java
+
+.logout(logout -> logout
+    .logoutUrl("/logout") // URL que executa o logout
+    .logoutSuccessUrl("/login?logout") // Página após logout
+    .invalidateHttpSession(true) // Invalida a sessão do usuário
+    .deleteCookies("JSESSIONID") // Remove cookies de sessão
+    .permitAll()
+)
+
+```
+
+- **logoutUrl("/logout")** → URL que faz o logout.
+- **logoutSuccessUrl("/login?logout")** → Redireciona para /login?logout após logout.
+- **invalidateHttpSession(true)** → Invalida a sessão do usuário.
+- **deleteCookies("JSESSIONID")** → Remove cookies para segurança.
+
+Adicionando um Botão de Logout na Página
+
+``` HTML
+
+<form action="/logout" method="post">
+    <button type="submit">Sair</button>
+</form>
+
+```
+
+O Spring Security gerencia o logout automaticamente quando enviamos um **POST** para **/logout**.
