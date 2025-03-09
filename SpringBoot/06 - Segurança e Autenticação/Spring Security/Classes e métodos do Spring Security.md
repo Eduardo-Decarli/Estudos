@@ -1,6 +1,6 @@
 # SecurityFilterChain
 
-O que é o SecurityFilterChain?: o SecurityFilterChain é uma configuração central que define quais filtros de segurança serão aplicados às requisições HTTP da aplicação. Ele substitui a abordagem baseada em WebSecurityConfigurerAdapter (deprecated desde o Spring Security 5.7) e permite configurar a segurança da aplicação de forma mais modular e declarativa.
+**O que é o SecurityFilterChain?:** o SecurityFilterChain é uma configuração central que define quais filtros de segurança serão aplicados às requisições HTTP da aplicação. Ele substitui a abordagem baseada em WebSecurityConfigurerAdapter (deprecated desde o Spring Security 5.7) e permite configurar a segurança da aplicação de forma mais modular e declarativa.
 
 ``` Java
 
