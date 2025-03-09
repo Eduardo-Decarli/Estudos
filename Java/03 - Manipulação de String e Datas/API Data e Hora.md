@@ -3,8 +3,11 @@
 A API de Data e Hora (**java.time**) foi introduzida no Java 8 para facilitar o trabalho com datas e horas. Ela resolve problemas das classes antigas, como mutabilidade, dificuldades de formatação e inconsistências em fusos horários. Suas principais classes são:
 
 - **LocalDate** → Representa apenas a **data** (ex: 2025-02-26).
+  
 - **LocalTime** → Representa apenas a **hora** (ex: 14:30:15).
+  
 - **LocalDateTime** → Representa **data e hora** juntas (ex: 2025-02-26T14:30:15).
+  
 - **DateTimeFormatter** → Permite **formatar e parsear datas** para diferentes padrões.
 
 ## Conceitos Fundamentais
@@ -85,9 +88,9 @@ public class ExemploFormatter {
 
 ## Exemplos práticos
 
-- Somar e subtrair datas 
-
 ``` Java
+
+// Somar e subtrair datas 
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -104,11 +107,7 @@ public class ManipulacaoData {
     }
 }
 
-```
-
----
-
-- Diferença entre Datas
+// Diferença entre Datas
 
 ``` Java
 
@@ -126,11 +125,7 @@ public class DiferencaEntreDatas {
     }
 }
 
-```
-
----
-
-- Comparação de Datas
+// Comparação de Datas
 
 ``` Java
 
