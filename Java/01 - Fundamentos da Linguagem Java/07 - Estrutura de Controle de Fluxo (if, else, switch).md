@@ -201,3 +201,31 @@ Outro número
 */
 
 ```
+
+Podemos agrupar casos que executam o mesmo código. Isso pode nos permitir ter um switch com múltiplos casos no mesmo bloco:
+
+``` Java
+
+public class Notas {
+    public static void main(String[] args) {
+        char conceito = 'A';
+
+        switch (conceito) {
+            case 'A':
+            case 'B':
+                System.out.println("Aprovado!");
+                break;
+            case 'C':
+            case 'D':
+                System.out.println("Recuperação.");
+                break;
+            case 'F':
+                System.out.println("Reprovado.");
+                break;
+            default:
+                System.out.println("Nota inválida.");
+        }
+    }
+}
+
+```
