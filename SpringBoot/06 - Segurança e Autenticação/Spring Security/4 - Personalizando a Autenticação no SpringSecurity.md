@@ -13,78 +13,161 @@ O Spring Security permite carregar usuários de um banco de dados relacional usa
 // Criando a entidade **User**
 // Criamos uma entidade para armazenar usuários no banco de dados:
 
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-
 @Entity
-@Getter
-@Setter
+@Table(name = "users_tb")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id", updatable = false, unique = true, nullable = false)
+    private UUID id;
 
-    @Column(unique = true, nullable = false)
-    private String username;
+    @Column(name = "fist_name", unique = false, nullable = false)
+    private String firstName;
 
-    @Column(nullable = false)
+    private String email;
+
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String role; // Exemplo: "ROLE_USER", "ROLE_ADMIN"
-}
+    private Role role;
 
 // Criando um repositório UserRepository
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
-
+@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByUsername(String username);
 }
 
-// Implementando o UserDetailsService
-// Agora, criamos um UserDetailsService para carregar usuários do banco.
+// Implementando o UserDetails
+// Agora, criamos um UserDetails para carregar usuários do banco.
 
-import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+public class SecurityUserDetails implements UserDetails {
 
-@Service
-public class CustomUserDetailsService implements UserDetailsService {
+    private User user;
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    public SecurityUserDetails(User user) {
+        this.user = user;
+    }
 
-    public CustomUserDetailsService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(user.getRole().name()));
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+    public String getPassword() {
+        return user.getPassword();
+    }
 
-        return User.withUsername(user.getUsername())
-                .password(user.getPassword()) // Senha já deve estar criptografada no banco
-                .roles(user.getRole().replace("ROLE_", "")) // Remove o prefixo "ROLE_"
-                .build();
+    @Override
+    public String getUsername() {
+        return user.getEmail();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+}
+
+// Após a criação do UserDetail, temos que criar um UserDetailService.
+
+@Service
+public class SecurityUserDetailsService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    public SecurityUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with email: " + email);
+        }
+        return new SecurityUserDetails(user);
+    }
+
+}
+
+// Após isso, devemos fazer um service para login, para ser usado nas rotas do controller
+
+@Service
+public class AuthService {
+
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserMapper mapper;
+    private final AuthenticationManager authenticationManager;
+
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, UserMapper mapper, AuthenticationManager authenticationManager) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.mapper = mapper;
+        this.authenticationManager = authenticationManager;
+    }
+
+    public String register(UserCreateDto createDto) {
+        if(userRepository.existsByEmail(createDto.email())) throw new DuplicateException("This user already exists by email!");
+        if(userRepository.existsByTelephone(createDto.telephone())) throw new DuplicateException("This user already exists by telephone!");
+
+        User user = mapper.toUser(createDto);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userRepository.save(user);
+        return "User " + user.getEmail() + " was successfully created!";
+    }
+
+    public String login(String email, String password) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        Authentication authentication = authenticationManager.authenticate(authenticationToken);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        return "User " + email + " successfully logged in!";
     }
 }
 
 // Configurando a Segurança
 
-import org.springframework.context.annotation.*;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
+
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .httpBasic(Customizer.withDefaults())
+                .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                );
+        return http.build();
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -92,8 +175,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
 
