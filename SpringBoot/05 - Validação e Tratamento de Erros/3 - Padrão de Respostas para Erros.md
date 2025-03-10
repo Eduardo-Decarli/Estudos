@@ -1,10 +1,10 @@
-# Padrão de Resposta para Erros (RFC 7807 - Problem Details)
+# Padrão de Resposta para Erros
 
-Quando um erro ocorre em uma API, é importante retornar uma resposta clara e padronizada. O RFC 7807 - Problem Details define um formato de resposta JSON para erros HTTP.
+O padrão de resposta para erros definido pela RFC 7807, conhecido como "Problem Details for HTTP APIs", é uma especificação que fornece uma maneira estruturada de representar detalhes de erros em respostas HTTP. Este padrão ajuda a criar respostas de erro consistentes e informativas, facilitando o tratamento de erros por clientes de API.
 
 Esse padrão melhora a **consistência** e **interoperabilidade** entre APIs, facilitando a depuração e integração entre sistemas.
 
-## Estrutura do RFC 7807
+## Estrutura do RFC 7807 - Problem Details
 
 O padrão de resposta consiste no tipo (URI que identifica o tipo do erro), title (breve descrição do erro), status (Código HTTP do erro, por exemplo o 404, 400, etc...), detail (Explicação detalhada do problema) e instance (URI do recurso que gerou o erro)
 
@@ -19,6 +19,16 @@ O padrão de resposta consiste no tipo (URI que identifica o tipo do erro), titl
 }
 
 ```
+
+- **type:** Uma URI que identifica o tipo de problema. É recomendável que esta URI aponte para uma documentação que descreva o problema em detalhes.
+
+- **title:** Um resumo legível do problema. Deve ser curto e descritivo.
+
+- **status:** O código de status HTTP gerado pelo servidor para esta ocorrência de problema.
+
+- **detail:** Uma explicação específica do problema que ocorreu. Deve ser mais detalhada que o título.
+
+- **instance:** Uma URI que identifica a ocorrência específica do problema. Pode ser usada para rastrear o problema em logs ou sistemas de monitoramento.
 
 ## Implementando RFC 7807 no Spring Boot
 
