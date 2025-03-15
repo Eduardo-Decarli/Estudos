@@ -3,15 +3,15 @@
 
 Diferente dos testes unitários, que testam partes isoladas do código, os testes de integração verificam se múltiplos componentes do sistema funcionam juntos corretamente. No Spring Boot, o Spring Boot Test facilita a configuração e execução desses testes, permitindo testar desde a comunicação entre serviços até interações com o banco de dados.
 
-- @SpringBootTest: Carrega o contexto da aplicação para permitir testes de integração
+- **@SpringBootTest:** Carrega o contexto da aplicação para permitir testes de integração
 
-- @TestConfiguration: Define configurações específicas para os testes
+- **@TestConfiguration:** Define configurações específicas para os testes
 
-- @Transactional: Garante que os dados inseridos durante o teste sejam revertidos ao final
+- **@Transactional:** Garante que os dados inseridos durante o teste sejam revertidos ao final
 
-- TestRestTemplate: Cliente HTTP simplificado para testes de integração
+- **TestRestTemplate:** Cliente HTTP simplificado para testes de integração
 
-- @Sql: Permite executar scripts SQL antes e depois dos testes.
+- **@Sql:** Permite executar scripts SQL antes e depois dos testes.
 
 Vamos criar um teste de integração para validar um endpoint REST de busca de produtos.
 
@@ -43,7 +43,7 @@ public class ProdutoController {
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE) // Usa um banco real
 @Transactional // Garante que os dados serão revertidos após o teste
 class ProdutoControllerIT {
-
+    
     @Autowired
     private TestRestTemplate restTemplate;
 

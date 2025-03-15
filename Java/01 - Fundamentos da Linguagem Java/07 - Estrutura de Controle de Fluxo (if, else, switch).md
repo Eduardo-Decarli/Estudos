@@ -10,7 +10,7 @@ Em Java, temos três principais formas de controle de fluxo baseadas em decisõe
 
 Isso é útil, por exemplo, para verificar a idade de um usuário, validar dados de entrada ou tomar decisões no código de acordo com valores dinâmicos
 
-## if, else if, else
+## if, else if, else, Operador Ternário
 
 O if testa uma condição booleana. Se for **true**, executa o bloco de código associado.
 
@@ -81,6 +81,16 @@ public class DescontoLoja {
 }
 
 ```
+
+O operador ternário é um recurso para tomada de decisões com objetivo similar ao do if/else, mas que é codificado em apenas uma linha.
+
+``` Java
+
+(expressão booleana) ? código 1 : código 2;
+
+```
+
+Ao avaliar a expressão booleana, caso ela seja verdadeira, o código 1, declarado após o ponto de interrogação (?) será executado; do contrário, o programa irá executar o código 2, declarado após os dois pontos (:).
 
 ## Switch
 
