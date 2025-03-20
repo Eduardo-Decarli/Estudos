@@ -10,7 +10,7 @@ Listas em HTML são usadas para organizar e estruturar informações de forma cl
 
 ## Conceitos Fundamentais
 
-- Listas não ordenadas (<ul>): Exibe uma lista de itens com marcadores (º, o, etc), é util para itens sem uma ordem específica.
+- **Listas não ordenadas (<ul>):** Exibe uma lista de itens com marcadores (º, o, etc), é util para itens sem uma ordem específica.
 
 ``` HTML
 
@@ -22,7 +22,7 @@ Listas em HTML são usadas para organizar e estruturar informações de forma cl
 
 ```
 
-- Listas Ordenadas (<ol>): Exibe os itens numerados (1, 2, 3...), é util para passos, rankings e sequencias. Por padrão será uma lista numérica, mas podemos trocar para outras opções com type.
+- **Listas Ordenadas (<ol>):** Exibe os itens numerados (1, 2, 3...), é util para passos, rankings e sequencias. Por padrão será uma lista numérica, mas podemos trocar para outras opções com type.
 
     - Type="1" -> Números (1, 2, 3...)
     - Type="A" -> Letras maiúsculas (A, B, C...)
@@ -32,7 +32,7 @@ Listas em HTML são usadas para organizar e estruturar informações de forma cl
 
 ``` HTML
 
-<ol type="1">
+<ol type="1" start="3" reversed>
     <li>Abrir o navegador</li>
     <li>Acessar um site</li>
     <li>Ler o conteúdo</li>
@@ -40,7 +40,10 @@ Listas em HTML são usadas para organizar e estruturar informações de forma cl
 
 ```
 
-- Lista de Definição (<dl>, <dt>, <dd>): Usada para definir termos e suas descrições.
+start declara que a lista começará a partir de um valor passado.
+
+- **Lista de Definição (<dl>, <dt>, <dd>):** Usada para definir termos e suas descrições.
+
 
 ``` HTML
 
