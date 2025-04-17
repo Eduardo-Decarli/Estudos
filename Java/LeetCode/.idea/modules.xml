@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/HelloWorld/HelloWorld.iml" filepath="$PROJECT_DIR$/HelloWorld/HelloWorld.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/LeetCode.iml" filepath="$PROJECT_DIR$/.idea/LeetCode.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Leitura Inalterada Scanner/Leitura Inalterada Scanner.iml" filepath="$PROJECT_DIR$/Leitura Inalterada Scanner/Leitura Inalterada Scanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Scanner/Scanner.iml" filepath="$PROJECT_DIR$/Scanner/Scanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tabuada 10x/Tabuada 10x.iml" filepath="$PROJECT_DIR$/Tabuada 10x/Tabuada 10x.iml" />
+      <module fileurl="file://$PROJECT_DIR$/if-else/if-else.iml" filepath="$PROJECT_DIR$/if-else/if-else.iml" />
+      <module fileurl="file://$PROJECT_DIR$/printf/printf.iml" filepath="$PROJECT_DIR$/printf/printf.iml" />
+    </modules>
+  </component>
+</project>
