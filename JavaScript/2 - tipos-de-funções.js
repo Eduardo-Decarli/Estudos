@@ -45,6 +45,8 @@ const pessoa = {
     }
 };
 
+pessoa["nome"] = "Rodrigo"
+
 console.log(pessoa.falar());
 
 // Função Construtora
