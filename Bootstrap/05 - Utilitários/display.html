@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../Bootstrap files/css/bootstrap.min.css">
+    <style>
+        .telas-grandes {
+            margin: 0 10px;
+            height: 30vh;
+            background-color: #3473B2;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1s;
+        }
+
+        .telas-grandes:hover {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Vamos abordar os conceitos de display no HTML -->
+    <!-- A sintáxe é: d-valor  e d-breakpoint-valor -->
+    <div class="container">
+        <div class="telas-grandes d-none d-lg-flex">
+            Essa div aparece apenas em telas grandes
+        </div>
+    </div>
+</body>
+
+</html>
