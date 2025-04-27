@@ -59,3 +59,16 @@ function carro(marca, modelo) {
 const meuCarro = new carro("Toyota", "Corolla");
 
 console.log(meuCarro);
+
+// Função Callback
+
+function somaNumeros(a, b) {
+    console.log(a + b);
+}
+
+function mostrarCalculo(callback, a, b) {
+    console.log("Soma = ");
+    callback(a, b); // Aqui fazemos a chamada a outra função para dar o callback
+}
+
+mostrarCalculo(somaNumeros, 2, 5)
