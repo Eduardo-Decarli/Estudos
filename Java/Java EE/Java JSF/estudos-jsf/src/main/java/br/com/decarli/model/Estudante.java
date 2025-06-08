@@ -1,18 +1,18 @@
-package bean.estudante;
+package br.com.decarli.model;
 
-import javax.enterprise.context.RequestScoped;
-import javax.inject.Named;
-import java.io.Serializable;
+import br.com.decarli.model.enuns.Turno;
 
-@Named
-@RequestScoped
-public class RegistrarEstudanteBean implements Serializable {
+public class Estudante {
 
     private String name = "Eduardo";
     private String sobrenome = "Decarli";
     private double nota1;
     private double nota2;
-    private double nota3;
+    private double nota3 = 20;
+    private Turno turno = Turno.MATUTINO;
+
+    public Estudante() {
+    }
 
     public String getName() {
         return name;
@@ -52,5 +52,13 @@ public class RegistrarEstudanteBean implements Serializable {
 
     public void setNota3(double nota3) {
         this.nota3 = nota3;
+    }
+
+    public Turno getTurno() {
+        return turno;
+    }
+
+    public void setTurno(Turno turno) {
+        this.turno = turno;
     }
 }

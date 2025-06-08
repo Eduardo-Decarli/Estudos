@@ -2,24 +2,130 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://primefaces.org/ui"
+      xmlns:p="http://java.sun.com/jsf/composite">
 
-    <h:head>
-        <title>Teste</title>
-    </h:head>
+<h:head>
+    <title>Aprendendo JSF</title>
+</h:head>
 
-    <h:body>
-        <h:outputLabel value="Hello, World"/>
+<h:body>
+    <ui:importEnum type="br.com.decarli.model.enuns.Turno" var="Turno" allSuffix="ALL_ENUM_VALUES"/>
+
+    <h:outputLabel value="Hello, World"/>
+    <br/>
+    <hr/>
+    <h:outputLabel value="Nome do Estudante = #{estudanteBean.estudante.name}"/>
+    <br/>
+    <h:outputLabel value="#{estudanteBean.estudante['sobrenome']}"/>
+    <br/>
+    <hr/>
+    <h:outputLabel
+            value="Nota 1 é igual a Nota 2?: #{estudanteBean.estudante.nota1 eq estudanteBean.estudante.nota2}"/>
+    <br/>
+    <h:outputLabel
+            value="Nome do estudante é Eduardo e Nota 1 é igual a Nota2?: #{estudanteBean.estudante.nota1 eq estudanteBean.estudante.nota2 and estudanteBean.estudante.name.equalsIgnoreCase('eduardo')}"/>
+    <br/>
+    <h:outputText
+            value="Nota 3 é maior que zero? #{estudanteBean.estudante.nota3 le 0 ? 'Zero' : 'Maior que zero'}"/>
+
+    <!-- Palavras Reservadas:
+    | and, or, not | eq (==), ne (!=) | gt (>), ge (>=), lt (<), le (<=)
+    | true, false | null, empty, not empty | instanceof | div (/), mod (%) |-->
+
+    <br/>
+    <h:outputText value="ENUMS"/> <br/>
+    <h:outputText value="#{estudanteBean.estudante.turno}"/>
+    <br/>
+
+    <!-- Arrays -->
+
+    <hr/>
+    <h:outputLabel value="Arrays"/> <br/>
+    <h:outputText
+            value="#{estudanteBean.nomesArray[0]} #{estudanteBean.nomesArray[1]} #{estudanteBean.nomesArray[2]}"/>
+    <br/>
+
+    <!-- Percorrendo Arrays -->
+
+    <ui:repeat value="#{estudanteBean.nomesArray}" var="nome">
+        <h:outputText value="#{nome}, "/>
+    </ui:repeat>
+
+    <!-- Listas -->
+
+    <hr/>
+    <h:outputLabel value="Arrays"/> <br/>
+    <h:outputText
+            value="#{estudanteBean.cursosList.get(0)} #{estudanteBean.cursosList.get(1)} #{estudanteBean.cursosList.get(2)}"/>
+    <br/>
+
+    <!-- Percorrendo Arrays -->
+
+    <ui:repeat value="#{estudanteBean.cursosList}" var="curso">
+        <h:outputText value="#{curso}, "/>
+    </ui:repeat>
+
+    <!-- Percorrendo Sets -->
+
+    <hr/>
+    <ui:repeat value="#{estudanteBean.professoresSet.toArray()}" var="professores">
+        <h:outputText value="#{professores} "/>
+    </ui:repeat>
+
+    <!-- Map -->
+
+    <hr/>
+    <h:outputText value="#{estudanteBean.coordenadores.get(1)}"/>
+    <h:outputText value="#{estudanteBean.coordenadores.get(2)}"/>
+    <h:outputText value="#{estudanteBean.coordenadores.get(3)}"/>
+
+    <ui:repeat value="#{estudanteBean.coordenadores}" var="coordenador">
+        <h:outputText value="#{coordenador} "/>
+    </ui:repeat>
+
+    <br/>
+
+    <!-- Métodos -->
+
+    #{estudanteBean.executar()}
+    #{estudanteBean.executar("Xuxu beleza")}
+    #{estudanteBean.executarReturnString(estudanteBean.estudante.name)}
+
+    <!-- Botão de Comando -->
+
+    <h:form>
+        <h:commandButton value="Ir para a próxima página"
+                         action="#{estudanteBean.irParaPaginaCoordenadores()}"/>
+    </h:form>
+
+    <br/>
+
+    <!-- Aplicando CSS -->
+
+    <ui:repeat value="#{estudanteBean.cursosList}" var="curso"
+                    varStatus="status">
+
+        #{status.index} -
+        <h:outputText value="#{curso}" style="color: #{status.index % 2 == 0 ? 'red' : 'green'}"/>
+
         <br/>
-        <hr/>
-        <h:outputLabel value="#{registrarEstudanteBean.name}"/>
-        <br/>
-        <h:outputLabel value="#{registrarEstudanteBean['sobrenome']}"/>
-        <br/>
-        <hr/>
-        <h:outputLabel value="Nota 1 é igual a Nota 2?: #{registrarEstudanteBean.nota1 eq registrarEstudanteBean.nota2}"/> <br/>
-        <h:outputLabel value="Nome do estudante é Eduardo e Nota 1 é igual a Nota2?: #{registrarEstudanteBean.nota1 eq registrarEstudanteBean.nota2 and registrarEstudanteBean.name.equalsIgnoreCase('eduardo')}"/>
-        
-    </h:body>
+    </ui:repeat>
+
+    <!-- Aplicando JS -->
+
+    <h:form>
+        <h:commandButton value="Ver o melhor aluno" onclick="alerta()"/>
+    </h:form>
+
+</h:body>
+<script type="text/javascript">
+    function alerta() {
+        alert('O melhor aluno é você')
+    }
+
+
+</script>
 
 </html>
