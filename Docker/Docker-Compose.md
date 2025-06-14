@@ -9,10 +9,12 @@ O Docker Compose permite definir e gerenciar múltiplos containers usando um ún
 version: "3.8"  # Versão do Compose
 
 services:
-  app:
-    build: .
+  app: 
+    build: . 
     ports:
-      - "8080:8080"
+      - "8080:8080" 
+    networks:
+      - minha_rede
     depends_on:
       - db
     environment:
@@ -34,8 +36,16 @@ services:
 volumes:
   db_data:
 
+networks:
+  minha_rede:
 
 ```
+
+- **app** -> Nome do serviço que ficará atrelado ao container
+- **build** -> diretório que fará o buil (ele irá procurar por um docker file no diretório)
+- **port** -> A ordem é (host:container)
+- **environment** -> variáveis de ambiente para o projeto (opcional)
+- **networks** -> Define a rede que ele fará parte
 
 ## 🎯 Explicação por Blocos
 
