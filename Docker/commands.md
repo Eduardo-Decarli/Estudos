@@ -17,23 +17,23 @@ Mostra a versão instalada do Docker
 
 ## 📦 IMAGENS
 
-- **docker pull <imagem>**  
+- **docker pull 'imagem'**  
     Baixa uma imagem do Docker Hub (ou outro registry). Ex: *docker pull nginx*
 
 - **docker images**  
     Lista todas as imagens disponíveis localmente
 
-- **docker rmi <imagem>**  
+- **docker rmi 'imagem'**  
     Remove uma imagem local
 
-- **docker build -t <nome>:<tag> .**  
+- **docker build -t ''nome'':'tag' .**  
     cria uma imagem a partir de um Dockerfile Ex: *docker build -t meuapp:v1*
 
 ---  
 
 ## 📁 CONTAINERS
 
-- **docker run <opções> <imagem>**  
+- **docker run 'opções' 'imagem'**  
    Cria e inicia um container. Ex: *docker run -d -p 80:80 nginx* 
 
 - **docker ps**  
@@ -42,44 +42,44 @@ Mostra a versão instalada do Docker
 - **docker ps -a**  
     Lista todos os containers (inclusive os parados)
 
-- **docker start <id/nome>**  
+- **docker start 'id/nome'**  
     Inicia um container parado.
 
-- **docker stop <id/nome>**  
+- **docker stop 'id/nome'**  
     Para um container
 
-- **docker restart <id/nome>**  
+- **docker restart 'id/nome'**  
     Reinicia um container
 
-- **docker rm <id/nome>**  
+- **docker rm 'id/nome'**  
     Remove um container
 
-- **docker exec -it <container> <comando>**  
+- **docker exec -it 'container' 'comando'**  
     Executa um comando dentro do container. Ex: *docker exec -it meuapp bash*
 
-- **docker logs <container>**  
+- **docker logs 'container'**  
     Exibe os logs de um container
 
 ---
 
 ## 🔗 VOLUMES E REDES
 
-- **docker volume create <nome>**  
+- **docker volume create 'nome'**  
     Cria um volume para persistência de dados
 
 - **docker volume ls**  
     Lista todos os volumes
 
-- **docker volume rm <nome>**  
+- **docker volume rm 'nome'**  
     Remove um volume
 
 - **docker network ls**  
     Lista as redes do Docker
 
-- **docker network create <nome>**  
+- **docker network create 'nome'**  
     Cria uma nova rede
 
-- **docker network connect <rede> <container>**  
+- **docker network connect 'rede' 'container'**  
     Conecta um container a uma rede existente
 
 ---
@@ -108,8 +108,8 @@ Mostra a versão instalada do Docker
 - **docker-compose down**  
     Para e remove os serviços criados com *docker-compose up*.
 
-- **docker tag <imagem> <nome>:<tag>**  
+- **docker tag 'imagem' 'nome':'tag'**  
     Marca (ou renomeia) uma imagem local
 
-- **docker push <nome>:<tag>**  
+- **docker push 'nome':'tag'**  
     Envia uma imagem para o Docker Hub ou outro registry.
