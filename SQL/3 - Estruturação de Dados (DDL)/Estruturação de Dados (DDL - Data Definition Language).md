@@ -1,94 +1,53 @@
 # Estruturação de Dados (DDL - Data Definition Language)
 
-A DDL é uma sublinguagem do SQL usada para definir e modificar a estrutura do banco de dados. Ao contrário de comandos como SELECT, INSERT, UPDATE e DELETE, que manipulam dados, a DDL se concentra na criação, alteração e remoção de objetos no banco, como tabelas e índices. Ela inclui comandos como CREATE, ALTER, DROP, TRUNCATE e outros.
+A **DDL** é uma sublinguagem do SQL usada para definir e modificar a estrutura do banco de dados. Ao contrário de comandos como **SELECT**, **INSERT**, **UPDATE** e **DELETE**, que manipulam dados, a **DDL** se concentra na criação, alteração e remoção de objetos no banco, como tabelas e índices. Ela inclui comandos como **CREATE**, **ALTER**, **DROP**, **TRUNCATE** e outros.
 
-Os comandos mais utilizados para o DDL são: 
+## Conceitos imporantes
 
-- **CREATE TABLE:** Cria uma nova tabela no banco de dados.
+- Banco de Dados: É um conjunto organizado de dados, armazenados e acessados eletronicamente. Pode conter várias tabelas, esquemas, views, procedimentos armazenados, índices etc.
 
-- **ALTER TABLE:** Modifica a estrutura de uma tabela existente (Por exemplo, adiciona ou remove colunas)
+- Schema: É uma estrutura lógica dentro de um banco de dados que agrupa objetos relacionados, como tabelas, views, funções etc. Serve para organizar e separar os dados dentro de um mesmo banco.
 
-- **DROP TABLE:** Exclui uma tabela do banco de dados
-
-- **TRUNCATE TABLE:** Limpa todos os dados de uma tabela, mas mantém a estrutura
+- Index: É uma estrutura de dados usada para acelerar as buscas em tabelas. Funciona como um índice de livro: em vez de procurar linha por linha, o banco consulta o índice e vai direto ao ponto.
 
 ## Entendendo os comandos
 
-Agora vamos ver um pouco sobre os comandos, entender o que fazem e como utilizar eles na prática
-
-### CREATE TABLE - Criar tabelas
-
-O comando **CREATE TABLE** é usado para criar novas tabelas, definindo suas colunas, tipos de dados e restrções (como chaves primárias).
+- **CREATE**  
+    Criação de Objetos
 
 ``` SQL
 
-CREATE TABLE produtos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nome VARCHAR(100) NOT NULL,
-    preco DECIMAL(10,2) NOT NULL,
-    data_adicao DATE DEFAULT CORRENT_DATE 
+-- CREATE: Cria um novo banco de dados chamado empresa
+
+CREATE DATABASE empresa;
+
+-- CREATE SCHEMA: Cria um esquema chamado administrativo.
+
+CREATE SCHEMA administrativo;
+
+-- CREATE TABLE: Cria uma tabela chamada Funcionários
+
+CREATE TABLE funcionarios (
+    id INT PRIMARY KEY,
+    nome VARCHAR(100),
+    cargo VARCHAR(50),
+    salario DECIMAL(10,2),
+    data_admissao DATE
 );
 
-```
+-- CREATE TABLE (com Restrições): Cria uma tabela com campos obrigatórios, regras para validar valores, valor padrão e chave estrangeira
 
-- **id:** campo inteiro, chave primária, valor auto incrementado.
+CREATE TABLE produtos (
+    id INT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    preco DECIMAL(10,2) CHECK (preco > 0),
+    estoque INT DEFAULT 0,
+    categoria_id INT,
+    FOREIGN KEY (categoria_id) REFERENCES categorias(id)
+);
 
-- **nome:** campo de texto com no máximo 100 caracteres.
+-- CREATE INDEX: Cria um índice para acelerar buscas pelo nome
 
-- **preco:** campo decimal com 2 casas após a vírgula.
-
-- **data_adicao:** campo de data com valor padrão como a data atual.
-
-### ALTER TABLE - Modificar tabelas
-
-O comando ALTER TABLE é utilizado para adicionar, modificar ou excluir colunas em uma tabela já existente.
-
-``` SQL
-
--- Adicionando uma nova coluna na tabela de produtos
-
-ALTER TABLE produtos 
-ADD COLUMN descricao TEXT;
-
-
--- Modificando uma coluna
-
-ALTER TABLE produtos MODIFY COLUMN preco DECIMAL(12,2);
-
-
--- Excluindo uma coluna 
-
-ALTER TABLE produtos DROP COLUMN descricao;
+CREATE INDEX idx_nome ON funcionarios(nome);
 
 ```
-
-### DROP TABLE - Excluir tabelas
-
-O comando DROP TABLE é utilizado para excluir permanentemente uma tabela do banco de dados, incluindo todos os seus dados.
-
-``` SQL
-
--- Excluindo a tabela de produtos
--- Cuidado: Ao usar DROP TABLE, todos os dados da tabela são perdidos permanentemente.
-
-DROP TABLE produtos;
-
-```
-
-### TRUNCATE TABLE - Limpar dados de uma tabela
-
-O comando TRUNCATE TABLE remove todos os registros de uma tabela, mas mantém a estrutura da tabela.
-
-``` SQL
-
--- Limpando todos os dados da tabela de produtos
-
-TRUNCATE TABLE produtos;
-
-```
-
-Diferente de DELETE: TRUNCATE não pode ser revertido e é mais rápido que o DELETE para grandes volumes de dados, pois não grava o log de cada linha removida.
-
-# Tipos de dados
-
-
