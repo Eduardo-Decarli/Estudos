@@ -84,13 +84,14 @@ meu-projeto-jsf/
 
 # Navegação e mapeamento de páginas (faces-config.xml)
 
-O arquivo faces-config.xml é o arquivo de configuração central do JSF.
+O arquivo **faces-config.xml** é o arquivo de configuração central do JSF.
+
 Ele permite:
 
 - Mapear fluxos de navegação entre páginas.
 - Registrar beans, conversores, validadores.
 - Definir configurações específicas do JSF.
-- Criar regras declarativas que substituem o uso de action="#{bean.metodo}" quando necessário.
+- Criar regras declarativas que substituem o uso de **action="#{bean.metodo}"** quando necessário.
 
 # Facelets (.xhtml) vs JSP
 
