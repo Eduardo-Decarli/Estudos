@@ -23,8 +23,23 @@ Após a data de 2016, a equipe da google decidiu refatorar a arquitetura do **An
 - Angular moderno é recomendado para projetos novos, porque tem melhor performance, suporte e estrutura moderna.
 - Aprender AngularJS é útil para compreender fundamentos e manter sistemas antigos, mas vale considerar migrar para Angular moderno no futuro.
 
-# Principais conceitos e arquitetura: MVVM (Model-View-ViewModel)
+# Para que serve o Angular e quais suas vantagens
 
-# Como funciona o two-way data binding (dupla ligação de dados)
+O Angular serve principalmente para criar interfaces de usuário complexas, interativas e reativas, funcionando direto no navegador (Client-Side), utilizando principalmente **TypeScript** - O typeScript é uma linguagem derivada do JavaScript com tipagem e recursos de validação adicionais que aumenta a robustez do código.
 
-# Preparando o ambiente: instalação, CDN e estrutura básica do projeto
+Com angular você pode: 
+
+- Construir aplicações Web modernas e escaláveis
+- Trabalhar com compontes reutilizaveis
+- Gerenciar estado e dados da aplicação de forma organizada
+- Realizar consumo de APIs e fazer integração entre Backend e Frontend mais facilmente
+- Criar rotas para navegar no sistema sem fazer a recarga da página
+- Testar seu código com ferramentas integradas
+
+Agora que entendemos o que é o Angular, vamos estudar suas vantagens e o que diferencia ele dos demais frameworks frontend.
+
+1. Baseado em Componentes -> O Angular é estruturado para renderizar as páginas com base em componentes, permitindo o usuário criar botões, formulários e demais estruturas e fazer uma integração onde separa o componente de forma organizada do resto do código. Isso ajuda na organização, reutilização e manutenção dos sistemas.
+
+2. TypeScript por padrão -> 
+
+# Diferenças principais para frameworks concorrentes (React, Vue)
