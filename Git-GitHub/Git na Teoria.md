@@ -62,7 +62,39 @@ No **Git**, uma **branch** (ou ramificação) é uma linha independente de desen
 
 O **Vim** é um editor de texto poderoso e eficiente utilizado frequentemente por desenvolvedores para editar arquivos diretamente no terminal. Aqui estão os comandos básicos para começar:
 
+--- 
+
+# 🔄 Rebase no Git
+
+O **rebase** é uma forma de reorganizar os commits em uma branch, aplicando as mudanças de uma branch sobre outra. Ele é utilizado para manter o histórico linear e facilitar a compreensão da evolução do projeto.
+
+---
+
+## 📚 O que é o rebase?
+
+O comando `git rebase` pega todos os commits da sua branch atual que não estão na branch de destino e os reaplica no topo da branch de destino, um por um. Isso é diferente do merge, que cria um commit de junção no histórico.
+
+---
+
+## 🆚 Diferença entre Rebase e Merge
+
+- **Merge:** Une duas branches e cria um commit extra (merge commit), mantendo o histórico ramificado.
+- **Rebase:** Reescreve o histórico, aplicando os commits da sua branch sobre a branch de destino, deixando o histórico linear.
+
+Exemplo visual:
+
+```
+Antes do rebase:
+main:    A---B---C
+                 \
+feature:           D---E
+
+Após `git rebase main` na branch feature:
+main:    A---B---C
+                     \
+feature:               D'--E'
+```
+
 ---
 
 📖 *Com Git e GitHub você tem um conjunto completo de ferramentas para versionamento de código e colaboração no desenvolvimento de software!*
-

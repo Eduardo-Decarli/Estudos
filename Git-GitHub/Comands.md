@@ -153,3 +153,16 @@
 
 - **:wq**  
   Salva e sai do Vim.
+
+---
+
+## ▶️ Comandos Básicos
+
+- **git rebase nomeDaBranch**  
+  Aplica os commits da branch atual sobre a `nomeDaBranch`.
+
+- **git rebase main**
+  (Estando na branch feature) Aplica os commits da feature sobre a main.
+
+- **git rebase -i hashOuNomeDaBranch**
+  Inicia um rebase interativo para editar, reordenar ou combinar commits.
