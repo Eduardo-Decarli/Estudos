@@ -66,6 +66,23 @@ public class ExemploReduce {
 
 ```
 
+## Collection() vs ToList()
+
+Em java, o ToList e o Collection são usados para trasformar uma stream em uma lista, porém não são exatamente iguais, vamos entender a diferença:
+
+- collect(Collectors.toList()): Está disponível desde o Java 8, ele retorna uma lista que normalmente é um arrayList, o ponto chave é que o uso do collect transforma uma lista em mutável, ou seja, você pode fazer sua alteração posteriormente.
+
+- toList(): Foi introduzido no Java 16 como método de convenência, retorna uma lista imutável (Não permitindo adicionar, deletar ou modificar seus elementos)
+
+| Característica       | `collect(Collectors.toList())` | `toList()`     |
+| -------------------- | ------------------------------ | -------------- |
+| **Disponível desde** | Java 8                         | Java 16        |
+| **Mutabilidade**     | Mutável                        | Imutável       |
+| **Permite `null`**   | Sim                            | Não            |
+| **Garantia de tipo** | Apenas `List`, não imutável    | Lista imutável |
+| **Performance**      | Pode ter sobrecarga maior      | Mais direto    |
+
+
 ## Conclusão
 
 A API de Streams permite que você processe coleções de dados de maneira eficiente e expressiva. Os métodos **map**, **filter** e **reduce** são fundamentais para transformar, filtrar e agregar dados. Eles ajudam a escrever código mais conciso e legível, adotando um estilo de programação funcional.
