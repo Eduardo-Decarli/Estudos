@@ -156,13 +156,27 @@
 
 ---
 
-## ▶️ Comandos Básicos
+## ▶️ Comandos para Rebase
 
 - **git rebase nomeDaBranch**  
   Aplica os commits da branch atual sobre a `nomeDaBranch`.
 
-- **git rebase main**
+- **git rebase main**  
   (Estando na branch feature) Aplica os commits da feature sobre a main.
 
-- **git rebase -i hashOuNomeDaBranch**
+- **git rebase -i hashOuNomeDaBranch**  
   Inicia um rebase interativo para editar, reordenar ou combinar commits.
+
+- **git commit --amend -m "Nova mensagem do Commit"**  
+  Permite renomear o nome do ultimo commit
+
+## Stash
+
+- **git stash**  
+  Guarda as alterações não commitadas em uma area chamada stash, permitindo a troca de branch ou retorno de commits
+
+- **git stash show**   
+  Exibe um resumo das alterações que foram guardadas na ultima stash
+
+- **git stash pop**  
+  Aplica as alterações armazenadas na ultima stash
