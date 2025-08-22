@@ -175,8 +175,17 @@
 - **git stash**  
   Guarda as alterações não commitadas em uma area chamada stash, permitindo a troca de branch ou retorno de commits
 
+- **git stash save "configurações temporarias"**  
+  Guarda as alterações na stash, referenciando um nome para ela
+
 - **git stash show**   
   Exibe um resumo das alterações que foram guardadas na ultima stash
 
+- **git stash list**  
+  Exibe a lista de stashs criadas
+
 - **git stash pop**  
   Aplica as alterações armazenadas na ultima stash
+
+- **git stash clear**  
+  Elimina todas as stash registradas 
