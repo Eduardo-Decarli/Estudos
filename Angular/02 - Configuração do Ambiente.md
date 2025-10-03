@@ -70,4 +70,14 @@ ng version
 
 # Criando o primeiro projeto Angular com Angular CLI
 
+Para criar-mos nosso primeiro projeto em Angular, vamos utilizar o Angular CLI que já foi instalado, podemos usar o comando:
+
+``` bash
+
+ng new nome-do-projeto
+
+```
+
+O angular irá interagir com você pelo terminal e fazer diversas perguntas sobre o funcionamento e configurações iniciais do projeto, basta seguir e completar as configurações interativas.
+
 # Estrutura de pastas e arquivos do projeto
