@@ -2,7 +2,7 @@
 
 **hibernate.cfg.xml** → Usado em projetos sem Spring, ou com Hibernate puro
 
-``` Java
+``` XML
 
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC 
@@ -45,7 +45,7 @@ O hibernate procura esse arquivo por padrão na pasta ***src/main/resources***
 
 Quando você usa o Hibernate com Spring Boot, o hibernate.cfg.xml é desnecessário. A configuração é feita via application.properties ou application.yml.
 
-``` properties
+``` yml
 
 # Datasource (banco)
 spring.datasource.url=jdbc:postgresql://localhost:5432/meubanco
@@ -70,7 +70,6 @@ spring.jpa.hibernate.ddl-auto=update
 | `update`      | Atualiza o schema (adiciona colunas/tabelas sem apagar dados) |
 | `create`      | Cria o schema do zero (apaga dados toda vez)                  |
 | `create-drop` | Cria e remove o schema ao iniciar/encerrar a aplicação        |
-
 
 # Dependências no pom.xml (Maven) ou build.gradle (Gradle)
 
@@ -132,42 +131,6 @@ spring.jpa.hibernate.ddl-auto=update
   </dependency>
 
 </dependencies>
-
-```
-
-# Criação de banco de dados e tabelas
-
-1. 🏗️ Criação automática com hibernate.hbm2ddl.auto -> Essa propriedade define o comportamento do Hibernate ao iniciar a aplicação
-2. 📋 Como o Hibernate sabe o que criar? -> Ele lê as entiddes anotadas com **@Entity** e, baseado nelas, gera o SQL correspondente.
-
-``` Java
-
-@Entity
-@Table(name = "USUARIOS")
-public class Usuario {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "nome", nullable = false)
-    private String nome;
-
-    @Column(name = "email", unique = true, nullable = false)
-    private String email;
-}
-
-```
-
-🔎 Ao rodar a aplicação com ddl-auto=update, o Hibernate vai gerar algo assim:
-
-``` SQL
-
-create table USUARIOS (
-    id bigserial primary key,
-    nome varchar(255) not null,
-    email varchar(255) unique not null
-);
 
 ```
 
