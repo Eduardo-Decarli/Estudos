@@ -44,7 +44,9 @@ function dizOi(nome, sobrenome) {
 
 - Se uma variável for declarada sem valor, o typescript declara ela como any, e ela acaba fugindo do contexto de tipagem, então ela pode receber tipos diferentes em diferentes chamadas (será um bug da linguagem?).
 
-Any e Void: Em Typescript, pode-se determinar que o retorno de uma variável ou função é do tipo any ou void, o tipo any determina qualquer retorno, seja numero, string, vetor ou misturado, semelhante ao comportamento do JS, e tipo void não retorna nada.
+**Any e Void:** Em Typescript, pode-se determinar que o retorno de uma variável ou função é do tipo any ou void, o tipo any determina qualquer retorno, seja numero, string, vetor ou misturado, semelhante ao comportamento do JS, e tipo void não retorna nada.
+
+- Se utilizar um comentário e definir **@ts-ignore** acima de uma variávei, o typescript irá ignorar a validação de tipo da variável
 
 ## Definição de Variáveis
 

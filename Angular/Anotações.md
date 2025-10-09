@@ -71,6 +71,8 @@ ng generate: O ng generate serve para gerar novas estruturas para o projeto, os 
 
 **Componente:** Um componente é um encaixe dentro da tela, tudo que podemos separar em blocos dentro de um layout chamamos de componente, o angular trabalha com chamadas de componentes filhos para formar componentes pai (maiores e agrupados por outros componentes).
 
+Template: Conteudo HTML dentro do arquivo .html na pasta do componente.
+
 **Módulo:** No angular, podemos classificar e organizar componentes por módulos, dentro de cada módulo, encontramos os componentes específicamente organizados.
 
 - Normalmente fazemos uma tela se tornar um módulo e dentro do módulo (tela) temos vários componentes organizados.
@@ -91,3 +93,77 @@ Importação e Exportação de Módulos: No angular, quando criamos um módulo e
 2. voltando para o módulo 1, precisamos especificar os componentes que serão exportados, através de uma propriedade chamada **exports**, localizada dentro do @decorator. 
 
 Agora com os componentes exportados e o módulo importado, podemos chamar suas tags dentro do HTML que necessita dos componentes importados.
+
+**Data-biding:** É o termo dado para referenciar a sincronia entre variáveis da tela e da lógica, ela pode ser dividida em Interpolation, React databiding, Propery Databiding e two-way Databiding.
+
+**Interpolation:** É a sincronia de dados de variáveis entre a view e a lógica para expressar algo na tela, podemos passar as variáveis ou funções que irão realizar o comportamento da view sem necessariamente chamar os elementos HTML, esse processo é feito através das **{{nome-da-variavel}}**.
+
+- Na interpolação, se uma variável de tela retornar um valor undefined, o Angular não irá imprimir nada na tela (Dificil de debugar). Se utilizarmos um optional change, ele ainda não mostrará os valores undefined, mas irá reservar espaço na tela e não irá quebrar completamente o comportamento gráfico.  Optional Change -> **{{nome-da-variavel?}}**, ou também podemos definir um comparador ternário para validar.
+
+**Template dentro do Componente:** Ao criar um novo componente, definimos nosso template como nosso arquivo HTML dentro da pasta do componente, mas podemos inserir ele diretamente no arquivo.ts caso seja curto ou conveniente, para fazer isso, utilizamos a propriedade template? (Irá substituir a propriedade templateUrl?) dentro de @Component e passar uma String contendo o conteudo HTML.
+
+``` typescript
+
+@Component({
+  selector: 'app-card-button-roxo',
+  standalone: false,
+  // templateUrl: './card-button-roxo.html', // Deixa de utilizar esse caminho para usar um template inline
+  template: `
+    <button class="card-button-roxo">Clique Aqui</button>
+  `,
+  styleUrl: './card-button-roxo.scss'
+})
+export class CardButtonRoxo {
+
+}
+
+```
+
+**Estilização dentro do Componente:** Para o CSS, podemos ter um comportamento similar, em vez de referenciar uma localização de página de estilização, podemos usar a propriedade styles? e inserir uma string com o CSS requisitado.
+
+- Podemos definir uma tag style dentro do template HTML para utilizar CSS inline
+
+Importações de CSS: Utilizando o **@use** ou **@forward** dentro de um arquivo **CSS** ou **SCSS**, podemos passar um caminho para esse import, e o angular poderá identificar que os arquivos estão conectados, dessa forma podemos ter 2 arquivos dinâmicos, onde em um nós criamos variáveis CSS/SCSS e outro podemos utilizar essas variáveis.
+
+- Para não precisar especificar sempre um caminho relativo ou absoluto, podemos especificar para o Angular sempre olhar para uma pasta específica para buscar os arquivos de estilizações, ai precisamos apenas especificar o nome do arquivo, para fazer isso, precisamos declarar no nosso arquivo angular.json
+
+``` JSON
+
+"projects": {
+    "curso-angular": {
+        "architect": {
+            "build": {
+                "stylePreprocessorOptions": {
+                    "includePaths": [
+                        "src/styles" // Aqui especificamos a localização da pasta geral de CSS/SCSS
+                    ]
+                }
+            }
+        }
+    }
+}
+
+```
+
+**::ng-deep:** O angular possui um comportamento de isolamento de componentes, ou seja, alterações feitas no CSS de um componente se tornam inalteráveis fora do componente (mesmo se chamarmos em um componente pai, não é possível alterar o CSS dos componentes filhos), utilizando o seletor ng-deep e o nome da classe/id do componente filho, é possível alterar as propriedades dentro da classe CSS do componente pai.
+
+``` HTML
+
+<div class="card">
+    <div class="card__plan card__item">Plano, <b>{{plano.tipo}}</b></div>
+    <div class="card__price card__item">{{plano.getFullPrice(plano.preco)}}</div>
+    <app-card-button></app-card-button>
+    <app-button-cancel id="cancel-button-red"></app-button-cancel>
+</div>
+
+```
+
+``` CSS 
+
+::ng-deep #cancel-button-red .card-button-cancel {
+    background-color: yellow !important;
+}
+
+```
+
+- Nesse exemplo, temos um trecho do arquivo CSS de um componente pai, e dentro dele, fazemos o ng-deep em uma classe de um componente filho para poder realizar as alterações. Se caso ocultarmos o id no seletor CSS, o ng-deep conseguiria perfurar essa proteção de isolamento em nível macro, dessa forma, todos os .card-button-cancel seriam alterados na página, sem conseguir separar qual especificamente.
