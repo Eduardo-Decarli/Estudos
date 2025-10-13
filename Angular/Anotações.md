@@ -199,20 +199,51 @@ O angular Material é uma biblioteca de componentes prontos onde, basta apenas i
 
 - Na interpolação, se uma variável de tela retornar um valor undefined, o Angular não irá imprimir nada na tela (Dificil de debugar). Se utilizarmos um optional change, ele ainda não mostrará os valores undefined, mas irá reservar espaço na tela e não irá quebrar completamente o comportamento gráfico.  Optional Change -> **{{nome-da-variavel?}}**, ou também podemos definir um comparador ternário para validar.
 
-Property Binding: O property binding é a utilização direcional do uso de variáveis para manipulação de propriedades do DOM, o Angular consegue recuperar o identificador do elemento e realizar manipulações no DOM via sessão com variáveis JS. Para fazer isso, usamos os [nome-da-propriedade]="nome-da-variavel". Podemos fazer algo como <<input [value]="valueInput">>, assim, sempre que editar o valor da variável, ele automaticamente irá atualizar a tela.
+**Property Binding:** O property binding é a utilização direcional do uso de variáveis para manipulação de propriedades do DOM, o Angular consegue recuperar o identificador do elemento e realizar manipulações no DOM via sessão com variáveis JS. Para fazer isso, usamos os [nome-da-propriedade]="nome-da-variavel". Podemos fazer algo como <<input [value]="valueInput">>, assim, sempre que editar o valor da variável, ele automaticamente irá atualizar a tela.
 
 - O property Binding é unidirecional, ou seja, atualizar na tela um valor, não irá atualizar o valor da variável na classe, para isso, é necessário o Two-Way databinding
 
-Event Binding: O event Binding é o uso de eventos do navegador para chamar funções dentro da classe. Esse comportamento é de chamada e funciona no sentido contrário do property binding(um atualiza a tela, outro atualiza o código), podemos chamar funções de reação e atribuir funções do JS para dar comportamento. Isso é feito através das (), ex: <<button value="Meu botão" (click)="showClick()">> 
+**Event Binding:** O event Binding é o uso de eventos do navegador para chamar funções dentro da classe. Esse comportamento é de chamada e funciona no sentido contrário do property binding(um atualiza a tela, outro atualiza o código), podemos chamar funções de reação e atribuir funções do JS para dar comportamento. Isso é feito através das (), ex: <<button value="Meu botão" (click)="showClick()">> 
 
 - O nome das funções de eventos são chamadas removendo o termo 'on', onclick -> click, onpresskey -> presskey.
 
-Atribute Binding: È uma forma similar de trabalhar como property binding, mas mudando os atributos e não as propriedades, isso é feito através da seguinte forma: [attr.nome-do-atributo]="nome-da-variavel"
+**Atribute Binding:** È uma forma similar de trabalhar como property binding, mas mudando os atributos e não as propriedades, isso é feito através da seguinte forma: [attr.nome-do-atributo]="nome-da-variavel"
 
-Style Binding: O Style Binding é uma forma de trabalhar com estilização inline de forma dinâmica com o JS, ele permite passar um objeto **style** e definir seus atributos (propriedades CSS). Ex: **[style.width]="styleWidth" [style.height]="styleHeight" [style.backgroundColor]="backgroundColor"**, Alem dessa forma, podemos passar um objeto direto do código, como [style]="nome-do-objeto"
+**Style Binding:** O Style Binding é uma forma de trabalhar com estilização inline de forma dinâmica com o JS, ele permite passar um objeto **style** e definir seus atributos (propriedades CSS). Ex: **[style.width]="styleWidth" [style.height]="styleHeight" [style.backgroundColor]="backgroundColor"**, Alem dessa forma, podemos passar um objeto direto do código, como [style]="nome-do-objeto"
 
-Class Binding: O Class Binding é uma forma de trabalhar com classes de forma dinâmica, pois esse método permite definir se uma classe irá estar ou não presente através de um boolean, ex: [class.nome-da-classe]="true" [class.nome-da-classe]="!buttonClass".
+**Class Binding:** O Class Binding é uma forma de trabalhar com classes de forma dinâmica, pois esse método permite definir se uma classe irá estar ou não presente através de um boolean, ex: [class.nome-da-classe]="true" [class.nome-da-classe]="!buttonClass".
 
 ---
 
-@Input: 
+**@Input:** O @Input é a forma de conseguir enviar uma informação de um componente pai para dentro de um componente filho, essa tag possui algumas propriedades e é utilizada junto a uma variável. Dentro da classe do componente filho, podemos inicializar uma variável com @Input e declara que o componente, na hora de ser escrito como tag, terá uma propriedade como nome da variável atribuida (ou o nome do alias). O valor atribuido a essa propriedade será capturado pela variável especificada no componente filho e poderá ser utilizada.
+
+``` Typescript
+
+// Componente filho
+
+  @Input({alias: "labelCard", required: true}) labelCard: string = "";
+  @Input({alias: "price", required: true}) price: number = 0.0;
+
+// Tag do Componente Pai
+
+    <app-card [labelCard]="variavel" [price]="variavel"></app-card>
+
+```
+
+**@Output:** O @Output é utilizado para fazer o sentido inverso do @Input, ele é utilizado na chamada de eventos e pode fazer a comunicação de Filho para Pai, Um componente filho pode enviar informações através de um emmiter para o componente pai da seguinte forma:
+
+``` typescript
+
+// Componente filho
+
+@Output('eventoEmitido') eventoEmitido = new EventEmitter<Object>();
+
+  onButtonClick() {
+    this.eventoEmitido.emit(this.objectResponse);
+  }
+
+// HTML do Componente Pai (Pode ser passada uma função qualquer, mas para capturar alguma informação, é precisso do $event)
+
+<app-card-button (eventoEmitido)="buttonClicked($event)"></app-card-button>
+
+```
