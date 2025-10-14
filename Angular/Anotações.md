@@ -247,3 +247,33 @@ O angular Material é uma biblioteca de componentes prontos onde, basta apenas i
 <app-card-button (eventoEmitido)="buttonClicked($event)"></app-card-button>
 
 ```
+
+Two-way DataBinding: O Two-Way Databind é uma forma de sincronizar um evento com uma variável, ou seja, transformar automaticamente a entrada de dados em um valor de variável, podemos fazer isso usando a importação de um módulo e utilizando uma propriedade na tag do template. Vamos ver um exemplo mais explícito sobre como fazer o two-way databinding
+
+``` Typescript
+
+@Component({
+  imports: [
+    FormsModule // Isso permite o uso de NgModel e NgModelChange
+  ]
+})
+
+<input [NgModel]='variavel' (NgModelChange)='funcaoDeAtribuicao($event)' > // O NgModel puxa a informação da 'variavel' para dentro do input e a função deve atualizar a variavel com o valor do input através do $event
+<h2>{{variavel}}</h2> // Interpolação da variavel
+
+<input [(NgModel)]="variavel"> // Processo simplificado de realizar o two-way databinding
+<p>{{ variavel }}</p>
+
+```
+
+## Diretivas
+
+As diretivas são formas de manipulação do DOM, elas podem ser classificadas em componentizadas (Modelo de manipulação de componente, padrão para o que vimos até agora), atribuidas(Manipulam valores e comportamento de elementos) ou estruturais(Manipulam a estrutura dos elementos do DOM).
+
+*NgIf: O *NgIf é a propriedade HTML da diretiva estrutural de condição, uma tag que possui um NgIf pode receber uma condição, e dependendo da condição, o elemento será ou não mostrado ao usuário. Podemos inserir um template padrão para termos um else dentro da diretiva, vamos ver o exemplo:
+
+``` Typescript
+  <h1 *ngIf="condicao;">Lista de Tarefas</h1>  // Caso a condição não seja atendida, será ocultada a Tag
+
+  <h1 *ngIf="condicao; else contentElse"> Não será mostrado </h1> // Caso a condição não seja atendida, podemos definir um template para ser exibido no lugar do elemento
+  <ng-template #contentElse> Será mostrado </ng-template>
