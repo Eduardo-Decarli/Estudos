@@ -277,3 +277,14 @@ As diretivas são formas de manipulação do DOM, elas podem ser classificadas e
 
   <h1 *ngIf="condicao; else contentElse"> Não será mostrado </h1> // Caso a condição não seja atendida, podemos definir um template para ser exibido no lugar do elemento
   <ng-template #contentElse> Será mostrado </ng-template>
+```
+
+*NgFor: Essa é uma diretiva que consegue percorrer sobre um array (seja string, number, misto ou objeto) e criar um elemento para cada valor, vamos para um exemplo para entendermos
+
+``` typescript
+
+<div *ngFor="let item of vetor; i = index"> // Aqui definimos uma variável que representará o item na posição do index e o vetor
+  <h1>{{i}} - {{item}}</h1> // Isso irá mostrar a interpolação entre o index e o item (poderia ser um objeto e representariamos a propriedade do item)
+</div>
+
+```
