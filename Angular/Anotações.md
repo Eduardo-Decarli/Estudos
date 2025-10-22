@@ -187,7 +187,7 @@ API do DOM: O DOM é uma árvore que estrutura o HTML de um site dentro do naveg
 
 ## Angular Material
 
-O angular Material é uma biblioteca de componentes prontos onde, basta apenas importar o componente para dentro do módulo e fazer uso dele, para instalar o angular material, podemos usar o ng add @angular/material e seguir os passos, após isso, buscamos na internet o componente adequado, importamos ele para dentro de um módulo e fazemos uso dele.
+O angular Material é uma biblioteca de componentes prontos onde, basta apenas importar o componente para dentro do módulo e fazer uso dele, para instalar o angular material, podemos usar o **ng add @angular/material** e seguir os passos, após isso, buscamos na internet o componente adequado, importamos ele para dentro de um módulo e fazemos uso dele.
 
 ---
 
@@ -288,3 +288,145 @@ As diretivas são formas de manipulação do DOM, elas podem ser classificadas e
 </div>
 
 ```
+
+- Diretivas também podem ser criadas através de um comando do Angular CLI (ng generate directive nome-da-diretiva) e estruturadas de uma forma conveniente, assim, podemos criar elementos HTML que escutam essas diretivas, segue o exemplo: 
+
+``` typescript
+
+@Directive({
+  selector: '[appHighlight]',
+  standalone: false
+})
+export class Highlight {
+
+  @HostBinding('style.background-color') bgColor = 'transparent'; // Define que a variavel irá fazer referência ao background color de todos os elementos que usarem essa diretiva
+
+  @HostListener('mouseover', ) onMouseOver() { // HostListener ficará escutando um evento para realizar um método
+    this.bgColor = 'orange';
+  }
+
+  @HostListener('mouseout', ) onMouseOut() {
+    this.bgColor = 'transparent';
+  }
+  constructor() { }
+
+}
+
+```
+
+``` HTML
+
+<p appHighlight>Sou um Paragrafo com Diretiva</p>
+
+```
+
+---
+
+pipe: O pipe no Angular é uma ferramenta útil para fazer transformações em variáveis dentro do template, podemos usar uma variável e atribuila a um pipe que por sua vez irá delegar a tarefa para uma função criada em alguma classe Typescript, seja ela nativa do angular ou criada via classe Pipe. Uma classe Pipe importa a interface PipeTransform e utiliza a decoration @Pipe().
+
+- Os pipes nativos do angular são importados da biblioteca ComumModule
+
+``` HTML
+
+<<h1>{{ variavel | upercase }}</h1>> <!-- O valor dentro da variavel será expresso em letra maiúscula -->
+
+```
+
+``` typescript
+
+@Pipe({
+  name: 'nome-do-meu-pipe',
+})
+export class MeuPipePersonalizado implements PipeTransform { // Lembrando que precisamos importar nosso pipe para dentro do nosso modulo
+  transform(status: string): string {
+    // Aqui criamos uma lógica com retorno
+    if(status == 1) {
+      return valorRetornado
+    }
+  }
+}
+
+```
+
+- ngModel é um parâmetro que avisa para o Angular acionar o Change Detector no contexto, isso permite a sincronização de valores de elementros HTML com variáveis especificadas.
+
+Template Variables: Template Variables são variáveis que podemos criar dentro de elementos HTML (dentro do template) que fará referência ao próprio elemento, ou seja, se eu tiver um elemento <<input type="text">> eu posso atribuir uma variável a ele que conseguirá fazer referência a ele mesmo, ficando assim: **input type="text" #myVariable**, podemos acessar essa variável em qualquer momento dentro do template e dentro de seu escopo.
+
+``` HTML
+
+  <input #myInput type="text" ngModel>
+
+  <h2>{{myInput.value}}</h2>
+
+```
+
+1. Acima temos um input com a variável declarada e no próprio template, temos a chamada ao valor do input, o ngModel é importante, pois ele avisa ao observableChange do Angular para monitorar a atualização simultânea do valor da variável (similar ao two-way databinding).
+
+Template Variable Scope: O escopo das variáveis de template é definido na ordem similar ao javascript, se criarmos um escopo (escopo são criados com diretivas, como ngFor ou ngIf), as template variables irão seguir a sequência onde variáveis de elementos pais podem ser acessados dentro de elementos filhos, mas o contrário não.
+
+``` html
+<div>
+  <input #myInput type="text" *nfIf(true)>
+</div>
+
+  <h2>{{myInput.value}}</h2> <!-- Irá dar erro, pois a variável não pode ser acessada, o escopo da variável se limita à div-->
+
+```
+
+@ViewChild(): Esse decorator tem a capacidade de inicializar uma variável no typescript e atribuir a essa variável, a referência ao objeto do elemento HTML, dessa forma, podemos manipular uma variável que armazena um elemento HTML dentro da nossa classe/metodo.
+
+``` Typescript
+
+<input type="text" #meuInput>
+
+@ViewChild('meuInput')
+meuInput!: ElementRef<HtmlInputElement>;
+
+this.meuInput.nativeElement.value = 'valor atualizado';
+
+```
+@ViewChildren(): O ViewChildren é uma forma de conseguir capturar valores filhos de um elemento. Podemos por exemplo, ter um botão com for e os botões dentro do for pode ser capturado com o @viewChildren(), ele irá retornar uma lista de elementos que podem ser manipulados individualmente.
+
+``` HTML
+
+<button #meuButton class="btn-{{ i }}"
+    *ngFor="let btn of buttonsList; let i = index" (click)="changeColor($event)">{{ btn }}</button>
+
+```
+
+``` Typescript
+
+buttonsList = [ // Define a lista de botões de forma dinâmica usando diretiva estrutural (*for)
+    'botao 1',
+    'botão 2',
+    'botão 3'
+  ]
+
+  @ViewChildren('meuButton') 
+    buttonsEl!: QueryList<ElementRef<HTMLButtonElement>>; // Define uma lista de referencias a um Elemento HTML do tipo Botão
+
+  changeColor(event: Event) {
+    const buttonRef = event.target as HTMLButtonElement;
+
+    buttonRef.style.backgroundColor = 'green';
+    buttonRef.style.color = 'white';
+  }
+
+  resertButtons() {
+    this.buttonsEl.forEach((button) => { // Permite iterar sobre a lista de buttons capturada pelo ViewChildren
+      button.nativeElement.style.backgroundColor = '';
+      button.nativeElement.style.color = 'black';
+    })
+  }
+
+```
+
+Hook: Um hook é um método que o Angular chama automaticamente de acordo com um determinado ciclo de vida de um componente
+
+OnInit: O OnInit é uma interface que podemos implementar, e ao implementar ela nos fornece um método ngOnInit(), que podemos utilizar para realizar instruções logo quando o Angular carrega o sistema de @Input do componente.
+
+AfterViewInit: Esse hook é chamado pelo Angular, sempre que o Angular realizar a renderização do template.
+
+- Se precisar fazer manipulação de elementos HTML logo ao iniciar o sistema, o OnInit não encontrará os elementos.
+
+Diretivas: Diretiv
