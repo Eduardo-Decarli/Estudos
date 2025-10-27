@@ -65,3 +65,22 @@ function mostraNome(nome :string, sobrenome?:string): string {
 ---
 
 Restrição de Valores: No Typescript, podemos passar valores limitados para uma variável, onde a variável só poderá receber um conjunto restrito de valores, isso é feito através da atribuição usando um pipe, podemos fazer assim -> minhaVariavel: 'branco' | 'preto' = 'branco'; Isso define que a minhaVariavel só poderá receber branco ou preto como valores e por default, atribuimos branco como valor de inicialização.
+
+Interfaces: As interfaces no Typescript representam um contrado, onde quem as implementa é obrigado a seguir suas definições de métodos ou propriedades, uma interface pode ser utilizada para definir como uma classe deve implementar os métodos ou quais atributos um objeto deve ter.
+
+``` typescript
+
+interface Pessoa {
+    nome: string,
+    idade: number,
+    sexo: string = 'masculino' | 'feminino'
+}
+
+class ImplementaPessoa {
+
+    const pessoa: Pessoa = {
+        nome: 'Eduardo',
+        idade: 21,
+        sexo: 'masculino'
+    }
+}
