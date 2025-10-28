@@ -1,3 +1,12 @@
+# Sumário
+
+[Ciclo de vida do Componente](#ciclo-de-vida-do-componente)
+[Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)
+[Data Binding](#data-binding)
+[Pipes](#pipes)
+[Diretivas](#diretivas)
+[Angular Material](#angular-material)
+
 **Node.JS:** Node.js é um ambiente de execução JavaScript do lado do servidor. Ele permite rodar código JavaScript fora do navegador.  
 
 **npm:** npm (Node Package Manager) é o gerenciador de pacotes que vem junto com o Node. Ele permite instalar bibliotecas, como o Angular CLI, com um único comando, muito similar ao Maven.
@@ -56,12 +65,12 @@ ng generate component nome-do-componente
 
 ```
 
-ng generate: O ng generate serve para gerar novas estruturas para o projeto, os tipos de estruturas são:
+**ng generate:** O ng generate serve para gerar novas estruturas para o projeto, os tipos de estruturas são:
 
-**Componente** -> ng g component meu-nome
-**Serviços** -> ng g service meu-nome
-**Classe** -> ng g class meu-nome
-**Interface** -> ng g interface meu-nome
+- **Componente** -> ng g component meu-nome
+- **Serviços** -> ng g service meu-nome
+- **Classe** -> ng g class meu-nome
+- **Interface** -> ng g interface meu-nome
 
 **CSS:** Linguagem de estilização da web
 
@@ -71,23 +80,23 @@ ng generate: O ng generate serve para gerar novas estruturas para o projeto, os 
 
 **Componente:** Um componente é um encaixe dentro da tela, tudo que podemos separar em blocos dentro de um layout chamamos de componente, o angular trabalha com chamadas de componentes filhos para formar componentes pai (maiores e agrupados por outros componentes).
 
-Template: Conteudo HTML dentro do arquivo .html na pasta do componente.
+**Template:** Conteudo HTML dentro do arquivo .html na pasta do componente.
 
 **Módulo:** No angular, podemos classificar e organizar componentes por módulos, dentro de cada módulo, encontramos os componentes específicamente organizados.
 
 - Normalmente fazemos uma tela se tornar um módulo e dentro do módulo (tela) temos vários componentes organizados.
 
-Declaração de Componente: No angular, ao criar um componente, usando o ``generate component``, será criado uma pasta referente ao respectivo componente, e lá estará os arquivos utilizados. O arquivo .ts do componente fará o gerenciamento de import e export, lá nós encontramos um **decorator** que terá os metadados do componente, e uma classe (a classe é onde encontramos os métodos e lógica do componente).
+**Declaração de Componente:** No angular, ao criar um componente, usando o ``generate component``, será criado uma pasta referente ao respectivo componente, e lá estará os arquivos utilizados. O arquivo .ts do componente fará o gerenciamento de import e export, lá nós encontramos um **decorator** que terá os metadados do componente, e uma classe (a classe é onde encontramos os métodos e lógica do componente).
 
 - A propriedade SELECTOR do componente é o nome de chamada dele, ou seja, para chamar um componente, utilizamos uma tag com o nome do selector
 
 - Para um módulo identificar um componente, primeiro precisamos localziar o decorator @NgModule e declarar o componente lá.
 
-Importação e Exportação de Componentes: No Angular, para utilizar um componente, logo após ele ser criado, precisamos referenciar a classe desse componente no seu respectivo módulo (dentro de um decorator **@NgModule**, na propriedade declarations).
+**Importação e Exportação de Componentes:** No Angular, para utilizar um componente, logo após ele ser criado, precisamos referenciar a classe desse componente no seu respectivo módulo (dentro de um decorator **@NgModule**, na propriedade declarations).
 
 - Um componente não pode ser referenciado em 2 ou mais módulos diferentes, isso dará um erro.
 
-Importação e Exportação de Módulos: No angular, quando criamos um módulo e atribuimos componentes a esse módulo, podemos exportar o módulo e utilizar seus componentes em outros lugares. Para seus componentes serem exportados, realizamos isso através de 2 passos: 
+**Importação e Exportação de Módulos:** No angular, quando criamos um módulo e atribuimos componentes a esse módulo, podemos exportar o módulo e utilizar seus componentes em outros lugares. Para seus componentes serem exportados, realizamos isso através de 2 passos: 
 
 1. primeiro precisamos importar o módulo 1 para dentro do módulo 2, através da propriedade **imports**.
 2. voltando para o módulo 1, precisamos especificar os componentes que serão exportados, através de uma propriedade chamada **exports**, localizada dentro do @decorator. 
@@ -213,7 +222,27 @@ O angular Material é uma biblioteca de componentes prontos onde, basta apenas i
 
 **Class Binding:** O Class Binding é uma forma de trabalhar com classes de forma dinâmica, pois esse método permite definir se uma classe irá estar ou não presente através de um boolean, ex: [class.nome-da-classe]="true" [class.nome-da-classe]="!buttonClass".
 
+**Two-way DataBinding:** O Two-Way Databind é uma forma de sincronizar um evento com uma variável, ou seja, transformar automaticamente a entrada de dados em um valor de variável, podemos fazer isso usando a importação de um módulo e utilizando uma propriedade na tag do template. Vamos ver um exemplo mais explícito sobre como fazer o two-way databinding
+
+``` Typescript
+
+@Component({
+  imports: [
+    FormsModule // Isso permite o uso de NgModel e NgModelChange
+  ]
+})
+
+<input [NgModel]='variavel' (NgModelChange)='funcaoDeAtribuicao($event)' > // O NgModel puxa a informação da 'variavel' para dentro do input e a função deve atualizar a variavel com o valor do input através do $event
+<h2>{{variavel}}</h2> // Interpolação da variavel
+
+<input [(NgModel)]="variavel"> // Processo simplificado de realizar o two-way databinding
+<p>{{ variavel }}</p>
+
+```
+
 ---
+
+## Comunicação Entre Componentes
 
 **@Input:** O @Input é a forma de conseguir enviar uma informação de um componente pai para dentro de um componente filho, essa tag possui algumas propriedades e é utilizada junto a uma variável. Dentro da classe do componente filho, podemos inicializar uma variável com @Input e declara que o componente, na hora de ser escrito como tag, terá uma propriedade como nome da variável atribuida (ou o nome do alias). O valor atribuido a essa propriedade será capturado pela variável especificada no componente filho e poderá ser utilizada.
 
@@ -248,27 +277,26 @@ O angular Material é uma biblioteca de componentes prontos onde, basta apenas i
 
 ```
 
-Two-way DataBinding: O Two-Way Databind é uma forma de sincronizar um evento com uma variável, ou seja, transformar automaticamente a entrada de dados em um valor de variável, podemos fazer isso usando a importação de um módulo e utilizando uma propriedade na tag do template. Vamos ver um exemplo mais explícito sobre como fazer o two-way databinding
+---
 
-``` Typescript
+## Ciclo de vida do Componente
 
-@Component({
-  imports: [
-    FormsModule // Isso permite o uso de NgModel e NgModelChange
-  ]
-})
+Hook: Um hook é um método que o Angular chama automaticamente de acordo com um determinado ciclo de vida de um componente
 
-<input [NgModel]='variavel' (NgModelChange)='funcaoDeAtribuicao($event)' > // O NgModel puxa a informação da 'variavel' para dentro do input e a função deve atualizar a variavel com o valor do input através do $event
-<h2>{{variavel}}</h2> // Interpolação da variavel
+OnInit: O OnInit é uma interface que podemos implementar na classe do componente, e ao implementar ela nos **fornece um método ngOnInit()**, que podemos utilizar para realizar instruções logo quando o Angular carrega o sistema de **@Input** do componente.
 
-<input [(NgModel)]="variavel"> // Processo simplificado de realizar o two-way databinding
-<p>{{ variavel }}</p>
+ngOnChanges: 
 
-```
+AfterViewInit: Esse hook é chamado pelo Angular, sempre que o Angular realizar a renderização do template, é um processo posterior ao OnIni, pois primeiro ele irá carregar a estrutura do DOM e as diretivas.
+
+- Se precisar fazer manipulação de elementos HTML logo ao iniciar o sistema, o OnInit não encontrará os elementos.
+
 
 ## Diretivas
 
 As diretivas são formas de manipulação do DOM, elas podem ser classificadas em componentizadas (Modelo de manipulação de componente, padrão para o que vimos até agora), atribuidas(Manipulam valores e comportamento de elementos) ou estruturais(Manipulam a estrutura dos elementos do DOM).
+
+### Diretivas Estruturais
 
 *NgIf: O *NgIf é a propriedade HTML da diretiva estrutural de condição, uma tag que possui um NgIf pode receber uma condição, e dependendo da condição, o elemento será ou não mostrado ao usuário. Podemos inserir um template padrão para termos um else dentro da diretiva, vamos ver o exemplo:
 
@@ -312,17 +340,15 @@ export class Highlight {
 
 }
 
-```
-
-``` HTML
-
 <p appHighlight>Sou um Paragrafo com Diretiva</p>
 
 ```
 
 ---
 
-pipe: O pipe no Angular é uma ferramenta útil para fazer transformações em variáveis dentro do template, podemos usar uma variável e atribuila a um pipe que por sua vez irá delegar a tarefa para uma função criada em alguma classe Typescript, seja ela nativa do angular ou criada via classe Pipe. Uma classe Pipe importa a interface PipeTransform e utiliza a decoration @Pipe().
+## Pipes
+
+**pipe:** O pipe no Angular é uma ferramenta útil para fazer transformações em variáveis dentro do template, podemos usar uma variável e atribuila a um pipe que por sua vez irá delegar a tarefa para uma função criada em alguma classe Typescript, seja ela nativa do angular ou criada via classe Pipe. Uma classe Pipe importa a interface PipeTransform e utiliza a decoration @Pipe().
 
 - Os pipes nativos do angular são importados da biblioteca ComumModule
 
@@ -347,6 +373,8 @@ export class MeuPipePersonalizado implements PipeTransform { // Lembrando que pr
 }
 
 ```
+
+---
 
 - ngModel é um parâmetro que avisa para o Angular acionar o Change Detector no contexto, isso permite a sincronização de valores de elementros HTML com variáveis especificadas.
 
@@ -421,12 +449,3 @@ buttonsList = [ // Define a lista de botões de forma dinâmica usando diretiva 
 
 ```
 
-Hook: Um hook é um método que o Angular chama automaticamente de acordo com um determinado ciclo de vida de um componente
-
-OnInit: O OnInit é uma interface que podemos implementar, e ao implementar ela nos fornece um método ngOnInit(), que podemos utilizar para realizar instruções logo quando o Angular carrega o sistema de @Input do componente.
-
-AfterViewInit: Esse hook é chamado pelo Angular, sempre que o Angular realizar a renderização do template.
-
-- Se precisar fazer manipulação de elementos HTML logo ao iniciar o sistema, o OnInit não encontrará os elementos.
-
-Diretivas: Diretiv
