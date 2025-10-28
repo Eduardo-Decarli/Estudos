@@ -1,10 +1,13 @@
 # Sumário
 
-[Ciclo de vida do Componente](#ciclo-de-vida-do-componente)
-[Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)
 [Data Binding](#data-binding)
-[Pipes](#pipes)
+[Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)
+[Ciclo de vida do Componente](#ciclo-de-vida-do-componente)
+[Encapsulamento de Estilos](#encapsulamento-de-estilos)
 [Diretivas](#diretivas)
+- [Diretivas de Atributos](#diretivas-de-atributo)
+- [Diretivas Estruturais](#diretivas-estruturais)
+[Pipes](#pipes)
 [Angular Material](#angular-material)
 
 **Node.JS:** Node.js é um ambiente de execução JavaScript do lado do servidor. Ele permite rodar código JavaScript fora do navegador.  
@@ -173,6 +176,8 @@ export class CardButtonRoxo {
 
 :host: O uso do :host é uma ferramenta muito útil quando utilizamos o ::ng-deep, pois ele permite utilizar o ::ng-deep apenas no componente referenciado, sem afetar o funcionamento de outros componentes filhos iguais. (é fazer uso do ::ng-deep sem a obrigação de especificar um seletor como class/id para especificamente editar um componente filho.)
 
+## Encapsulamento de Estilos
+
 View Encapsulation: Os view encapsulations são formas de encapsular (ordenar o comportamento) do CSS, permitindo abrir maior leque de funcionamentos para o comportamento da estilização no angular. Para atribuir um view encapsulation, o angular se orienta através da propriedade **encapsulation** que pode ser inserida dentro do decoration do componente.
 
 1. ViewEncapsulation.None: Essa propriedade remove o comportamento padrão da estilização dos componentes, com essa propriedaed, todos os componentes receberão escopo global de estilização, então ao editar um, todos serão editados (como um @ng-deep geral sem o uso da anotação).
@@ -202,7 +207,7 @@ O angular Material é uma biblioteca de componentes prontos onde, basta apenas i
 
 ## Data Binding
 
-**Data-biding:** É o termo dado para referenciar a sincronia entre variáveis da tela e da lógica, ela pode ser dividida em Interpolation, React databiding, Propery Databiding e two-way Databiding.
+É o termo dado para referenciar a sincronia entre variáveis da tela e da lógica, ela pode ser dividida em Interpolation, React databiding, Propery Databiding e two-way Databiding.
 
 **Interpolation:** É a sincronia de dados de variáveis entre a view e a lógica para expressar algo na tela, podemos passar as variáveis ou funções que irão realizar o comportamento da view sem necessariamente chamar os elementos HTML, esse processo é feito através das **{{nome-da-variavel}}**.
 
@@ -294,28 +299,72 @@ AfterViewInit: Esse hook é chamado pelo Angular, sempre que o Angular realizar 
 
 ## Diretivas
 
-As diretivas são formas de manipulação do DOM, elas podem ser classificadas em componentizadas (Modelo de manipulação de componente, padrão para o que vimos até agora), atribuidas(Manipulam valores e comportamento de elementos) ou estruturais(Manipulam a estrutura dos elementos do DOM).
+As diretivas são **formas de manipulação do DOM**, elas podem ser classificadas em  **Diretivas de Atributo**(Manipulam valores e comportamento de elementos), **Diretivas Estruturais**(Manipulam a estrutura dos elementos do DOM) e **Diretivas Personalizadas**.
+
+### Diretivas de Atributo
+
+**NgClass:** Permite adicionar ou remover dinamicamente uma classe CSS.
+
+**NgStyle:** Permite adicionar ou remover dinâmicamente um estilo CSS
+
+**NgModel:** Cria a comunicação de bidirecional entre o template e a classe do componente (famoso two-way data binding).
+
+**NgTemplate:** Cria um template modelo, que possui um rendered=falso por padrão, se utilizar junto com *NgIf, poderá renderiza-lo.
+
+**NgContent:** Permite que o elemento pai renderize os elementos filho.
 
 ### Diretivas Estruturais
 
-*NgIf: O *NgIf é a propriedade HTML da diretiva estrutural de condição, uma tag que possui um NgIf pode receber uma condição, e dependendo da condição, o elemento será ou não mostrado ao usuário. Podemos inserir um template padrão para termos um else dentro da diretiva, vamos ver o exemplo:
+***NgIf:** O *NgIf é a propriedade HTML da diretiva estrutural de condição, uma tag que possui um NgIf pode receber uma condição, e dependendo da condição, o elemento será ou não mostrado ao usuário. Podemos inserir um template padrão para termos um else dentro da diretiva, vamos ver o exemplo:
 
-``` Typescript
-  <h1 *ngIf="condicao;">Lista de Tarefas</h1>  // Caso a condição não seja atendida, será ocultada a Tag
+``` HTML
+  <h1 *ngIf="condicao;">Lista de Tarefas</h1>  <!-- Caso a condição não seja atendida, será ocultada a Tag -->
 
-  <h1 *ngIf="condicao; else contentElse"> Não será mostrado </h1> // Caso a condição não seja atendida, podemos definir um template para ser exibido no lugar do elemento
+  <h1 *ngIf="condicao; else contentElse"> Não será mostrado </h1> <!-- Caso a condição não seja atendida, podemos definir um template para ser exibido no lugar do elemento -->
   <ng-template #contentElse> Será mostrado </ng-template>
 ```
 
-*NgFor: Essa é uma diretiva que consegue percorrer sobre um array (seja string, number, misto ou objeto) e criar um elemento para cada valor, vamos para um exemplo para entendermos
+***NgFor:** Essa é uma diretiva que consegue percorrer sobre um array (seja string, number, misto ou objeto) e criar um elemento para cada valor, vamos para um exemplo para entendermos
 
-``` typescript
+``` html
 
-<div *ngFor="let item of vetor; i = index"> // Aqui definimos uma variável que representará o item na posição do index e o vetor
-  <h1>{{i}} - {{item}}</h1> // Isso irá mostrar a interpolação entre o index e o item (poderia ser um objeto e representariamos a propriedade do item)
+<div *ngFor="let item of vetor; i = index"> <!-- Aqui definimos uma variável que representará o item na posição do index e o vetor -->
+  <h1>{{i}} - {{item}}</h1> <!-- Isso irá mostrar a interpolação entre o index e o item (poderia ser um objeto e representariamos a propriedade do item) -->
 </div>
 
 ```
+
+**NgSwitchCase:** Cria blocos condicionais, que dependendo da variável atrelada, poderá renderizar conteudos diferentes
+
+``` HTML
+
+<div [ngSwitch]="menuType">
+  <div *ngSwitchDefault="'user'">
+    <ul>
+      <li>Editar Perfil</li>
+      <li>Adiconar cartão</li>
+    </ul>
+  </div>
+  <div *ngSwitchCase="'admin'">
+    <ul>
+      <li>Editar Perfil</li>
+      <li>Adiconar cartão</li>
+      <li>Gerenciar usuários</li>
+    </ul>
+  </div>
+  <div *ngSwitchCase="'superUser'">
+    <ul>
+      <li>Editar Perfil</li>
+      <li>Adiconar cartão</li>
+      <li>Gerenciar usuários</li>
+      <li>Gerenciar Admins</li>
+    </ul>
+  </div>
+</div>
+
+```
+
+### Diretivas Personalizadas
 
 - Diretivas também podem ser criadas através de um comando do Angular CLI (ng generate directive nome-da-diretiva) e estruturadas de uma forma conveniente, assim, podemos criar elementos HTML que escutam essas diretivas, segue o exemplo: 
 
