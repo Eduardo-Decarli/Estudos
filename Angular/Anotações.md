@@ -1,14 +1,16 @@
 # Sumário
 
-[Data Binding](#data-binding)
-[Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)
-[Ciclo de vida do Componente](#ciclo-de-vida-do-componente)
-[Encapsulamento de Estilos](#encapsulamento-de-estilos)
-[Diretivas](#diretivas)
-- [Diretivas de Atributos](#diretivas-de-atributo)
-- [Diretivas Estruturais](#diretivas-estruturais)
-[Pipes](#pipes)
-[Angular Material](#angular-material)
+[Data Binding](#data-binding)  
+[Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)  
+[Ciclo de vida do Componente](#ciclo-de-vida-do-componente)  
+[Encapsulamento de Estilos](#encapsulamento-de-estilos)  
+[Diretivas](#diretivas)  
+- [Diretivas de Atributos](#diretivas-de-atributo)  
+- [Diretivas Estruturais](#diretivas-estruturais)  
+- [Diretivas Personalizadas](#diretivas-personalizadas)
+[Pipes](#pipes)  
+[Template Variables](#template-variables)  
+[Angular Material](#angular-material)  
 
 **Node.JS:** Node.js é um ambiente de execução JavaScript do lado do servidor. Ele permite rodar código JavaScript fora do navegador.  
 
@@ -65,6 +67,12 @@ ng serve
 
 # Gera um novo componente
 ng generate component nome-do-componente
+
+# Irá imprimir as alterações que o generate component fará, mas sem realiza-las
+ng generate component nome-do-componente --dry-run
+
+# Irá imprimir as alterações que o generate component fará, mas sem realiza-las
+ng generate component nome-do-componente --dry-run
 
 ```
 
@@ -366,7 +374,46 @@ As diretivas são **formas de manipulação do DOM**, elas podem ser classificad
 
 ### Diretivas Personalizadas
 
-- Diretivas também podem ser criadas através de um comando do Angular CLI (ng generate directive nome-da-diretiva) e estruturadas de uma forma conveniente, assim, podemos criar elementos HTML que escutam essas diretivas, segue o exemplo: 
+Para criar uma diretiva personalizada, precisamos utilizar o comando de geração de diretiva: **ng generate directive nome-da-diretiva**, isso irá criar um arquivo ts da diretiva e vincular ela ao app.module
+
+- Se referir, pode colocar a diretiva dentro de uma pasta separada para ela.
+
+``` typescript
+
+@Direcive({
+  selector: ["minhaDiretiva"] // Define como chamar a diretiva
+})
+export class MinhaDiretiva {
+  constructor(private elRef: ElementRef) { // Uma diretiva possui em seu construtor, uma referência ao próprio elemento HTML na qual está definida
+    elRef.nativeElement.style.background = 'red'; // Com o elRef, podemos acessar o elemento HTML e alterar suas propriedades (Manipulando o DOM)
+  } 
+}
+
+```
+
+@HostListener: Podemos criar diretivas que reagem a eventos do usuário quando necessário, para realizar essa interação, temos o **@HostListener(nome-do-evento)**, que ficará escutando o evento especificado e irá executar a função na qual está atrelado
+
+```typescript
+
+@HostListener('mouseenter') onMouseEnter() {
+  elRef.nativeElement.style.background = 'green';
+}
+
+@HostListener('mouseleave') onMouseLeave() {
+  elRef.nativeElement.style.background = 'pink';
+}
+
+```
+
+@HostBinding: Também podemos associar propriedades a uma variável, isso é interessante quando queremos trabalhar com diretivas sem precisar ficar chamando o nativeElement a todo momento, o @HostBinding() funciona similar ao @HostListener, mas é atribuido a uma variável.
+
+``` typescript
+
+@HostBinding('target.value') valorDoElemento = 'Um valor de Elemento';
+
+```
+
+- Vamos ver um exemplo extendido de como podemos criar uma diretiva funcional
 
 ``` typescript
 
@@ -389,7 +436,7 @@ export class Highlight {
 
 }
 
-<p appHighlight>Sou um Paragrafo com Diretiva</p>
+<p appHighlight>Sou um Paragrafo com Diretiva</p> // Para atribuir uma diretiva, basta colocar o nome do seletor dentro do elemento HTML
 
 ```
 
@@ -427,7 +474,11 @@ export class MeuPipePersonalizado implements PipeTransform { // Lembrando que pr
 
 - ngModel é um parâmetro que avisa para o Angular acionar o Change Detector no contexto, isso permite a sincronização de valores de elementros HTML com variáveis especificadas.
 
-Template Variables: Template Variables são variáveis que podemos criar dentro de elementos HTML (dentro do template) que fará referência ao próprio elemento, ou seja, se eu tiver um elemento <<input type="text">> eu posso atribuir uma variável a ele que conseguirá fazer referência a ele mesmo, ficando assim: **input type="text" #myVariable**, podemos acessar essa variável em qualquer momento dentro do template e dentro de seu escopo.
+---
+
+## Template Variables
+
+Template Variables: Template Variables são variáveis que podemos criar dentro de elementos HTML (dentro do template) que fará referência ao próprio elemento ou a uma diretiva, ou seja, se eu tiver um elemento <<input type="text">> eu posso atribuir uma variável a ele que conseguirá fazer referência a ele mesmo, ficando assim: **input type="text" #myVariable**, podemos acessar essa variável em qualquer momento dentro do template e dentro de seu escopo.
 
 ``` HTML
 
@@ -437,18 +488,21 @@ Template Variables: Template Variables são variáveis que podemos criar dentro 
 
 ```
 
-1. Acima temos um input com a variável declarada e no próprio template, temos a chamada ao valor do input, o ngModel é importante, pois ele avisa ao observableChange do Angular para monitorar a atualização simultânea do valor da variável (similar ao two-way databinding).
+- Acima temos um input com a variável declarada e no próprio template, temos a chamada ao valor do input, o ngModel é importante, pois ele avisa ao observableChange do Angular para monitorar a atualização simultânea do valor da variável (similar ao two-way databinding).
 
-Template Variable Scope: O escopo das variáveis de template é definido na ordem similar ao javascript, se criarmos um escopo (escopo são criados com diretivas, como ngFor ou ngIf), as template variables irão seguir a sequência onde variáveis de elementos pais podem ser acessados dentro de elementos filhos, mas o contrário não.
+**Template Variable Scope:** O escopo das variáveis de template é definido na ordem similar ao javascript, se criarmos um escopo (escopo são criados com diretivas, como ngFor ou ngIf), as template variables irão seguir a sequência onde variáveis de elementos pais podem ser acessados dentro de elementos filhos, mas o contrário não.
 
 ``` html
-<div>
-  <input #myInput type="text" *nfIf(true)>
-</div>
+
+  <div>
+    <input #myInput type="text" *nfIf(true)>
+  </div>
 
   <h2>{{myInput.value}}</h2> <!-- Irá dar erro, pois a variável não pode ser acessada, o escopo da variável se limita à div-->
 
 ```
+
+## Acesso de componentes filhos
 
 @ViewChild(): Esse decorator tem a capacidade de inicializar uma variável no typescript e atribuir a essa variável, a referência ao objeto do elemento HTML, dessa forma, podemos manipular uma variável que armazena um elemento HTML dentro da nossa classe/metodo.
 
@@ -498,3 +552,97 @@ buttonsList = [ // Define a lista de botões de forma dinâmica usando diretiva 
 
 ```
 
+### Serviços
+
+Serviços são classes com propósitos lógicos e definidos, elas são caracterizadas por realizar lógica de negócio, realizar validações, conexões com servidores e qualquer outras coisas que não envolvam a visualização ou interação do usuário. No Angular, um serviço é caracterizado pelo decorador **@Injectable**, pois define a criação de um serviço e permite chama-lo para dentro de um módulo ou classe. Podendo reutilizar o nosso serviço em quantos lugares precisarmos.
+
+- Podemos criar um serviço através do **ng generate service nomeDoServico**
+
+``` Typescript
+
+@Injectable({
+  providedIn: 'root'
+})
+export class heroService() {
+
+}
+
+```
+
+- Quando o Angular renderiza um componetne, ele identifica quais serviços esse componente precisa, através dos parametros do construtor, por isso, para instanciar um serviço, é necessário inicializar ele pelos parametros do construtor. Se o Angular identificar a necessidade de um serviço, ele irá verificar se já existe uma instância para esse serviço, caso não houver ele irá criar uma instância, caso já houver, ele irá reaproveitar a referência. Então podemos dizer que sempre haverá apenas uma instância de um serviço naturalmente criado pelo Angular, caso tenha mais referências, será reaproveitada a instância existente.
+
+- Por padrão, os serviços root do Angular são **singleton**
+
+Provedores: Povedores definem como o serviço será visto pelos componentes e como o Angular deve gerenciar ele, ao criar um novo serviço pelo Angular CLI, ele irá vir com um providedIn no decorator, esse providedIn define aonde o serviço deverá ser gerenciado, por padrão, ele é definido no root, o que quer dizer que o Angular irá instânciar de forma natural na raiz, permitindo todos os componentes poderem acessar ele e reutilizar instâncias existentes.
+
+- Caso no componente seja registrado um providres, o Angular irá criar uma nova instância do serviço especificado para cada referência ao componente criado na aplicação.
+
+``` typescript
+
+@Component({
+  providers: [HeroService] // Essa propriedade no @Component define que a cada nova instanciação do respectivo componente, o Angular irá criar um novo serviço.
+})
+
+```
+
+## Roteamento Estático
+
+O Angular nos fornece uma estrutura de mapeamento de componentes, esse mapeamento transforma nossa aplicação componentizada em uma SPA, permitindo uma navegação fluida entre URLs através das rotas, é um conceito extremamente importante e permite criar telas com rotas separadas e específicas, vamos primeiramente entender o roteamento estático.
+
+- O Angular define diferentes formas de implementar um roteamento entre os modelos padrões e standalone do Angular.
+
+Para o standalone, irei deixar um arquivo que demonstra como utilizar sistema de roteamento estático na pasta [Roteamento Estático](/Angular/Roteamento%20Estático/1-roteamento-standalone/). E irei deixar abaixo algumas definições.
+
+**app.routers.ts:** Esse é o arquivo onde iremos configurar nossas rotas e os componentes que serão carregados ao entrar na respectiva rota (importante notar que o componente só será renderizado quando a rota for acessada, até lá, o angular não irá inicializar o componente, isso é demonstrado através do OnInit).
+
+``` typescript
+
+export const routes: Routes = [ // Variável de rotas do tipo Routes é criada e exportada para o Angular
+  { path: 'primeiro', component: Primeiro }, // Rotas de exemplo, onde ao acessar localhost:2400/primeiro, iremos renderizar o componente Primeiro
+  { path: 'segundo', component: Segundo }
+];
+
+```
+
+**router-outlet:** Esse router-outlet é uma diretiva estrutural que define o comportamento de rotas, ela é necessária dentro do template para permitir a exibição dos componentes em rotas.
+
+``` typescript
+
+<div class="menu__item">
+  <a class="menu__link" routerLink="/segundo">Segundo</a> // O RouterLink irá realizar a navegação entre rotas, iniciando e destruindo componentes (ele não é obrigatório estar em um link, mas recomendado por convenção)
+</div>
+
+```
+
+- Caso seja utilizada o href do link para navegar entre as rotas, o Angular não irá funcionar como SPA e sim como carregamento total de páginas, onde cada troca de link, o cliente fará as requisições dos arquivos.
+
+RouterLinkActive: O RouterLinkActive é uma diretiva com a habilidade de implementar classes CSS a um elemento que ela esteja, ele implementa a classe CSS com base no RouterLink mais próximo, por exemplo: Se eu tiver um RouterLink e um RouterLinkActive próximo a ele (talvez no componente pai), ao ser ativado o RouterLink, o RouterLinkActive irá implementar as classes CSS atribuidas, fazendo um comportamento dinâmico dependendo do link ativo.
+
+``` HTML
+
+<div class="menu">
+    <div class="menu__item" routerLinkActive="menu__item--selected">
+        <a class="menu__link" routerLink="/primeiro">Primeiro</a> <!-- Se o /primeiro for clicado (ativado), o menu__item--selected será atribuida a div -->
+    </div>
+    <div class="menu__item" routerLinkActive="menu__item--selected"> <!-- Se o /segundo for clicado (ativado), a classe será removida do RouterLinkActive próximo ao /primeiro e atribuida à div do /segundo -->
+        <a class="menu__link" routerLink="/segundo">Segundo</a>
+    </div>
+</div>
+
+<router-outlet></router-outlet>
+
+```
+
+- O Elemento que possui um RouterLinkActive irá receber também uma propriedade chamada **isActive** que irá ser um boolean para verificar se o link está ou não ativado.
+
+``` HTML
+
+<div class="menu__item" routerLinkActive="menu__item--selected" #rlaPrimeiro="routerLinkActive">
+    <a class="menu__link" routerLink="/primeiro">
+      Primeiro {{ rlaPrimeiro.isActive ? 'Ativado' : '' }}
+    </a>
+</div>
+
+```
+
+Lazy Loading: O Lazy Loading é uma ferramenta das rotas que permite configurar como os componentes serão carregados para o browser, podemos configurar para trazer tudo de uma vez no main.js (arquivo do Angular que traz o código, podemos localizar ele em network), que é o comportamento padrão, ou podemos utilizar o lazy loading para trazer os componentes sob demanda.
