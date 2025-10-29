@@ -5,12 +5,13 @@
 [Ciclo de vida do Componente](#ciclo-de-vida-do-componente)  
 [Encapsulamento de Estilos](#encapsulamento-de-estilos)  
 [Diretivas](#diretivas)  
-- [Diretivas de Atributos](#diretivas-de-atributo)  
-- [Diretivas Estruturais](#diretivas-estruturais)  
-- [Diretivas Personalizadas](#diretivas-personalizadas)
+  - [Diretivas de Atributos](#diretivas-de-atributo)  
+  - [Diretivas Estruturais](#diretivas-estruturais)  
+  - [Diretivas Personalizadas](#diretivas-personalizadas)   
 [Pipes](#pipes)  
 [Template Variables](#template-variables)  
 [Angular Material](#angular-material)  
+[Roteamento Estático](#roteamento-estático)   
 
 **Node.JS:** Node.js é um ambiente de execução JavaScript do lado do servidor. Ele permite rodar código JavaScript fora do navegador.  
 
@@ -616,7 +617,7 @@ export const routes: Routes = [ // Variável de rotas do tipo Routes é criada e
 
 - Caso seja utilizada o href do link para navegar entre as rotas, o Angular não irá funcionar como SPA e sim como carregamento total de páginas, onde cada troca de link, o cliente fará as requisições dos arquivos.
 
-RouterLinkActive: O RouterLinkActive é uma diretiva com a habilidade de implementar classes CSS a um elemento que ela esteja, ele implementa a classe CSS com base no RouterLink mais próximo, por exemplo: Se eu tiver um RouterLink e um RouterLinkActive próximo a ele (talvez no componente pai), ao ser ativado o RouterLink, o RouterLinkActive irá implementar as classes CSS atribuidas, fazendo um comportamento dinâmico dependendo do link ativo.
+**RouterLinkActive:** O RouterLinkActive é uma diretiva com a habilidade de implementar classes CSS a um elemento que ela esteja, ele implementa a classe CSS com base no RouterLink mais próximo, por exemplo: Se eu tiver um RouterLink e um RouterLinkActive próximo a ele (talvez no componente pai), ao ser ativado o RouterLink, o RouterLinkActive irá implementar as classes CSS atribuidas, fazendo um comportamento dinâmico dependendo do link ativo.
 
 ``` HTML
 
@@ -645,4 +646,18 @@ RouterLinkActive: O RouterLinkActive é uma diretiva com a habilidade de impleme
 
 ```
 
-Lazy Loading: O Lazy Loading é uma ferramenta das rotas que permite configurar como os componentes serão carregados para o browser, podemos configurar para trazer tudo de uma vez no main.js (arquivo do Angular que traz o código, podemos localizar ele em network), que é o comportamento padrão, ou podemos utilizar o lazy loading para trazer os componentes sob demanda.
+**Lazy Loading:** O Lazy Loading é uma ferramenta das rotas que permite configurar como os componentes serão carregados para o browser, podemos configurar para trazer tudo de uma vez no main.js (arquivo do Angular que traz o código, podemos localizar ele em network), que é o comportamento padrão, ou podemos utilizar o lazy loading para trazer os componentes sob demanda.
+
+``` typescript
+
+export const routes: Routes = [
+  { path: 'components', loadComponent: () => import('./components/base/base').then(m => m.Base)}, // Isso define o comportamento de lazy loading para o componente base 
+  { path: 'components/primeiro', component: Primeiro },
+  { path: 'components/segundo', component: Segundo },
+];
+
+```
+
+**Path Vazio:** Para criarmos uma rota para o path vazio, podemos apenas no app.routes.ts, criar uma nova rota com um path vazio e associar um componente a ele, importante entender que para entrar no path root através de link, o acesso é via '/'
+
+WildCard: 
