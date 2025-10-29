@@ -1,0 +1,19 @@
+<div class="menu">
+  <div class="menu__item" routerLink="/index" routerLinkActive="menu__link--selected" #refIndex="routerLinkActive">
+      <a class="menu__link ">Início</a>
+  </div>
+  <div class="menu__item" routerLink="/info" routerLinkActive="menu__link--selected" [attr.disabled]="refLogout.isActive">
+      <a class="menu__link" [ngClass]="{'menu__link--disabled': refLogout.isActive}" >Informações</a>
+  </div>
+  <div class="menu__item" routerLink="/contacts" routerLinkActive="menu__link--selected" [attr.disabled]="refLogout.isActive">
+    <a class="menu__link" [ngClass]="{'menu__link--disabled': refLogout.isActive}">Contatos</a>
+  </div>
+  <div class="menu__item" routerLink="/about" routerLinkActive="menu__link--selected" >
+    <a class="menu__link" [ngClass]="{'menu__link--disabled': refLogout.isActive}">Sobre</a>
+  </div>
+  <div class="menu__item" routerLink="/logout" routerLinkActive="menu__link--selected" #refLogout="routerLinkActive">
+    <a class="menu__link">Sair</a>
+  </div>
+</div>
+
+<router-outlet></router-outlet>
