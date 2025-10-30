@@ -13,6 +13,7 @@
 [Template Variables](#template-variables)  
 [Angular Material](#angular-material)  
 [Roteamento Estático](#roteamento-estático)   
+[Roteamento Dinâmico](#roteamento-dinâmico)
 
 **Node.JS:** Node.js é um ambiente de execução JavaScript do lado do servidor. Ele permite rodar código JavaScript fora do navegador.  
 
@@ -661,4 +662,146 @@ export const routes: Routes = [
 
 **Path Vazio:** Para criarmos uma rota para o path vazio, podemos apenas no app.routes.ts, criar uma nova rota com um path vazio e associar um componente a ele, importante entender que para entrar no path root através de link, o acesso é via '/'
 
-WildCard: 
+WildCard: Os WildCards são considerados coringas, onde eles servem para redirecionar o usuário para página específica caso o Angular não consida dar match na URL com nenhuma rota existente no projeto. Para entender o wildcard, precisamos ter uma noção sobre o sistema de localizar rotas do Angular, no nosso arquivo app.routes.ts, escrevemos vários objetos para representar uma rota e associar ela a um componente, o Angular costuma realizar a leitura de forma progressiva (de cima para baixo), se colocarmos um wildcard no último objeto, podemos ter um comportamento de redirecionamento caso o Angular não encontre a rota (isso é o comportamento de 'página não encontrada').
+
+``` typescript
+
+export const routes: Routes = [
+  { path: '', title: 'Index', component: Inicial },
+  {
+    path: 'components',
+    title: 'Componentes',
+    loadComponent: () => import('./components/base/base').then((m) => m.Base),
+  },
+  { path: 'components/primeiro', title: 'Primeiro', component: Primeiro },
+  { path: 'components/segundo', title: 'Segundo', component: Segundo },
+  { path: '**', title: 'Página Não Encontrada', component: PaginaNaoEncontrada }, // Caso o usuário não acesse o root, /compontents, /Primeiro ou /Segundo, ele será redirecionado para o coringa
+];
+
+```
+
+**Título da Página:** Para definir um título para a aba do navegador, utilizamos o atributo **title** dentro do objeto de Routes
+
+**Rotas Filhas:** O sistema de rotas filhas permite os desenvolvedores de utilizar uma hierarquia de rotas, onde o componente pai possui um Route-Outlet e um componente filho também possua um (com seus próprios objetos de rotas), isso ajuda na organização das rotas e permite melhor manutenção e entendimento do contexto de rotas na aplicação, é uma melhor abordagem do que criar um arquivo gigante com 50-100 rotas misturadas.
+
+``` typescript
+[
+  {
+    path: 'components/primeiro',
+    title: 'Primeiro',
+    component: Primeiro,
+    children: [ // Definimos que a rota terá rotas filhas
+      { path: 'filho-a', title: 'filho-a', component: FilhoA }, // O acesso é via /components/primeiro/filho-a
+      { path: 'filho-b', title: 'filho-b', component: FilhoB },
+    ],
+  }
+]
+
+```
+
+- Agora que definimos as rotas filhas de components/primeiro, vamos ver como seria o template do componente /primeiro
+
+``` HTML
+
+<p>primeiro works!</p>
+
+<a routerLink="filho-a">Filho A</a>
+
+<br>
+
+<a routerLink="filho-b">Filho B</a>
+
+<router-outlet></router-outlet>
+
+```
+
+## Roteamento Dinâmico
+
+Query Params x Query Strings x Property 'data': Os 3 são formas de comunicação com APIs via HTTP, o Params são valores passados dentro de uma URL para retorno de coleções ou objetos sem filtragem ou consulta avançada, isso permite passar uma rota com valores dinâmicos, como um id de usuário ou recuperar postagens de uma vez só. Os Query Strings são valores de consulta avançada passadas pela URL, são informações visíveis ao usuário da aplicação (importante tomar cuidado com o que é passado), isso permite realizar buscas por parâmetros específicos ou realizar consultas extensas com vários atributos. O Property Data é um objeto armazenado dentro da rota Angular que irá guardar informações de metadados.
+
+``` 
+
+https://jsonplaceholder.typicode.com/posts?userId=2 // Query String
+
+https://jsonplaceholder.typicode.com/users // Query Params
+
+```
+
+- Agora vamos ver como podemos realizar a chamada de Query Params dentro de uma rota Angualar:
+
+``` typescript
+
+// Routes
+
+export const routes: Routes = [
+  {
+    path: '',
+    redirectTo: '/users',
+    pathMatch: 'full'
+  },
+  {
+    path: 'users',
+    component: Users
+  },
+  {
+    path: 'posts/:userId', // Definimos aqui um Query Param como:userId
+    component: Posts
+  }
+];
+
+// Service
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private readonly _http = inject(HttpClient);
+
+  getUsers(): Observable<IUser[]> {
+    return this._http.get<IUser[]>('https://jsonplaceholder.typicode.com/users');
+  }
+}
+
+export type Root = IUser[];
+
+export interface IUser {
+  id: number;
+  name: string;
+  username: string;
+  email: string;
+  address: Address;
+  phone: string;
+  website: string;
+  company: Company;
+}
+
+// Template
+
+@for (user of usersList$ | async; track user) {
+  <div style="cursor: pointer;" [routerLink]="['/posts', user.id]"> // Fazemos o property binding do routerLink para poder acessar com variáveis e definimos a junção entre os valores para sair algo como /posts/user.id
+    <div>Id: {{user.id}}</div>
+    <div>Name: {{user.name}}</div>
+  </div>
+
+}
+
+```
+
+Acessando Parâmetros da URL: Para acessar os parâmetros da URL, nós precisamos criar um Input() com o mesmo nome do parâmetro que queremos acessar, o input irá procurar na URL e retornar o valor associado a esse parametro
+
+``` typescript
+
+// Routes
+
+export const routes: Routes = [
+  {
+    path: 'posts/:userId', // Definimos aqui um Query Param como:userId
+    component: Posts
+  }
+];
+
+// Component
+
+@Input() userId: string = ''; // Informamos que o nome do input será o mesmo do parametro da rota
+
+```
