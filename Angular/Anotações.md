@@ -4,6 +4,7 @@
 [Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)  
 [Ciclo de vida do Componente](#ciclo-de-vida-do-componente)  
 [Encapsulamento de Estilos](#encapsulamento-de-estilos)  
+
 [Diretivas](#diretivas)  
   - [Diretivas de Atributos](#diretivas-de-atributo)  
   - [Diretivas Estruturais](#diretivas-estruturais)  
@@ -11,6 +12,7 @@
   
 [Pipes](#pipes)  
 [Template Variables](#template-variables)  
+[Acesso de Componentes Filhos](#acesso-de-componentes-filhos)
 [Angular Material](#angular-material)  
 [Roteamento Estático](#roteamento-estático)   
 [Roteamento Dinâmico](#roteamento-dinâmico)
@@ -717,7 +719,7 @@ export const routes: Routes = [
 
 ## Roteamento Dinâmico
 
-Query Params x Query Strings x Property 'data': Os 3 são formas de comunicação com APIs via HTTP, o Params são valores passados dentro de uma URL para retorno de coleções ou objetos sem filtragem ou consulta avançada, isso permite passar uma rota com valores dinâmicos, como um id de usuário ou recuperar postagens de uma vez só. Os Query Strings são valores de consulta avançada passadas pela URL, são informações visíveis ao usuário da aplicação (importante tomar cuidado com o que é passado), isso permite realizar buscas por parâmetros específicos ou realizar consultas extensas com vários atributos. O Property Data é um objeto armazenado dentro da rota Angular que irá guardar informações de metadados.
+**Query Params x Query Strings x Property 'data':** Os 3 são formas de comunicação com APIs via HTTP, o Params são valores passados dentro de uma URL para retorno de coleções ou objetos sem filtragem ou consulta avançada, isso permite passar uma rota com valores dinâmicos, como um id de usuário ou recuperar postagens de uma vez só. Os Query Strings são valores de consulta avançada passadas pela URL, são informações visíveis ao usuário da aplicação (importante tomar cuidado com o que é passado), isso permite realizar buscas por parâmetros específicos ou realizar consultas extensas com vários atributos. O Property Data é um objeto armazenado dentro da rota Angular que irá guardar informações de metadados.
 
 ``` 
 
@@ -787,7 +789,7 @@ export interface IUser {
 
 ```
 
-Acessando Parâmetros da URL: Para acessar os parâmetros da URL, nós precisamos criar um Input() com o mesmo nome do parâmetro que queremos acessar, o input irá procurar na URL e retornar o valor associado a esse parametro
+**Acessando Parâmetros da URL:** Para acessar os parâmetros da URL, nós precisamos criar um Input() com o mesmo nome do parâmetro que queremos acessar, o input irá procurar na URL e retornar o valor associado a esse parametro
 
 ``` typescript
 
@@ -805,3 +807,16 @@ export const routes: Routes = [
 @Input() userId: string = ''; // Informamos que o nome do input será o mesmo do parametro da rota
 
 ```
+
+**Query Strings:** Para poder criar rotas utilizando query strings é bem simples e fácil, é utilizado apenas um parâmetro a mais junto com um RouterLink. Vamos ver o exemplo abaixo para entendermos
+
+``` typescript
+
+<button routerLink="/comp1" [queryParams]="{ nome: 'Eduardo', idade: 21}">Redirecionar Eduardo</button> // Aqui definimos os parâmetros em forma de objeto que será passado para a URL
+<button routerLink="/comp1" [queryParams]="{ nome: 'Gustavo', idade: 34}">Redirecionar Gustavo</button>
+
+<router-outlet></router-outlet> // Aqui será o redirecionamento
+
+```
+
+**Recuperação de Query Strings da URL:** Para recuperarmos os Query Strings, utilizmaos um meio similar ao de recuperação de Query Params, utilizando o @Input, mas em vez de passar o nome do Query Param, utilizamos o nome da propriedade do Objeto do Query String.
