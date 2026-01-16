@@ -31,3 +31,6 @@ O trafego na internet funciona mais ou menos da seguinte forma:
 
 ## HTTP
 
+Como vimos, o protocolo HTTP é divido em uma estrutura bem definida, e durante o tempo, ele passou por diversas transformações (versões). Após entender a estrutura de um protocolo HTTP atual, iremos estudar sobre as versões que foram surgindo com o tempo.
+
+Header: O header é onde se concentra os metadados das requisições HTTPs, são informações relevantes, mas não principais
