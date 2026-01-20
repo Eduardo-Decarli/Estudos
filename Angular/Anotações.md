@@ -126,8 +126,8 @@ ng generate component nome-do-componente --dry-run
 
 **Diretivas:** As diretivas no Angular são ferramentas que permitem a manipulação do template ou a transformação do DOM de forma dinâmica, existem dois tipos de diretivas:
 
-- **Diretivas Estruturais:** Tais como *ngIf, *ngFor.
-- **Diretivas de Atributo:** São as [\(ngClass\)] e \[ngStyle\].
+- **Diretivas Estruturais:** Tais como ***ngIf**, ***ngFor**.
+- **Diretivas de Atributo:** São as ***ngClass***, ***ngStyle***, ***ngModel***, ***ngTemplate*** e ***ngContent***.
 
 **Serviços e Injeção de Dependência(DI):** Os serviços são classes separadas que servem exclusivamente para compartilhar lógica, dados e funcionalidades entre diferentes componentes. Por exemplo, requisições HTTP feitas por um serviço, podem ser utilizadas por diferentes componentes que necessitem das mesmas requisições. A injeção de dependência é a forma como o Angular gerencia a instanciação das classes de serviços.
 
@@ -143,7 +143,7 @@ ng generate component nome-do-componente --dry-run
 
 Para indicar ao Angular um novo componente, utilizamos um decorator dentro da classe TS do componente. Dentro do Decoretor **@Component**, podemos definir um objeto anônimo que pode receber diversos parâmetros de configuração, os mais comuns e importantes são os seguintes: 
 
-- **selector:** O selector é a definição do nome do componente, ou seja, como poderemos chamar esse componente como tag HTML, escolhendo um nome como 'app-component-overview', podemos chamar o seguinte componente como uma tag HTML utilizando esse nome.
+- **selector:** O selector é a definição do nome do componente, ou seja, como poderemos chamar esse componente como tag HTML, escolhendo um nome como 'app-component-overview', podemos chamar o seguinte componente como uma tag HTML utilizando esse nome. 
 
 - **templateUrl:** Esse parâmetro recebe uma string como caminho de um template HTML, sendo o respectivo template que a classe do template instruirá o Angular core que deverá usar aquele código HTML para renderizar na chamada do componente.
 
@@ -164,14 +164,11 @@ Para indicar ao Angular um novo componente, utilizamos um decorator dentro da cl
 @Component({
   selector: 'app-card',
   standalone: true,
-
-  // Deixa de utilizar esse caminho para usar um template inline
-  // templateUrl: './card-button-roxo.html', 
   template: `
     <button class="card-button-roxo">Clique Aqui</button>
   `,
   styleUrl: './card-button-roxo.scss',
-  providers: [ServicoHTTP],
+  providers: [MeuServicoHTTP],
   imports: [MeuPipe]
 })
 export class CardButtonRoxo {
@@ -184,9 +181,9 @@ export class CardButtonRoxo {
 
 ## Estilização com Angular
 
-**Importações de CSS:** Utilizando o **@use** ou **@forward** dentro de um arquivo **CSS** ou **SCSS**, podemos passar um caminho para esse import, e o angular poderá identificar que os arquivos estão conectados, dessa forma podemos ter 2 arquivos dinâmicos, onde em um nós criamos variáveis CSS/SCSS e outro podemos utilizar essas variáveis.
+**Importações de Arquivos CSS:** Utilizando o **@use** ou **@forward** dentro de um arquivo **CSS** ou **SCSS**, podemos passar um caminho para esse import, e o angular poderá identificar que os arquivos estão conectados, dessa forma podemos ter 2 arquivos dinâmicos, onde em um nós criamos variáveis CSS/SCSS e outro podemos utilizar essas variáveis.
 
-- Para não precisar especificar sempre um caminho relativo ou absoluto, podemos especificar para o Angular sempre olhar para uma pasta específica para buscar os arquivos de estilizações, ai precisamos apenas especificar o nome do arquivo, para fazer isso, precisamos declarar no nosso arquivo angular.json
+**Importações Globais:** Para não precisar especificar sempre um caminho relativo ou absoluto, podemos especificar para o Angular sempre olhar para uma pasta específica para buscar os arquivos de estilizações, ai precisamos apenas especificar o nome do arquivo, para fazer isso, precisamos configurar isso no nosso arquivo **angular.json**
 
 ``` JSON
 
@@ -254,6 +251,8 @@ export class CardButtonRoxo {
 **API do DOM:** O DOM é uma árvore que estrutura o HTML de um site dentro do navegador, um browser possui uma API de acesso e modificação desse comportamento, em javascript, podemos acessar essa API através do document, como document.className(), isso quer dizer que estamos chamando o atributo class do documento HTML.
 
 - Ao apertar f12, podemos ir para a sessão properties e acessar todos os atributos da API do browser.
+
+---
 
 ## Angular Material
 
@@ -376,11 +375,39 @@ As diretivas são **formas de manipulação do DOM**, elas podem ser classificad
 
 ### Diretivas de Atributo
 
-**NgClass:** Permite adicionar ou remover dinamicamente uma classe CSS.
+**NgClass:** Permite adicionar ou remover dinamicamente uma classe CSS. Ele irá adicionar ou remover uma classe declaradamente especificada, as classes dentro de um arquivo CSS ou SCSS não irão sofrer alterações.
+
+``` HTML
+
+  <!-- property binding referencia a propriedade estilo que está no arquivo TS -->
+  <p [ngClass]="estilo">comp-atributos works!</p>
+
+  <!-- Botão com event binding que dispara o método trocar() 
+  que está no arquivo TS -->
+  <button (click)="trocar()">trocar estilo</button>
+
+```
+
+``` typescript
+
+@Component()
+export class DiretivaNgClass {
+  minhaClasse: string = "minha-classe-css";
+
+  public troca() {
+    if(minhaClasse === "minha-classe-css") {
+      this.minhaClasse = "outra-classe-css"
+    } else {
+      minhaClasse = "minha-classe-css"
+    }
+  }
+}
+
+```
 
 **NgStyle:** Permite adicionar ou remover dinâmicamente um estilo CSS
 
-**NgModel:** Cria a comunicação de bidirecional entre o template e a classe do componente (famoso two-way data binding).
+**NgModel:** Cria a comunicação de bidirecional entre o template e a classe do componente (famoso two-way data binding), esse conceito é estudado e aprofundado no módulo sobre Data Binding.
 
 **NgTemplate:** Cria um template modelo, que possui um rendered=falso por padrão, se utilizar junto com *NgIf, poderá renderiza-lo.
 
@@ -401,8 +428,12 @@ As diretivas são **formas de manipulação do DOM**, elas podem ser classificad
 
 ``` html
 
-<div *ngFor="let item of vetor; i = index"> <!-- Aqui definimos uma variável que representará o item na posição do index e o vetor -->
-  <h1>{{i}} - {{item}}</h1> <!-- Isso irá mostrar a interpolação entre o index e o item (poderia ser um objeto e representariamos a propriedade do item) -->
+<!-- Aqui definimos uma variável que representará o item na posição do index e o vetor -->
+<div *ngFor="let item of vetor; i = index"> 
+
+<!-- Isso irá mostrar a interpolação entre o index e 
+o item (poderia ser um objeto e representariamos a propriedade do item) -->
+  <h1>{{i}} - {{item}}</h1> 
 </div>
 
 ```
