@@ -116,6 +116,9 @@
 - **git reset**  
   Utilizado para retornar a um commit anterior, desfazendo mudanças.
 
+- **git reset HEAD^**
+  Desfaz o ultimo commit do histórico e mantem as alterações no stage
+
 - **git reset --soft hashDoCommit**  
   Volta a um commit específico, mantendo os commits posteriores em stage.
 
