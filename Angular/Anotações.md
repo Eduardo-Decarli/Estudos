@@ -681,15 +681,16 @@ export const routes: Routes = [ // Variável de rotas do tipo Routes é criada e
 
 - Caso seja utilizada o href do link para navegar entre as rotas, o Angular não irá funcionar como SPA e sim como carregamento total de páginas, onde cada troca de link, o cliente fará as requisições dos arquivos.
 
-**RouterLinkActive:** O RouterLinkActive é uma diretiva com a habilidade de implementar classes CSS a um elemento que ela esteja, ele implementa a classe CSS com base no RouterLink mais próximo, por exemplo: Se eu tiver um RouterLink e um RouterLinkActive próximo a ele (talvez no componente pai), ao ser ativado o RouterLink, o RouterLinkActive irá implementar as classes CSS atribuidas, fazendo um comportamento dinâmico dependendo do link ativo.
+**RouterLinkActive:** O ***routerLinkActive*** é uma diretiva estrutural de estado.
+Ela observa o Router do Angular e aplica (ou remove) classes CSS quando o routerLink mais próximo estiver ativo.
 
 ``` HTML
 
 <div class="menu">
-    <div class="menu__item" routerLinkActive="menu__item--selected">
-        <a class="menu__link" routerLink="/primeiro">Primeiro</a> <!-- Se o /primeiro for clicado (ativado), o menu__item--selected será atribuida a div -->
+    <div class="menu__item" routerLinkActive="active">
+        <a class="menu__link" routerLink="/primeiro">Primeiro</a> <!-- Se o /primeiro for clicado (ativado), a classe CSS active será atribuida a div -->
     </div>
-    <div class="menu__item" routerLinkActive="menu__item--selected"> <!-- Se o /segundo for clicado (ativado), a classe será removida do RouterLinkActive próximo ao /primeiro e atribuida à div do /segundo -->
+    <div class="menu__item" routerLinkActive="active"> <!-- Se o /segundo for clicado (ativado), a classe CSS será removida do RouterLinkActive próximo ao /primeiro e atribuida à div do /segundo -->
         <a class="menu__link" routerLink="/segundo">Segundo</a>
     </div>
 </div>
@@ -698,7 +699,9 @@ export const routes: Routes = [ // Variável de rotas do tipo Routes é criada e
 
 ```
 
-- O Elemento que possui um RouterLinkActive irá receber também uma propriedade chamada **isActive** que irá ser um boolean para verificar se o link está ou não ativado.
+- Ele não reage a cliques, não reage ao hover, não reage ao **DOM**. Ele reage exclusivamente a propriedade ***isActive*** do Angular.
+
+- O Elemento que possui um ***RouterLinkActive*** irá receber também uma propriedade chamada ***isActive*** que irá ser um boolean para verificar se o link está ou não ativado.
 
 ``` HTML
 
@@ -724,7 +727,7 @@ export const routes: Routes = [
 
 **Path Vazio:** Para criarmos uma rota para o path vazio, podemos apenas no app.routes.ts, criar uma nova rota com um path vazio e associar um componente a ele, importante entender que para entrar no path root através de link, o acesso é via '/'
 
-WildCard: Os WildCards são considerados coringas, onde eles servem para redirecionar o usuário para página específica caso o Angular não consida dar match na URL com nenhuma rota existente no projeto. Para entender o wildcard, precisamos ter uma noção sobre o sistema de localizar rotas do Angular, no nosso arquivo app.routes.ts, escrevemos vários objetos para representar uma rota e associar ela a um componente, o Angular costuma realizar a leitura de forma progressiva (de cima para baixo), se colocarmos um wildcard no último objeto, podemos ter um comportamento de redirecionamento caso o Angular não encontre a rota (isso é o comportamento de 'página não encontrada').
+**WildCard:** Os WildCards são considerados coringas, onde eles servem para redirecionar o usuário para página específica caso o Angular não consida dar match na URL com nenhuma rota existente no projeto. Para entender o wildcard, precisamos ter uma noção sobre o sistema de localizar rotas do Angular, no nosso arquivo app.routes.ts, escrevemos vários objetos para representar uma rota e associar ela a um componente, o Angular costuma realizar a leitura de forma progressiva (de cima para baixo), se colocarmos um wildcard no último objeto, podemos ter um comportamento de redirecionamento caso o Angular não encontre a rota (isso é o comportamento de 'página não encontrada').
 
 ``` typescript
 
@@ -1011,7 +1014,22 @@ public deletarUsuario(id: number): Observable<void> {
 
 ```
 
-Utilizando o Serviço HTTP: 
+**HttpErrorResponse:** O **HttpErrorResponse** é uma classe específica do próprio Angular que é entregue como retorno sempre que uma requisição via **HttpClient** falha. Sempre que uma requisição via **HttpClient** retornar um status 400, 401, 403, 404, etc... ou retornar um erro de rede, o método que realizou o envio irá retornar um **HttpErrorResponse**. Ao realizar um subscribe para um método HttpClient, podemos interceptar o erro via subscribe.
+
+``` typescript
+
+this.http.post('/login', dados).subscribe({
+  next: res => { /* sucesso */ },
+  error: (err: HttpErrorResponse) => {
+    console.log(err); // Aqui o err conterá todas as propriedades necessárias para entender e expor o erro
+  }
+});
+
+```
+
+- No caso acima, o err não será de um tipo genérico, mas sim de um **HttpErrorResponse**, que permite trabalhar em cima de todas as propriedades relativas a erros.
+
+- O Angular considera erro toda vez que retorna um Http Status diferente de 200-299
 
 ## Variáveis de Ambiente
 
