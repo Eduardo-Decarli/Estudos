@@ -713,6 +713,8 @@ Ela observa o Router do Angular e aplica (ou remove) classes CSS quando o router
 
 ```
 
+**RouterLinkActiveOptions:** O ***routerLinkActiveOptions*** é uma configuração que define como o Angular decide se uma rota está ativa ou não para efeitos do ***routerLinkActive***. Ele não navega, não cria rotas e não aplica classes sozinho. Ele apenas ajusta o critério de comparação usado pelo ***routerLinkActive***.
+
 **Lazy Loading:** O Lazy Loading é uma ferramenta das rotas que permite configurar como os componentes serão carregados para o browser, podemos configurar para trazer tudo de uma vez no main.js (arquivo do Angular que traz o código, podemos localizar ele em network), que é o comportamento padrão, ou podemos utilizar o lazy loading para trazer os componentes sob demanda.
 
 ``` typescript
