@@ -173,6 +173,8 @@
 - **git commit --amend -m "Nova mensagem do Commit"**  
   Permite renomear o nome do ultimo commit
 
+---
+
 ## Stash
 
 - **git stash**  
