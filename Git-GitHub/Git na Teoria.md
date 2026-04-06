@@ -58,6 +58,14 @@ No **Git**, uma **branch** (ou ramificação) é uma linha independente de desen
 
 ---
 
+## 📝 Sistema de Arquivos
+
+O Git utiliza um sistema de arquivos de gerenciamento interno dispostos incialmente em sua pasta raiz
+
+- gitconfig: É um arquivo específico, localizado no caminho ***[path]/etc/gitconfig***, onde podemos encontrar todas as configurações de comportamento do git, comportamentos esses que serão utilizados em todos os projetos do git (global)
+
+--- 
+
 ## 📝 Editor Vim
 
 O **Vim** é um editor de texto poderoso e eficiente utilizado frequentemente por desenvolvedores para editar arquivos diretamente no terminal. Aqui estão os comandos básicos para começar:

@@ -133,6 +133,19 @@
 
 ---
 
+## 📂 Configurações Internas do Git
+
+- **git config**  
+  É o comando raiz utilizado para declarar configurações ao git
+
+- **git config --global user.name "John Doe"**  
+  Define o usuário global no Git.
+
+- **git config --global user.email johndoe@example.com**  
+  Define o email global no Git.
+
+---
+
 ## 📂 Movimentação de Arquivos
 
 - **git mv nomeDoArquivo1 nomeDoArquivo2**  
