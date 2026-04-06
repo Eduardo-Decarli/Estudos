@@ -7,7 +7,7 @@
 - CREATE DATABASE - Cria um novo Banco de Dados.
 - ALTER DATABASE - Modifica um banco de dados.
 - CREATE TABLE - Cria uma nova tabela.
--ALTER TABLE - Modifica uma tabela.
+- ALTER TABLE - Modifica uma tabela.
 - DROP TABLE - Apaga uma tabela.
 - CREATE INDEX - Cria um índice (Chave de pesquisa).
 - DROP INDEX - Exclui um índice.
