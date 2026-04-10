@@ -8,7 +8,7 @@
 
 O Kotlin é uma linguagem com ***interoperabilidade*** com o Java, isso permite que ambas as linguagens consigam se comunicar uma com a outra e até chamar trechos de códigos entre elas. O Kotlin é feito para ***POO*** e para ***Funcional***.
 
-- Fortemente Tipada: Ela é tipada de forma manual, usando explicitamente o tipo que quer montar e também de forma dinâmica, onde apenas define-se o valor da variável e a variável irá ser tipada de acordo com o valor.
+- ***Fortemente Tipada:*** Ela é tipada de forma manual, usando explicitamente o tipo que quer montar e também de forma dinâmica, onde apenas define-se o valor da variável e a variável irá ser tipada de acordo com o valor.
 
 ``` kotlin 
 
@@ -24,11 +24,23 @@ val excelenteEnsino = true
 
 ```
 
-- Concisa: Ela possui menos código Boilerplate do que o Java, permitindo uma estruturação de classes de forma mais rápida e menos trabalhosa
+- ***Concisa:*** Ela possui menos código Boilerplate do que o Java, permitindo uma estruturação de classes de forma mais rápida e menos trabalhosa
 
 ``` kotlin
 
 // Aqui inclui-se propriedades e get/set
 class Pessoa (var nome: String, var anoNascimento: Int)
+
+```
+
+- ***Segura:*** Kotlin trabalha com a abordagem de Null-Safe, para impedir que variáveis recebam um valor null, isso auxilia o código a não cometer o famoso NullPointerException. Pode-se apenas atribuir um valor null para uma variável se ela for marcada como ***Anulável*** através do símbolo ***?***
+
+``` kotlin
+
+// Não compila, pois uma String não pode receber Null
+var nome: String = null
+
+// Agora permite que um valor possa receber Null
+var valor: String? = null
 
 ```
