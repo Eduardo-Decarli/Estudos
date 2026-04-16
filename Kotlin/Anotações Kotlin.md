@@ -44,3 +44,15 @@ var nome: String = null
 var valor: String? = null
 
 ```
+
+# Código MAIN
+
+No Kotlin, todo código executa dentro de uma função main, essa função é definida através da seguinte nomeclatura:
+
+``` kotlin
+
+fun main(args Array<String>) {
+    print("Meu primeiro programa);
+}
+
+```
