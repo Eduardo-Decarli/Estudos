@@ -120,3 +120,104 @@ Além disso, vamos definir uma tabela que consta os difernetes tipos de definiç
 | Explícita        | : Tipo                 | Tipo declarado manualmente                                                   | val x: Int = 10             |
 | Nullable         | ?                      | Pode armazenar valor nulo                                                    | var nome: String? = null    |
 | Não-null         | (padrão)               | Não aceita valor nulo                                                        | var nome: String = "Ana"    |
+
+O Kotlin possui uma peculiaridade interessante, no ponto de vista funcional da linguagem, o kotlin não possui **tipo primitivo**, pois ele trata todos os tipos de variáveis como objetos, ou seja, tanto int, double, float ou long possui métodos atribuidos a eles, e isso permite que possamos trabalhar com os tipos de forma mais flexível.
+
+Mas uma nuância muito importante, esses tipos que o Java consideram primitivos e o Kotlin trabalha como objetos, são convertidos em tipos primitivos durante o processo de compilação.
+
+Como resumo, podemos comparar o tipo Int do Kotlin com o tipo Integer do Java (wapper class), sabendo que ambos os tipos possuem um tipo int primitivo em sua essência.
+
+## Conversão de Tipos
+
+Como o Kotlin trabalha os tipos como Wapper Class, ele disponibiliza diversos métodos para trabalharmos, e isso inclui métodos de conversão, podemos utilizar métodos como toString(), toDouble(), toFloat(), etc... atrelados a cada tipo da linguagem.
+
+```kotlin
+
+var w: Int = 10;
+var x: Double = w.toDouble();
+var y: Float = x.toFloat();
+var z: String = y.toString();
+
+```
+
+O tipo Booleano no Kotlin também recebe métodos, e podemos utilizar esses métodos para fazer verificação de tabela verdade através dos métodos.
+
+``` kotlin 
+
+val c1 = b1.and(b2) //Retorno será false
+val c2 = b1.or(b2) //Retorno será true
+val c3 = b1.not() //Retorno será false
+
+```
+
+# Template String
+
+O Kotlin possui uma caracteristica muito interessante, ele possui uma coisa chamada de **Template String**, e isso de forma nativa na linguagem, permitindo a interpolação de variáveis em textos String utilizando o caractere $ para representar a chamada de uma variável.
+
+Muitas linguagens possuem essa caracteristica, mas infelizmente o java não é uma delas.
+
+``` kotlin
+
+val idade: Int = 22;
+String minhaIdade = "Eu tenho $idade anos de idade";
+
+```
+
+Além do Template String, o Kotlin permite o uso de aspas triplas para representar textos de várias linhas e com formatação, muito similar ao Java nesse quesito.
+
+``` kotlin
+
+val text = """
+    Exemplo de texto
+    com mais de uma
+    linha
+    """;
+
+```
+
+# Listas e Arrays
+
+Um array em Koltin é definido da seguinte forma:
+
+``` kotlin
+
+val arrayInt: Array<Int> = arrayOf(1, 2, 3, 4);
+
+val x = arrayInt[1] // recupera o número 2;
+
+```
+
+Como os arrays possuem valores definidos previamente e não permitem inserção dinâmica, podemos utilizar então um List para realizar uma estrutura que permita esse comportamento, porém, aqui temos uma diferença definida entre o Kotlin e o Java, pois as Listas são definidas de forma diferente.
+
+``` kotlin
+
+// Criação de uma lista Imutável, não permite inserção
+var myImutableList: List<Int> = listOf(1, 2, 3, 4, 5);
+
+var myMutableList: List<Int> = mutableListOf(1, 2, 3, 4, 5);
+
+```
+
+Vamos ver também alguns métodos que um tipo List possui, sendo que alguns métodos são válidos apenas para o tipo MutableList:
+
+``` kotlin
+
+val myList: List<String> = motableList("Uma palavra", "Duas Palavras");
+val palavraEx: String = "Três palavras";
+
+myList.add(palavraEx);                                  // Adiciona 1 elemento na lista
+myList.addAll("Quarto Palavras", "Cinco Palavras");     // Adiciona vários elementos na lista
+myList.removeAt(1);                                     // Remove o elemento na posição definida                                    
+myList.remove(palavraEx)                                // Remove o elemento por igualdade
+myList.first();                                         // Recupera o 1º Item da lista
+myList.last();                                          // Recupera o Ultimo Item da lista
+myList.filter(regex);                                   // Retorna uma lista filtrada
+
+// Mutabilidade por Referência
+
+val listaMutavel: List<Int> = mutableListOf(1, 2, 3);   // Define uma lista Mutavel
+fun retornaLista: List<Int> = listaMutavel;             // Cria uma função que retorna a lista Mutavel
+val listaImutavel: List<Int> = retornaLista();          // Atribui a lista mutável para uma lista Imutável
+listaMutavel.add(4);                                    // Irá salvar e as 2 listas receberam a alteração
+
+```
