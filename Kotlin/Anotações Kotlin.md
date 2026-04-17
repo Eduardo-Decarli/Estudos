@@ -282,3 +282,14 @@ val lista = listOf(1, 2, 3, 4);
 for(i in lista) {
     print("Item da lista número $i");
 }
+
+for((index, value) in lista.withIndex()) {                  // Aqui temos um for que consegue puxar a posição do valor dentro da lista, para isso temos que puxar também o index diretamente da lista
+    println("Item $value está no index $index");
+}
+
+```
+
+- While em Kotlin funciona muito parecido com o Java.
+
+# Funções
+
