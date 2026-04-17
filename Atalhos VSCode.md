@@ -22,3 +22,8 @@ Ctrl + Alt + ↑ / ↓:Adiciona cursores.
 Ctrl + Alt + F: Formata o código.  
 Ctrl + Space: Sugestões de Código.  
 F2: Renomeação de variáveis, funções e classes.  
+
+# Extensões Python
+
+Python: Permite que o VSCode interprete o código Python e ofereça run e snipets
+Code Runner: Permite executar scripts em diversas linguagens diferentes, incluindo Python 
