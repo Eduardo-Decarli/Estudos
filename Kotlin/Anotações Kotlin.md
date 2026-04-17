@@ -56,3 +56,67 @@ fun main(args Array<String>) {
 }
 
 ```
+
+# Variáveis
+
+Para definir variáveis em Kotlin, há algumas maneiras diferentes, como o **var**, que permite criar variáveis mutaveis e o **val** que cria variáveis imutáveis, comos e fossem final. Vamos estudar a seguir, primeiramente abordando o conceito de var.
+
+**Var:** Esse método permite criar variáveis que podem sofrer uma revalorização durante o fluxo de funcionamento do aplicativo, podemos definir uma variável de duas formas diferentes, atribuindo ou não um **tipo inferido**.
+
+``` Kotlin
+
+// Aqui definimos uma variável nome do tipo String
+var nome: String = "Eduardo";
+
+// Aqui podemos atribuir uma variável nome que dinamicamente sofre um tipo, isso se chama Inferência de Tipo
+var nome = "Eduardo";
+
+```
+
+**Val:** O uso da variável val, permite criar variáveis que não podem mudar a referência, ou seja, criamos variáveis **final** que serão contínuas no programa, como a criação de uma variável para se referir a idade ou a PI, etc...
+
+Essa variável ela fixa apenas a referência de memória, ou seja, para tipos primitivos, não é possível alterar seus valores, uma vez definidos, serão sempre aqueles.
+
+Mas como o val armazena a referência de memória, uma variável pode apontar para um Objeto também, e nesse caso, ao apontar para um objeto em memória, a variável irá conter e fixar a referência de memória, permitindo alterar as propriedades do objeto, mas não a reatribuição para outro objeto.
+
+``` kotlin
+
+val lista = mutableListOf(1, 2);
+
+lista = mutableListOf(3, 4); // Isso não é permitido
+
+lista.add(3) // Isso é permitido
+
+```
+
+## Tipo de variáveis
+
+No Kotlin, possuimos algumas variáveis bem similares ao Java, vamos estudar elas abaixo:
+
+| Tipo        | Descrição                              | Exemplo                            |
+|-------------|----------------------------------------|------------------------------------|
+| Int         | Número inteiro                         | val x: Int = 10                    |
+| Double      | Número decimal (precisão dupla)        | val pi = 3.14                      |
+| Float       | Decimal com menor precisão             | val f = 3.14f                      |
+| Long        | Inteiro grande                         | val l = 100000L                    |
+| Short       | Inteiro pequeno                        | val s: Short = 10                  |
+| Byte        | Inteiro muito pequeno                  | val b: Byte = 1                    |
+| Boolean     | Verdadeiro ou falso                    | val ativo = true                   |
+| Char        | Um único caractere                     | val letra = 'A'                    |
+| String      | Cadeia de caracteres                   | val nome = "Kotlin"                |
+| Array       | Coleção de elementos                   | val arr = arrayOf(1,2,3)           |
+| List        | Lista imutável                         | val lista = listOf(1,2,3)          |
+| MutableList | Lista mutável                          | val lista = mutableListOf(1,2,3)   | 
+| Set         | Conjunto sem elementos duplicados      | val set = setOf(1,2)               |
+| Map         | Estrutura chave-valor                  | val map = mapOf("a" to 1)          |
+
+Além disso, vamos definir uma tabela que consta os difernetes tipos de definições de variáveis
+
+| Categoria        | Tipo / Palavra-chave   | Descrição                                                                    | Exemplo                     |
+|------------------|------------------------|------------------------------------------------------------------------------|-----------------------------|
+| Mutável          | var                    | Pode ter seu valor alterado após a declaração                                | var idade = 20              |
+| Imutável         | val                    | Não pode ser reatribuída após a inicialização                                | val nome = "Eduardo"        |
+| Inferida         | (sem tipo explícito)   | O compilador deduz o tipo automaticamente                                    | val x = 10                  |
+| Explícita        | : Tipo                 | Tipo declarado manualmente                                                   | val x: Int = 10             |
+| Nullable         | ?                      | Pode armazenar valor nulo                                                    | var nome: String? = null    |
+| Não-null         | (padrão)               | Não aceita valor nulo                                                        | var nome: String = "Ana"    |
