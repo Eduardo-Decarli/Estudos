@@ -221,3 +221,64 @@ val listaImutavel: List<Int> = retornaLista();          // Atribui a lista mutá
 listaMutavel.add(4);                                    // Irá salvar e as 2 listas receberam a alteração
 
 ```
+
+# Importações
+
+No Kotlin, podemos realizar importações para utilizar classes e arquivos diferentes dentro do nosso algorítmo, e para isso, devemos realizar um import similar ao Java.
+
+No Kotlin, caso você precise realizar um import que possua o mesmo nome de uma classe que já existe no fluxo, você pode apelidar ela com um **as**.
+
+``` kotlin
+
+import vitrine.produto as product
+import carrinho.produto 
+
+```
+
+- Como já existe um produto vindo de outro package, podemos realizar um apelido para o produto vindo de vitrine, isso é importante quando lidamos com pacotes externos e bibliotecas.
+
+# Estrutura de Condição e Repetição
+
+If Ternário: Em Kotlin, usamos o if ternário de uma forma escrita um pouco diferente do Java, pois em vez de utilizar caracteres como ? e : utilizamos if else
+
+``` kotlin
+
+val maior = if(a > b) a else b
+
+```
+
+When: Essa é uma estrutura com nome novo, mas ela serve realizmente para ser como o Switch em Java, apenas com outro nome:
+
+``` Kotlin
+
+when(x) {
+    1 -> print("X é igual a 1");
+    2 -> print("X é igual a 2");
+    else -> {
+        print("X é maior que 2");
+    }
+}
+
+when(x) {
+    1, 2 -> print("X é igual a 1 ou a 2");                      // Utiliza um OU, sendo um ou outro
+    else -> {
+        print("X possui outro valor");
+    }
+}
+
+when(x) {
+    1..10 -> print("X possui um valor entre 1 e 10");           // Verifica intervalo de caracteres
+    else -> print("X não é um valor entre 1 e 10");
+}
+
+```
+
+for: Assim como o java, podemos criar uma estrutura de repetição for, mas em Kotlin, a sintáxe da estrutura funciona um pouco diferente do que estamos acostumados a montar, pois ela é similar ao python.
+
+``` kotlin
+
+val lista = listOf(1, 2, 3, 4);
+
+for(i in lista) {
+    print("Item da lista número $i");
+}
