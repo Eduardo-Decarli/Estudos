@@ -291,5 +291,17 @@ for((index, value) in lista.withIndex()) {                  // Aqui temos um for
 
 - While em Kotlin funciona muito parecido com o Java.
 
+# Comparativos
+
+Dentro do Kotlin, podemos usar o sinal de igual para 3 funções diferentes, sendo:
+
+Atribuição (=): refere-se a dar/trocar um valor a uma variável.
+
+Comparação Estrutural (==): Ele realiza uma comparação entre 2 variáveis de forma estrutural, ou seja, verifica se os valores são iguais, é basicamente a chamada para a função .equals() do Java.
+
+Comparação Referencial (===): Aqui nós não realizamos uma comparação de conteúdo, mas sim uma comparação de referência. Ele verifica se duas variáveis apontam para a mesma célula de memória, ou seja, não basta ter valores iguais, precisam ser exatamente a mesma variável
+
+- O comparativo estrutural do Kotlin não é igual ao Java, no Java, a comparação é realizada, fazendo comparação de **referência de memória para objetos** e comparação de **valor para primitivos**
+
 # Funções
 
