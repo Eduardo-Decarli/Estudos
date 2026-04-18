@@ -1,6 +1,18 @@
 # Sumário 
 
 [História do Kotlin](#história-do-kotlin)
+[Função Main](#código-main)
+[Variáveis](#variáveis)
+[Tipo de Variáveis](#tipo-de-variáveis)
+[Conversão de Tipos](#conversão-de-tipos)
+[Template String](#template-string)
+[Listas e Arrays](#listas-e-arrays)
+[Importações](#importações)
+[Estrutura de Repetição e Condição](#estrutura-de-condição-e-repetição)
+[Comparativo](#comparativos)
+[Funções](#funções)
+[Herança](#herança)
+[Data Class](#data-class)
 
 # História do Kotlin
 
@@ -305,3 +317,52 @@ Comparação Referencial (===): Aqui nós não realizamos uma comparação de co
 
 # Funções
 
+Funções em Kotlin são definidas a partir da sequência fun + nome da função + parâmetros + retorno + chaves.
+
+``` kotlin
+
+fun somar(num1: Int, num2: Int): Long {             // Função completa com parâmetros e retorno
+    return num1 + num2;
+}
+
+fun imprimir(text: String) : Unit {                 // Função com retorno Unit declara um retorno vazio ou sem retorno (pode ser ocultado)
+    print(text)
+}
+
+fun somar(num1 : Int, num2 : Int) = num1 + num2;    // Uma função Single-Expression Function
+
+```
+
+# Herança
+
+A herança em Kotlin funciona de forma similar ao Java, porém a herança não é definida pela palavra extend e sim pelo sinal de :
+
+``` kotlin
+
+class pessoa {
+    var nome: String;
+    var idade: Int;
+
+    fun saudacao(): Unit {
+        print("Olá");
+    }
+}
+
+class funcionario : pessoa {
+    var matricula: Int;
+    var salario: Double;
+}
+
+```
+
+# Data Class
+
+O Data Class é muito similar a uma classe do tipo Record em Java, muito útil para realizar DTOs ou entidades simples, onde podemos criar uma entidade que recebe parâmetros (sem métodos) e montar tudo com apenas uma linha de código, incluindo propriedades, get e set.
+
+``` kotlin
+
+data class Usuario(var nome: String, var email: String, var senha: String);
+
+```
+
+# Android SDK
