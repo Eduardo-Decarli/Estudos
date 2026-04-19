@@ -366,3 +366,202 @@ data class Usuario(var nome: String, var email: String, var senha: String);
 ```
 
 # Android SDK
+
+É um conjunto de ferramentas (SDK) oferecidas pela Android para poder auxiliar o desenvolvimento de aplicativos Android, dentro da Android SDK encontramos bibliotecas, ferramentas, documentação e emuladores essenciais para desenvolver.
+
+Dentro do Android SDK encontramos:
+
+- SDK Platforms: Bibliotecas necessárias para rodar o aplicativo em diferentes versões do Android
+
+- SDK Tools: Inclui ferramentas de depuração e desenvolvimento
+
+- Build-Tools: Contem ferramentas para compilar código em um arquivo APK ou AAB.
+
+Quando utilizamos IDEs como o Android Studio, já vem integrado a linguagem Kotlin e o Android SDK
+
+# Estrutura de um Projeto Kotlin-Android
+
+Para desenvolver projetos em dispositivos Android, precisamos entender como funciona a estrutura e organização de um projeto e como o código é estruturado nele. Vamos analisar a estrutura inicial de um projeto Kotlin:
+
+``` bash
+
+MeuApp/
+│
+├── app/
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/ ou kotlin/
+│   │   │   ├── res/
+│   │   │   └── AndroidManifest.xml
+│   │   │
+│   │   ├── test/
+│   │   └── androidTest/
+│   │
+│   ├── build.gradle (Module: app)
+│
+├── gradle/
+├── build.gradle (Project)
+├── settings.gradle
+└── gradle.properties
+
+```
+
+- **app/:** É onde encontramos o projeto que será compilado e codificado pelo desenvolvedor, ele contém algumas pastas e arquivos padrões que analisaremos a seguir.
+    - **Java/ ou Kotlin/:** É onde ficará o código que iremos montar, dentro dessas pastas iremos separar e organizar o código em pacotes (packages), é onde ficará o código-fonte.
+    - **res/:** Aqui nessa pasta, é onde ficarão todos os arquivos de suporte ao código-fonte, como imagens, etc... Ele é ramificado em outros pacotes, sendo:
+        - **layout/:** Aqui é onde irá ficar as páginas/telas, normalmente programadas em XML.
+        - **drawable/:** Nessa pasta iremos manter as imagens e shapes que as telas irão usar.
+        - **values/:** Aqui é onde mantemos as informações reutilizaveis pelas telas, sendo coisas como variáveis, textos padrões (Strings), cores e até temas.
+        - **mipmap/:** Aqui irá ficar icones do sistema, recebendo um tratamento diferente das imagens devido a necessidade de portabilidade por telas diferentes.
+    - **build.gradle (module):** Aqui nesse arquivo, encontramos uma configuração com o SDK, dependências utilizadas e versões do aplicativo.
+
+- **global:** Nessa parte, encontramos 4 tipos de arquivos padrões necessários para o funcionamento de um projeto Android, sendo:
+    - **build.gradle (Project):** Define configurações globais para os arquivos do projeto.
+    - **settings.gradle:** Lista os módulos que o sistema irá utilizar
+    - **gradle.properties:** Em geral, serve para uma configuração de performance e flags.
+
+# Activities
+
+Uma Activity dentro do Android é popularmente conhecida como uma tela, ou seja, um aplicativo pode possuir várias activities e necessariamente uma principal, que seria a MainActivity, que é mostrada ao usuário quando ele inicia o aplicativo.
+
+Uma activity normalmente possui botões, caixa de texto e seleção, tudo para oferecer alguma interação com o usuário do sistema.
+
+Uma activity pode chamar outras activities, e a medida que o sistema vai chamando, elas possuem uma hierarquia de empilhamento, onde activity x chama y e activity y chama z, então temos uma hierarquia de:
+
+X -> Y -> Z
+
+E dessa forma o aplicativo android vai criando uma ***Pilha de Navegação***, e a medida que você vai apertando no botão de voltar do celular, as activities vão sendo desempilhadas uma a uma.
+
+![Pilha de Activities](activities.png)
+
+## Como Criar uma Activity
+
+Para criar uma activity, utilizamos o sistema de herança, onde criamos uma classe que representa uma activity e ela irá herdar de Activity() que é uma classe provinda da API Android.
+
+Agora teremos uma classe que representa uma Activity e o Android já irá entender ela como uma.
+
+``` Kotlin
+
+import android.app.Activity         // Importação da Activity provinda da API Android
+
+class MainActivity : Activity(){    // Declaração de herança de uma activity
+
+}
+
+```
+
+Agora temos uma classe Activity básica, a medida que formos dando funcionalidades para a Activity, as funções serão implementadas no código.
+
+## Métodos de Callback
+
+Um CallBack é uma função passada como argumento para outra função, que será executada em resposta a um evento ou a um determinado tempo. Esse é o conceito de callback, podemos encontrar o uso dessa prática em várias linguagens de programação, como JS, Java, Kotlin, Angular, etc...
+
+``` JavaScript
+
+function processar(dado, callback) {
+    callback(dado);
+}
+
+```
+
+Normalmente um CallBack está diretamente relacionado aos métodos de ciclo de vida de uma aplicação, no Angular seriam os LifeCicle Hooks e no Android, temos os ciclos de vida de uma Activity.
+
+## LifeCicle Activities
+
+A medida que o usuário navega pelo sistema, as activities vão sofrendo ações também, e as ações básicas das activities compoem o Lifecicle delas.
+
+Os métodos que fazem parte do lifecicle são:
+
+| Método              | Quando é chamado                                      | Finalidade principal                                      |
+|---------------------|-------------------------------------------------------|-----------------------------------------------------------|
+| onCreate()          | Ao criar a Activity                                   | Inicialização geral (layout, variáveis, estado inicial)   |
+| onStart()           | Quando a Activity se torna visível                    | Preparar UI para o usuário                                |
+| onResume()          | Quando a Activity entra em primeiro plano             | Interação com o usuário começa                            |
+| onPause()           | Quando outra Activity entra parcialmente em foco      | Pausar tarefas leves (ex: animações, sensores)            |
+| onStop()            | Quando a Activity não está mais visível               | Liberar recursos pesados                                  |
+| onRestart()         | Quando a Activity volta após ter sido parada          | Preparar retorno ao fluxo                                 |
+| onDestroy()         | Antes da Activity ser destruída                       | Limpeza final de recursos                                 |
+
+![Diagrama do Ciclo de Vida de uma Activity](lifecicle-activity.png)
+
+## Variável SavedInstanceState
+
+É uma variável que é utilizada pelo Oncrate, ela serve para recuperar um estado anterior do aplicativo, caso ele tenha sido pausado ou encerrado, dessa forma, o Android pode armazenar o estado anterior e recriar ele quando necessário. Ele é normalmente utilizado como parâmetro do método onCreate().
+
+``` 
+
+class MainActivity : Activity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val texto = savedInstanceState?.getString("chave")
+        println("Restaurado: $texto")
+    }
+}
+
+```
+
+# Definindo conteúdo na tela
+
+Quando criamos uma Activity, uma etapa do seu ciclo de vida é o OnStart() e esse método é justamente a parte que se refere a criação gráfica do conteúdo que aparece na tela do usuário.
+
+O conteúdo pode ser mostrado pela função ***setContentView(texto)***, esse método irá imprimir na tela da activity o conteúdo expresso dentro do parâmetro, iremos usar eles nas duas formas de desenvolver uma tela.
+
+Há duas formas de mostrar o conteúdo do aplicativo na tela, a primeira se refere a criação de uma estrutura visual diretamente no código fonte, utilizando métodos da API Android, porém não retorna muitas vantagens, pois o código se torna maior, complexo e misturado com a lógica.
+
+``` kotlin
+
+import android.app.Activity
+import android.os.Bundle
+import android.widget.TextView
+class MainActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val texto = TextView(this)          //Criando um objeto de texto
+        texto.text = "Hello Kotlin"
+
+        setContentView( texto )             //definindo o conteúdo da tela
+    }
+}
+
+```
+
+A segunda opção é a criação de telas separadas dentro de um arquivo XML, que ficará localizado na pasta res/layout, com isso, podemos referenciar o arquivo de layout para a função setContentView() e aqui poderemos expor uma página inteira na tela.
+
+``` xml
+
+// Nome do arquivo activity_main.xml
+
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="Hello Kotlin" />
+
+```
+
+``` kotlin
+
+import android.app.Activity
+import android.os.Bundle
+
+class MainActivity : Activity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        
+        setContentView( R.layout.activity_main )     //definindo o conteúdo da tela
+    }
+}
+
+```
+
+# Classe Resource
+
+A API do Android disponibiliza uma classe chamada R, essa classe é a abreviação de Resource, ela serve exatamente para resgatar informações de dentro do package resource, e com isso utilizamos os termos como R.drawable.background ou R.color.azul (resgatar variáveis de cor).
+
+# Classe View
+
+A classe View é uma classe extremamente importante para manipular elementos, com ela podemos criar e modificar elementos como botões, input, textos, etc... dentro da tela do Android.
