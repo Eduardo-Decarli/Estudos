@@ -565,3 +565,110 @@ A API do Android disponibiliza uma classe chamada R, essa classe é a abreviaç�
 # Classe View
 
 A classe View é uma classe extremamente importante para manipular elementos, com ela podemos criar e modificar elementos como botões, input, textos, etc... dentro da tela do Android.
+
+Dentro dessa classe, há uma hierarquia definida entre os componentes, segue abaixo essa hierarquia:
+
+![alt text](hierarquia-view.png)
+
+## TextView
+
+Essa classe define qualquer texto que será impresso na tela, podemos chamar ela através da tag ***TextView*** e usar sua propriedade ***text*** para informar o texto
+
+``` xml
+
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="Text exemplo" />
+
+```
+
+## EditText
+
+Essa tag representa um input, podemos atribuir um texto informativo através da tag ***text*** também.
+
+Outra propriedade importante dessa tag é a ***hint*** que serve como placeholder do campo de texto.
+
+``` xml
+
+<EditText
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:hint="Nome de usuário" />
+
+```
+
+## Button
+
+Essa tag cria um botão na tela que pode ser usado para disparar alguma ação.
+
+Ele também possui a propriedade ***text***
+
+``` xml
+
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="cadastrar" />
+
+```
+
+## LinearLayout
+
+Essa tag funciona como estrutura, não como componente, nela podemos definir o layout de como os dados serão mostrados. Ela possui 2 variantes, sendo a orientação vertical e a orientação horizontal.
+
+``` xml
+
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:orientation="vertical">         <!--Define que ficará um botão abaixo do outro -->
+
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Botão 1" />
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Botão 2" />
+</LinearLayout>
+
+```
+
+## Altura e Largura
+
+Dentro de uma View (qualquer componente), é necessário informar a altura e a largura do componente, caso o contrário, o código não irá compilar.
+
+Podemos definir essas informações de 3 maneiras diferentes, sendo:
+
+- dp: Funciona como o px, ela irá definir uma quantidade x de pixels independentes de densidade, ou seja, vai ser o valor de tamanho, não importa qual a resolução.
+
+- wrap_content: Essa define que o valor será variável de acordo com o tamanho do dispositivo que estará rodando o programa, não distorcendo o aplicativo.
+
+- match_parent: Essa irá definir que a View irá ocupar 100% do espaço que está alocada.
+
+## FindViewById
+
+Essa função nos permite resgatar o componente View dentro da tela, preservando seu estado, funciona como um FindById do JS.
+
+``` XML
+
+<Button
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:text="login"
+android:id="@+id/btn_login" />
+
+```
+
+``` kotlin
+
+import android.widget.Button
+...
+val button = findViewById<Button>(R.id.btn_login)        // Usamos a classe R para resgatar os valores da Activity.
+
+```
+
+- O método findViewById() pode resgatar qualquer componente View da tela, então para isso, é necessário especificar de qual objeto genérico estamos recuperando o tipo.
