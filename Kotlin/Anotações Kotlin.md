@@ -14,6 +14,8 @@
 [Herança](#herança)
 [Data Class](#data-class)
 
+---
+
 # História do Kotlin
 
 É uma linguagem de programação ***Open-Search*** criada pela JetBrains (criadora do InteliJ e do Android Studio) em 2010 e teve sua primeira versão após 6 anos de desenvolvimento, lançada em Fevereiro de 2016, agora ela possui além dos desenvolvimentos feitos pela JetBrains, um suporte gigante feito por uma unida comunidade do GitHUb.
@@ -57,6 +59,8 @@ var valor: String? = null
 
 ```
 
+---
+
 # Código MAIN
 
 No Kotlin, todo código executa dentro de uma função main, essa função é definida através da seguinte nomeclatura:
@@ -68,6 +72,8 @@ fun main(args Array<String>) {
 }
 
 ```
+
+---
 
 # Variáveis
 
@@ -162,6 +168,8 @@ val c3 = b1.not() //Retorno será false
 
 ```
 
+---
+
 # Template String
 
 O Kotlin possui uma caracteristica muito interessante, ele possui uma coisa chamada de **Template String**, e isso de forma nativa na linguagem, permitindo a interpolação de variáveis em textos String utilizando o caractere $ para representar a chamada de uma variável.
@@ -186,6 +194,8 @@ val text = """
     """;
 
 ```
+
+---
 
 # Listas e Arrays
 
@@ -234,6 +244,8 @@ listaMutavel.add(4);                                    // Irá salvar e as 2 li
 
 ```
 
+---
+
 # Importações
 
 No Kotlin, podemos realizar importações para utilizar classes e arquivos diferentes dentro do nosso algorítmo, e para isso, devemos realizar um import similar ao Java.
@@ -249,9 +261,11 @@ import carrinho.produto
 
 - Como já existe um produto vindo de outro package, podemos realizar um apelido para o produto vindo de vitrine, isso é importante quando lidamos com pacotes externos e bibliotecas.
 
+---
+
 # Estrutura de Condição e Repetição
 
-If Ternário: Em Kotlin, usamos o if ternário de uma forma escrita um pouco diferente do Java, pois em vez de utilizar caracteres como ? e : utilizamos if else
+**If Ternário:** Em Kotlin, usamos o if ternário de uma forma escrita um pouco diferente do Java, pois em vez de utilizar caracteres como ? e : utilizamos if else
 
 ``` kotlin
 
@@ -259,7 +273,7 @@ val maior = if(a > b) a else b
 
 ```
 
-When: Essa é uma estrutura com nome novo, mas ela serve realizmente para ser como o Switch em Java, apenas com outro nome:
+**When:** Essa é uma estrutura com nome novo, mas ela serve realizmente para ser como o Switch em Java, apenas com outro nome:
 
 ``` Kotlin
 
@@ -285,7 +299,7 @@ when(x) {
 
 ```
 
-for: Assim como o java, podemos criar uma estrutura de repetição for, mas em Kotlin, a sintáxe da estrutura funciona um pouco diferente do que estamos acostumados a montar, pois ela é similar ao python.
+**for:** Assim como o java, podemos criar uma estrutura de repetição for, mas em Kotlin, a sintáxe da estrutura funciona um pouco diferente do que estamos acostumados a montar, pois ela é similar ao python.
 
 ``` kotlin
 
@@ -303,6 +317,8 @@ for((index, value) in lista.withIndex()) {                  // Aqui temos um for
 
 - While em Kotlin funciona muito parecido com o Java.
 
+---
+
 # Comparativos
 
 Dentro do Kotlin, podemos usar o sinal de igual para 3 funções diferentes, sendo:
@@ -314,6 +330,8 @@ Comparação Estrutural (==): Ele realiza uma comparação entre 2 variáveis de
 Comparação Referencial (===): Aqui nós não realizamos uma comparação de conteúdo, mas sim uma comparação de referência. Ele verifica se duas variáveis apontam para a mesma célula de memória, ou seja, não basta ter valores iguais, precisam ser exatamente a mesma variável
 
 - O comparativo estrutural do Kotlin não é igual ao Java, no Java, a comparação é realizada, fazendo comparação de **referência de memória para objetos** e comparação de **valor para primitivos**
+
+---
 
 # Funções
 
@@ -332,6 +350,8 @@ fun imprimir(text: String) : Unit {                 // Função com retorno Unit
 fun somar(num1 : Int, num2 : Int) = num1 + num2;    // Uma função Single-Expression Function
 
 ```
+
+---
 
 # Herança
 
@@ -355,6 +375,8 @@ class funcionario : pessoa {
 
 ```
 
+---
+
 # Data Class
 
 O Data Class é muito similar a uma classe do tipo Record em Java, muito útil para realizar DTOs ou entidades simples, onde podemos criar uma entidade que recebe parâmetros (sem métodos) e montar tudo com apenas uma linha de código, incluindo propriedades, get e set.
@@ -364,6 +386,8 @@ O Data Class é muito similar a uma classe do tipo Record em Java, muito útil p
 data class Usuario(var nome: String, var email: String, var senha: String);
 
 ```
+
+---
 
 # Android SDK
 
@@ -378,6 +402,8 @@ Dentro do Android SDK encontramos:
 - Build-Tools: Contem ferramentas para compilar código em um arquivo APK ou AAB.
 
 Quando utilizamos IDEs como o Android Studio, já vem integrado a linguagem Kotlin e o Android SDK
+
+---
 
 # Estrutura de um Projeto Kotlin-Android
 
@@ -419,6 +445,8 @@ MeuApp/
     - **build.gradle (Project):** Define configurações globais para os arquivos do projeto.
     - **settings.gradle:** Lista os módulos que o sistema irá utilizar
     - **gradle.properties:** Em geral, serve para uma configuração de performance e flags.
+
+---
 
 # Activities
 
@@ -466,6 +494,8 @@ function processar(dado, callback) {
 
 Normalmente um CallBack está diretamente relacionado aos métodos de ciclo de vida de uma aplicação, no Angular seriam os LifeCicle Hooks e no Android, temos os ciclos de vida de uma Activity.
 
+---
+
 ## LifeCicle Activities
 
 A medida que o usuário navega pelo sistema, as activities vão sofrendo ações também, e as ações básicas das activities compoem o Lifecicle delas.
@@ -502,6 +532,8 @@ class MainActivity : Activity() {
 }
 
 ```
+
+---
 
 # Definindo conteúdo na tela
 
@@ -562,7 +594,13 @@ class MainActivity : Activity() {
 
 A API do Android disponibiliza uma classe chamada R, essa classe é a abreviação de Resource, ela serve exatamente para resgatar informações de dentro do package resource, e com isso utilizamos os termos como R.drawable.background ou R.color.azul (resgatar variáveis de cor).
 
-# Classe View
+---
+
+# Criação de Telas
+
+Dentro de um aplicativo Android, podemos ter diferentes formas de criar uma tela, podemos utilizar 3 meios diferentes, sendo a criação de tela por meio de ***XML*** (Legado), por meio manual da ***classe View*** e utilizando o ***JetPack Compose*** (meio moderno). 
+
+## Classe View
 
 A classe View é uma classe extremamente importante para manipular elementos, com ela podemos criar e modificar elementos como botões, input, textos, etc... dentro da tela do Android.
 
@@ -570,7 +608,7 @@ Dentro dessa classe, há uma hierarquia definida entre os componentes, segue aba
 
 ![alt text](hierarquia-view.png)
 
-## TextView
+### TextView
 
 Essa classe define qualquer texto que será impresso na tela, podemos chamar ela através da tag ***TextView*** e usar sua propriedade ***text*** para informar o texto
 
@@ -583,7 +621,7 @@ android:text="Text exemplo" />
 
 ```
 
-## EditText
+### EditText
 
 Essa tag representa um input, podemos atribuir um texto informativo através da tag ***text*** também.
 
@@ -598,7 +636,7 @@ android:hint="Nome de usuário" />
 
 ```
 
-## Button
+### Button
 
 Essa tag cria um botão na tela que pode ser usado para disparar alguma ação.
 
@@ -613,7 +651,7 @@ android:text="cadastrar" />
 
 ```
 
-## LinearLayout
+### LinearLayout
 
 Essa tag funciona como estrutura, não como componente, nela podemos definir o layout de como os dados serão mostrados. Ela possui 2 variantes, sendo a orientação vertical e a orientação horizontal.
 
@@ -637,7 +675,7 @@ android:orientation="vertical">         <!--Define que ficará um botão abaixo 
 
 ```
 
-## Altura e Largura
+### Altura e Largura
 
 Dentro de uma View (qualquer componente), é necessário informar a altura e a largura do componente, caso o contrário, o código não irá compilar.
 
@@ -649,7 +687,7 @@ Podemos definir essas informações de 3 maneiras diferentes, sendo:
 
 - match_parent: Essa irá definir que a View irá ocupar 100% do espaço que está alocada.
 
-## FindViewById
+### FindViewById
 
 Essa função nos permite resgatar o componente View dentro da tela, preservando seu estado, funciona como um FindById do JS.
 
@@ -672,3 +710,6 @@ val button = findViewById<Button>(R.id.btn_login)        // Usamos a classe R pa
 ```
 
 - O método findViewById() pode resgatar qualquer componente View da tela, então para isso, é necessário especificar de qual objeto genérico estamos recuperando o tipo.
+
+## Jetpack Compose
+
