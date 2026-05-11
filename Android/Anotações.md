@@ -76,7 +76,7 @@ MeuApp/
 
 # Activities
 
-Uma Activity dentro do Android é popularmente conhecida como uma tela, ou seja, um aplicativo pode possuir várias activities e necessariamente uma principal, que seria a MainActivity, que é mostrada ao usuário quando ele inicia o aplicativo.
+Uma Activity dentro do Android é popularmente conhecida como uma tela, ou seja, um aplicativo pode possuir várias activities e necessariamente uma principal, que seria a ***MainActivity***, que é mostrada ao usuário quando ele inicia o aplicativo.
 
 Uma activity normalmente possui botões, caixa de texto e seleção, tudo para oferecer alguma interação com o usuário do sistema.
 
@@ -94,7 +94,7 @@ src > main > java > com.example.meuprojeto
 
 ## Como Criar uma Activity
 
-Para criar uma activity, utilizamos o sistema de herança, onde criamos uma classe que representa uma activity e ela irá herdar de Activity() que é uma classe provinda da API Android.
+Para criar uma activity, utilizamos o sistema de herança, onde criamos uma classe que representa uma activity e ela irá herdar de ***Activity()*** que é uma classe provinda da API Android.
 
 Agora teremos uma classe que representa uma Activity e o Android já irá entender ela como uma.
 
@@ -109,6 +109,18 @@ class MainActivity : Activity(){    // Declaração de herança de uma activity
 ```
 
 Agora temos uma classe Activity básica, a medida que formos dando funcionalidades para a Activity, as funções serão implementadas no código.
+
+## Tipos de Herança de Activity
+
+Dentro do SDK Android, podemos encontrar diferentes casses herdadas, que definem comportamento e compatibilidade, entre elas, podemos encontrar:
+
+**AppCompactActivity:** É a classe mais comum de ser herdada para montar uma activity, ela faz parte da biblioteca ***JetPack AppCompact*** (classe nativa) e ela permite retrocompatibilidade, permitindo uso de recursos mais novos do android em versões mais antigas do sistema.
+
+**ComponentActivity:** É uma classe mais leve e moderna em relação a AppCompactActivity e serve como base de herança da AppCompactActivity (AppCompactActivity : ComponentActivity), e é utilizada quando você não precisa de todos os recursos que a AppCompactActivity proporciona, servindo como abordagem mais enxuta. É muito utilizada no Jatpack Compose.
+
+**Activity:** Essa é a classes pai fundamental de uma activity no android, onde todas as outras heram dela. usada quando precisa de controle total e mínimo de recursos adicionais. É raramente utilizada hoje em dia.
+
+**FragmentActivity:** É uma subclasse de Activity, que adiciona suporte para lidar com fragmentos (Fragments) em versões mais antigas do Android.
 
 ---
 
