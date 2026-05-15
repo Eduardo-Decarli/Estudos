@@ -414,3 +414,4 @@ Essa classe possui os mesmos métodos que uma classe normal e pode armazenar qua
 
 Com ela podemos recuperar dados estáticos provindos de um XML ou até de um banco de dados e fornecer como opções para o **AdapterView**.
 
+O arrayAdapter possui métodos similares aos de uma lista para realizar seu gerenciamento, como add(), get(), etc...
