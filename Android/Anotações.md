@@ -86,7 +86,7 @@ X -> Y -> Z
 
 E dessa forma o aplicativo android vai criando uma ***Pilha de Navegação***, e a medida que você vai apertando no botão de voltar do celular, as activities vão sendo desempilhadas uma a uma.
 
-![Pilha de Activities](activities.png)
+![Pilha de Activities](imgs/activities.png)
 
 Uma activity sempre ficará presente dentro do pacote principal do projeto, sendo:
 
@@ -140,7 +140,7 @@ Os métodos que fazem parte do lifecicle são:
 | onRestart()         | Quando a Activity volta após ter sido parada          | Preparar retorno ao fluxo                                 |
 | onDestroy()         | Antes da Activity ser destruída                       | Limpeza final de recursos                                 |
 
-![Diagrama do Ciclo de Vida de uma Activity](lifecicle-activity.png)
+![Diagrama do Ciclo de Vida de uma Activity](imgs/lifecicle-activity.png)
 
 ## Variável SavedInstanceState
 
@@ -304,7 +304,7 @@ A classe View é uma classe extremamente importante para manipular elementos, co
 
 Dentro dessa classe, há uma hierarquia definida entre os componentes, segue abaixo essa hierarquia:
 
-![alt text](hierarquia-view.png)
+![alt text](imgs/hierarquia-view.png)
 
 ### TextView
 
@@ -400,18 +400,44 @@ Podemos definir essas informações de 3 maneiras diferentes, sendo:
 
 - **match_parent:** Essa irá definir que a View irá ocupar 100% do espaço que está alocada.
 
+---
+
 ## Jetpack Compose
+
+O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando linguagem declarativa, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
+
+
+
+
+---
 
 # Adapter
 
-Um adapter é um componente responsável por converter individualmente cada item para uma lista de View Objects que serão mostrados na tela.
+Um adapter é um componente responsável por converter individualmente cada item para uma lista de View Objects que serão mostrados na tela. Ou seja, ele serve como um intermediador entre os **Dados** (lista String, objetos ou banco de dados) e a própria **Interface de Usuário (UI)**. 
+
+Ele é frequentemente utilizado dentro de componentes que necessitam de coleções para mostrar dados, e existem diferentes tipos de Adapters, sendo ArrayAdapter, BaseAdapter e ListAdapter.
 
 ## ArrayAdapter
 
-É uma lista presente dentro do Android SDK que podemos utilizar para fornecer dados para uma ***AdapterView***, que seria uma superclasse de Spinner, Gallery, ListView e GridView.
+É uma lista presente dentro do Android SDK que podemos utilizar para fornecer dados para uma ***AdapterView***, que seria uma superclasse de Spinner, Gallery, ListView e GridView. Essa classe possui os mesmos métodos que uma classe normal e pode armazenar qualquer tipo de valor, como um array genérico.
 
-Essa classe possui os mesmos métodos que uma classe normal e pode armazenar qualquer tipo de valor, como um array genérico.
+Com ela podemos recuperar dados estáticos provindos de um XML ou até de um banco de dados e fornecer como opções para o **AdapterView**. Por padrão o ArrayAdapter lê o método toString() de cada objeto contido dentro dele (caso seja um Adapter de Objetos).
 
-Com ela podemos recuperar dados estáticos provindos de um XML ou até de um banco de dados e fornecer como opções para o **AdapterView**.
+Para criar um ArrayAdapter, é necessário 3 parâmetros obrigatórios, sendo um **contexto** que geralmente é a prória Activity (this), **Layout do Item** que é um arquivo XML separado que define o formado e a aparência de cada linha, embora o Android ofereça algumas opções prontas pelo caminho ***android.R.layout.simple_list_item_1*** e a **fonte de dados** que seria um Array ou List (Objects).
 
-O arrayAdapter possui métodos similares aos de uma lista para realizar seu gerenciamento, como add(), get(), etc...
+``` kotlin
+
+val linguagens = listOf("Kotlin", "Java", "Python", "Swift", "C++")
+
+// Criando o Adapter
+val adapter = ArrayAdapter(
+    this, // Contexto
+    android.R.layout.simple_list_item_1, // Layout padrão do Android (apenas um texto)
+    linguagens // Nossa fonte de dados
+)
+
+// Vinculando o adapter à View (ex: um ListView no seu XML)
+val minhaLista = findViewById<ListView>(R.id.listViewPrincipal)
+minhaLista.adapter = adapter
+
+```

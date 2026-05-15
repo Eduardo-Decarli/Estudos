@@ -1,3 +1,38 @@
+# JDK
+
+O JDK é um SDK específico feito para desenvolver programas em Java. Dentro do JDK podemos encontrar um JRE (Java Runtime Environment) e um Kit de ferramentas de desenvolvimento.
+
+JRE -> Significa Java Runtime Environment, e dentro desse ambiente, podemos encontrar a JVM e a biblioteca básica do próprio Java, como a java.lang, java.io, java.util ou até a java.net.
+
+Kit de Desenvolvimento Java -> Esse kit fornece o compilador Javac, Jar, Javadoc, JDB, JavaP, KeyTool e Jarsigner. 
+
+# LifeCicle do Java
+
+Para um programa Java ser desenvolvido, ele passa por diversas etapas e processos para transformar um código-fonte em algo intendível pelo computador.
+
+1. Escrita -> Na primeira etapa, o código Java é escrito através de um editor de código ou IDE (Integrated Development Enviroment), aqui o arquivo possui o código-fonte e é armazenado no formato ***.java***. Para as IDEs, temos exemplos como **IntelliJ EDEA**, **Eclipse** e **NetBeans**. Também podemos encontrar o **Spring Tools (STS)**, que é especializada em desenvolvimento com Spring, foi baseado no Eclipse e fornece suporte para rodar dentro do Eclipse, vsCode e Theia.
+
+2. Compilação -> O segundo estado que encontramos, é o estado de arquivo compilado, pelo qual o código-fonte passa pelo processo de compilação do javac (compilador java) e armazena os novos dados, chamados de ***Bytecodes*** dentro de novos arquivos chamados ***.class***.
+
+``` bash
+
+javac NomeDoArquivo.java                            # Aqui nós chamamos o Javac para realizar a compilação do arquivo, gerando um novo arquivo.class
+javac NomeDoArquivo.java -d <diretorio>             # Aqui podemos definir um diretório onde deverá salvar os arquivos .class que foram gerados
+javac NomeDoArquivo.java -sourcepath <diretorio>    # Aqui podemos definir o local em que o javac recuperará o arquivo .java para realizar a compilação
+javac NomeDoArquivo.java --encoding <nome>          # Aqui podemos definir a codificação dos caracteres do arquivo, como por exemplo, UTF-8
+
+```
+
+- Para melhor entendimento de como funciona a compilação em Java, é altamente recomendada realizar uma matéria ou curso referente a compiladores.
+
+3. Carregamento -> O próximo passo é o processo de carregamento, onde a Java Virtual Machine (JVM) carrega as classes necessárias na memória. Ou seja, os arquivos bytecodes que estavam presentes dentro dos .class agora são carregados e jogados dentro da memória primária.
+
+4. Validação -> Essa etapa ocorre simultaneamente com a etapa 3, pois a medida que os arquivos são carregados na memória primária, a JVM verifica e valida as classes que foram colocadas dentro da memória principal, na intenção de localizar violações de restrições ou erros de compilação.
+
+5. Execução -> Aqui a JVM executa os ***bytecodes*** utilizando uma combinação de interpretação, chamada de compilação ***JIT (Just-In-Time)***, também conhecido como compilador **Java HotSpot**. A JVM pega os bytecodes dentro da memória primária, compila eles para a linguagem de computador (sendo muito próximo ou equivalente ao **Assembly** da CPU) e dessa forma, temos o código final.
+
+---
+
 # Optionals
 
 Um Optional é uma classe Java que permite facilitar o trabalho com objetos que podem ser nulos e evitar o ***NullPointerException***. Ele foi introduzido no Java 8 e possui diversas utilidades.
