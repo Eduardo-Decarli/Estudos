@@ -72,3 +72,49 @@ Acesso do Valor
 - orElseThrow(exceção) -> Retorna uma exception personalizada.
 
 - Caso for utilizar o get(), faça uma verificação utilizando isPresent().
+
+---
+
+# Abstract Class
+
+Uma classe abstrata serve como um "molde" ou superclasse base. A classe abstrata sempre participará de uma herança e serve para ser herdada, para que as classes filhas sempre à utilizem como modelo, onde todos os métodos e propriedades dentro da classe abstrata serão obrigatóriamente implementadas pelas classes filhas.
+
+- A classe abstrata não pode ser instanciada, ou seja, não pode utilizar diretamente o new.
+- Utiliza a palavra chave ***Abstract*** para declarar uma classe abstrata
+- Os métodos dentro da classe podem ser abstratos também, onde não podem possuir corpo, e servem como contrato para as classes filhas criarem.
+- Podem ter métodos concretos, onde são herdados diretamente pelas classes filhas.
+
+``` java
+
+// Declaração da classe abstrata
+public abstract class Animal {                 
+    protected String nome;                                      
+
+    public Animal(String nome) {
+        this.nome = nome;
+    }
+
+    // Método concreto (comum a todos os animais)
+    public void dormir() {
+        System.out.println(nome + " está dormindo zzz");
+    }
+
+    // Método abstrato (sem corpo - cada animal faz de um jeito)
+    public abstract void emitirSom();                       
+}
+
+// Classe concreta que herda a classe abstrata
+public class Cachorro extends Animal {
+
+    public Cachorro(String nome) {
+        super(nome);
+    }
+
+    // Implementação obrigatória do método abstrato
+    @Override
+    public void emitirSom() {
+        System.out.println(nome + " faz: Au au!");
+    }
+}
+
+```
