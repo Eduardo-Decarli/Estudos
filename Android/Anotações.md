@@ -1,5 +1,6 @@
 [Android SDK](#android-sdk)   
-- [Conceitos Importantes](#conceitos-importantes)   
+- [Conceitos Importantes](#conceitos-importantes) 
+
 [Estrutura de um Projeto Android](#estrutura-de-um-projeto-kotlin-android)   
 [Activities](#activities)   
 - [Como criar uma Activity](#como-criar-uma-activity)   
@@ -7,14 +8,15 @@
 - [Criando mais de uma Activity](#criando-1-activity)   
 - [Lifecicle de uma Activity](#lifecicle-activities)   
 - [Variável SavedInstancestate](#variável-savedinstanceState)   
+
 [Android Manifest](#androidmanifest)   
 [Método setContentView()](#setconcentview)   
 [Método findViewById()](#FindViewById)   
 [Classe Resource (R)](#classe-resource)  
 [Criação de Telas](#criação-de-telas)   
-[Classe View (XML)](#classe-view)
-- [Especificação ViewGroup](#viewgroup)
-- [Especificações Widgets](#Widgets)
+[Classe View (XML)](#classe-view)   
+- [Especificação ViewGroup](#viewgroup)   
+- [Especificações Widgets](#Widgets)   
 
 # Android SDK
 
