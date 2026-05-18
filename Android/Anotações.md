@@ -1,11 +1,20 @@
-[Android SDK](#android-sdk)
-- [Conceitos Importantes](#conceitos-importantes)
-[Estrutura de um Projeto Android](#estrutura-de-um-projeto-kotlin-android)
-[Activities](#activities)
-- [Como criar uma Activity](#como-criar-uma-activity)
-[Definindo o Conteúdo na Tela](#definindo-conteúdo-na-tela)
-[Classe Resource](#classe-resource)
-[Criação de Telas](#criação-de-telas)
+[Android SDK](#android-sdk)   
+- [Conceitos Importantes](#conceitos-importantes)   
+[Estrutura de um Projeto Android](#estrutura-de-um-projeto-kotlin-android)   
+[Activities](#activities)   
+- [Como criar uma Activity](#como-criar-uma-activity)   
+- [Tipos de Herança de uma Activity](#tipos-de-herança-de-activity)   
+- [Criando mais de uma Activity](#criando-1-activity)   
+- [Lifecicle de uma Activity](#lifecicle-activities)   
+- [Variável SavedInstancestate](#variável-savedinstanceState)   
+[Android Manifest](#androidmanifest)   
+[Método setContentView()](#setconcentview)   
+[Método findViewById()](#FindViewById)   
+[Classe Resource (R)](#classe-resource)  
+[Criação de Telas](#criação-de-telas)   
+[Classe View (XML)](#classe-view)
+- [Especificação ViewGroup](#viewgroup)
+- [Especificações Widgets](#Widgets)
 
 # Android SDK
 
@@ -243,7 +252,7 @@ Algumas tags importantes são:
 
 ---
 
-# Definindo conteúdo na tela
+# setConcentView
 
 Quando criamos uma Activity, uma etapa do seu ciclo de vida é o OnStart() e esse método é justamente a parte que se refere a criação gráfica do conteúdo que aparece na tela do usuário.
 
@@ -352,6 +361,8 @@ A classe View gerencia 4 pilares fundamentais da interface gráfica, sendo eles 
 
 ## ViewGroup
 
+
+## Widgets
 
 
 ## TextView
