@@ -14,6 +14,8 @@
 [Herança](#herança)
 [Data Class](#data-class)
 
+[Documentação do Kotlin](https://kotlinlang.org/)
+
 ---
 
 # História do Kotlin
@@ -61,6 +63,22 @@ var valor: String? = null
 
 ---
 
+# Frameworks de Kotlin
+
+O Kotlin é uma linguagem nova no mercado, mas ela vem ganhando uma grande popularidade, e já possui uma lista de frameworks eficientes, tais como:
+
+**Spring Boot:** Por ser feito para Java, possui total interoperabilidade com o Kotlin, tornando-se parte do ecossistema Kotlin.
+
+**Ktor:** Esse é um framework criado pela Jetbrains oficialmente para o Kotlin, é o framework ideal para criar APIs RESTful, microsserviços e aplicações WebSockets.
+
+- Spring Boot e Ktor são concorrentes, pois servem para criar funcionalidades similares entre si, embora o KTor é mais performático, e o SpringBoot é mais formalizado para backend empresarial.
+  
+**Jetpack Compose:** É um framework nativo do Google para auxiliar o desenvolvimento de interfaces de usuário nativas no Android.
+
+**Kotlin Multiplatform (KMP):** É uma tecnologia que permite compartilhar lógicas de negócio e interfaces entre Android, iOS, Web e Desktop.
+
+**KVision:** É um framework focado em Kotlin/JS que permite desenvolver aplicações web completas utilizando componentes reativos orientados a objetos.
+
 # Código MAIN
 
 No Kotlin, todo código executa dentro de uma função main, essa função é definida através da seguinte nomeclatura:
@@ -74,6 +92,20 @@ fun main(args Array<String>) {
 ```
 
 ---
+
+# Print and Read
+
+No Kotlin, podemos encontrar 2 funções nativas muito importantes, sendo elas o print(), que serve para imprimir conteúdo na tela, e o readln(), que permite ler a linha em um terminal
+
+```
+
+fun main() {
+    println("Enter any word: ");
+    val yourWord = readln();
+    print("You entered the word: yourWord");
+}
+
+```
 
 # Variáveis
 
@@ -297,6 +329,14 @@ when(x) {
     else -> print("X não é um valor entre 1 e 10");
 }
 
+when (obj) {
+        1          -> "One"
+        "Hello"    -> "Greeting"
+        is Long    -> "Long"                                    // Podemos ver que ele aceita qualquer tipo de valor possível, desde numero, objeto ou até boolean.
+        !is String -> "Not a string"
+        else       -> "Unknown"
+    }
+
 ```
 
 **for:** Assim como o java, podemos criar uma estrutura de repetição for, mas em Kotlin, a sintáxe da estrutura funciona um pouco diferente do que estamos acostumados a montar, pois ela é similar ao python.
@@ -306,11 +346,15 @@ when(x) {
 val lista = listOf(1, 2, 3, 4);
 
 for(i in lista) {
-    print("Item da lista número $i");
+    println("Item da lista número $i");
 }
 
 for((index, value) in lista.withIndex()) {                  // Aqui temos um for que consegue puxar a posição do valor dentro da lista, para isso temos que puxar também o index diretamente da lista
     println("Item $value está no index $index");
+}
+
+for(value in lista.indices) {                               // Assim podemos recuperar o índice que se encontra no item da lista.
+    println("Item no índice $value é $lista[value]");
 }
 
 ```
@@ -332,6 +376,20 @@ Comparação Referencial (===): Aqui nós não realizamos uma comparação de co
 - O comparativo estrutural do Kotlin não é igual ao Java, no Java, a comparação é realizada, fazendo comparação de **referência de memória para objetos** e comparação de **valor para primitivos**
 
 ---
+
+# Range
+
+Dentro do Kotlin, podemos realizar um Range, que seria uma validação para saber se um valor está contido dentro de uma lista ou sequência e validando como um valor booleano.
+
+``` kotlin
+
+val x = 10
+val y = 9
+if (x in 1..y+1) {                  // Verifica se x está presente dentro de 1 e y+1
+    println("fits in range")
+}
+
+```
 
 # Funções
 
@@ -359,7 +417,7 @@ A herança em Kotlin funciona de forma similar ao Java, porém a herança não �
 
 ``` kotlin
 
-class pessoa {
+open class pessoa {
     var nome: String;
     var idade: Int;
 
@@ -374,6 +432,8 @@ class funcionario : pessoa {
 }
 
 ```
+
+Por padrão, todas as classes em kotlin são marcadas como final, isso impede que elas sejam herdadas, e para resolver isso, deve-se utilizar a declaração open na frente da classe.
 
 ---
 
