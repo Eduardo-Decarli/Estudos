@@ -1,3 +1,5 @@
+[Roadmap para Android](https://roadmap.sh/android)
+
 [Android SDK](#android-sdk)   
 - [Conceitos Importantes](#conceitos-importantes) 
 
@@ -5,7 +7,7 @@
 [Activities](#activities)   
 - [Como criar uma Activity](#como-criar-uma-activity)   
 - [Tipos de Herança de uma Activity](#tipos-de-herança-de-activity)   
-- [Criando mais de uma Activity](#criando-1-activity)   
+- [Intent e StartActivity()](#intent-e-startactivity)   
 - [Lifecicle de uma Activity](#lifecicle-activities)   
 - [Variável SavedInstancestate](#variável-savedinstanceState)   
 
@@ -91,9 +93,7 @@ MeuApp/
 
 Uma Activity dentro do Android é popularmente conhecida como uma tela, ou seja, um aplicativo pode possuir várias activities e necessariamente uma principal, que seria a ***MainActivity***, que é mostrada ao usuário quando ele inicia o aplicativo.
 
-Uma activity normalmente possui botões, caixa de texto e seleção, tudo para oferecer alguma interação com o usuário do sistema.
-
-Uma activity pode chamar outras activities, e a medida que o sistema vai chamando, elas possuem uma hierarquia de empilhamento, onde activity x chama y e activity y chama z, então temos uma hierarquia de:
+Uma activity normalmente possui botões, caixa de texto e seleção, tudo para oferecer alguma interação com o usuário do sistema. Uma activity pode chamar outras activities, e a medida que o sistema vai chamando, elas possuem uma hierarquia de empilhamento, onde activity x chama y e activity y chama z, então temos uma hierarquia de:
 
 X -> Y -> Z
 
@@ -137,7 +137,53 @@ Dentro do SDK Android, podemos encontrar diferentes casses herdadas, que definem
 
 ---
 
-## Criando +1 Activity
+## LifeCicle Activities
+
+A medida que o usuário navega pelo sistema, as activities vão sofrendo ações também, e as ações básicas das activities compoem o Lifecicle delas.
+
+Os métodos que fazem parte do lifecicle são:
+
+| Método              | Quando é chamado                                      | Finalidade principal                                      |
+|---------------------|-------------------------------------------------------|-----------------------------------------------------------|
+| onCreate()          | Ao criar a Activity                                   | Inicialização geral (layout, variáveis, estado inicial)   |
+| onStart()           | Quando a Activity se torna visível                    | Preparar UI para o usuário                                |
+| onResume()          | Quando a Activity entra em primeiro plano             | Interação com o usuário começa                            |
+| onPause()           | Quando outra Activity entra parcialmente em foco      | Pausar tarefas leves (ex: animações, sensores)            |
+| onStop()            | Quando a Activity não está mais visível               | Liberar recursos pesados                                  |
+| onRestart()         | Quando a Activity volta após ter sido parada          | Preparar retorno ao fluxo                                 |
+| onDestroy()         | Antes da Activity ser destruída                       | Limpeza final de recursos                                 |
+
+![Diagrama do Ciclo de Vida de uma Activity](imgs/lifecicle-activity.png)
+
+A medida que a navegação dentro de uma activity vai ocorrendo, podemos ver os métodos realizando a ***mudança de estado*** da activity, que funciona mais ou menos assim:
+
+O fluxo pode ser entendido da seguinte forma:
+
+A aplicação abre a tela principal (MainActivity):
+- onCreate() → a Activity é criada e os componentes iniciais são configurados.
+- onStart() → a Activity se torna visível para o usuário.
+- onResume() → a Activity entra em primeiro plano e começa a interagir com o usuário.
+O usuário navega para a tela de login:
+Na Activity atual:
+- onPause() → a Activity perde o foco.
+- onStop() → a Activity deixa de ficar visível.
+Na nova Activity:
+- onCreate()
+- onStart()
+- onResume()
+O usuário pressiona o botão “Voltar”:
+Na Activity de login:
+- onPause()
+- onStop()
+- onDestroy() → a Activity é removida da memória.
+A Activity anterior retorna:
+- onRestart() → a Activity estava parada e será reutilizada.
+- onStart()
+- onResume()
+
+Esse comportamento permite que o Android controle memória, desempenho e experiência do usuário de forma eficiente, reutilizando Activities quando possível e destruindo aquelas que não são mais necessárias.
+
+## Intent e StartActivity()
 
 Para podermos abrir uma activity a partir de outra, precisamos utilizar o método chamado startActivity() e esse método utiliza um Intent para saber como abrir a activity.
 
@@ -172,24 +218,6 @@ val intent = Intent(
 startActivity(intent)
 
 ```
-
-## LifeCicle Activities
-
-A medida que o usuário navega pelo sistema, as activities vão sofrendo ações também, e as ações básicas das activities compoem o Lifecicle delas.
-
-Os métodos que fazem parte do lifecicle são:
-
-| Método              | Quando é chamado                                      | Finalidade principal                                      |
-|---------------------|-------------------------------------------------------|-----------------------------------------------------------|
-| onCreate()          | Ao criar a Activity                                   | Inicialização geral (layout, variáveis, estado inicial)   |
-| onStart()           | Quando a Activity se torna visível                    | Preparar UI para o usuário                                |
-| onResume()          | Quando a Activity entra em primeiro plano             | Interação com o usuário começa                            |
-| onPause()           | Quando outra Activity entra parcialmente em foco      | Pausar tarefas leves (ex: animações, sensores)            |
-| onStop()            | Quando a Activity não está mais visível               | Liberar recursos pesados                                  |
-| onRestart()         | Quando a Activity volta após ter sido parada          | Preparar retorno ao fluxo                                 |
-| onDestroy()         | Antes da Activity ser destruída                       | Limpeza final de recursos                                 |
-
-![Diagrama do Ciclo de Vida de uma Activity](imgs/lifecicle-activity.png)
 
 ## Variável SavedInstanceState
 
@@ -347,6 +375,8 @@ A API do Android disponibiliza uma classe chamada R, essa classe é a abreviaç�
 
 Dentro de um aplicativo Android, podemos ter diferentes formas de criar uma tela, podemos utilizar 3 meios diferentes, sendo a criação de tela por meio de ***XML*** (Legado), por meio manual da ***classe View*** e utilizando o ***JetPack Compose*** (meio moderno). 
 
+---
+
 # Classe View
 
 A classe View é uma classe extremamente importante para manipular elementos, com ela podemos criar e modificar elementos como botões, input, textos, etc... dentro da tela do Android.
@@ -363,11 +393,35 @@ A classe View gerencia 4 pilares fundamentais da interface gráfica, sendo eles 
 
 ## ViewGroup
 
+As ViewGroups são classes especializadas herdadas da view que servem para criar um container que poderá englobar outras views dentro delas. Elas são a classe base para a criação de layouts e containers de visualização. Algumas delas são:
+
+- LinearLayout
+- RelativeLayout
+- FrameLayout
+- TableLayout
+- CoordinatorLayout
+- ConstraintLayout
+
+### LinearLayout
+
+O LinearLayout é uma forma de definir layout posicionando widgets lado a lado, e ainda podemos definir sua orientação atraves de uma propriedade chamada orientation, oferecendo horizontal/vertical.
+
+``` xml
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"                          // Aqui definimos a orientação do Linear Layout, sendo Vertical/Horizontal    
+    android:gravity="center">                               // Aqui definimos que todos os itens serão orientados para o centro do LinearLayout
+
+```
 
 ## Widgets
 
+No desenvolvimento Android, os Widgets são componentes gráficos que o usuário pode interagir dentro da tela, eles são componentes da interface gráfica que o usuário vê e com os quais interage na tela. Exemplos comuns incluem botões (Button), caixas de texto (TextView), listas (RecyclerView) e imagens (ImageView). Todos os Widgets herdam diretamente da classe View
 
-## TextView
+### TextView
 
 Essa classe define qualquer texto que será impresso na tela, podemos chamar ela através da tag ***TextView*** e usar sua propriedade ***text*** para informar o texto
 
@@ -397,7 +451,7 @@ Suas propriedades fundamentais são:
 | `typeface`         | estilo da fonte     |
 
 
-## EditText
+### EditText
 
 Essa tag representa um input, podemos atribuir um texto informativo através da tag ***text***.
 
@@ -445,7 +499,7 @@ As principais propriedades são:
 | `android:textAllCaps`      | texto         | Força maiúsculas                  | `"true"`            |
 | `android:selectAllOnFocus` | seleção       | Seleciona texto ao focar          | `"true"`            |
 
-## Button
+### Button
 
 Essa tag cria um botão na tela que pode ser usado para disparar alguma ação.
 
@@ -471,7 +525,7 @@ do botão
 
 ```
 
-## ImageView
+### ImageView
 
 Esse componente permite mostrar imagens dentro de uma activity, as imagens podem ser em **Bitmap** ou um arquivo dentro da pasta ***drawable***, que é a pasta onde se localiza as imagens do programa, ela fica localizada dentro da res. O Android também possui algumas imagens embutidas, que podem ser acessadas da seguinte forma abaixo, no caso, vamos acessar a foto de uma câmera.
 
@@ -486,35 +540,11 @@ Esse componente permite mostrar imagens dentro de uma activity, as imagens podem
 
 ```
 
-## LinearLayout
-
-Essa tag funciona como estrutura, não como componente, nela podemos definir o layout de como os dados serão mostrados. Ela possui 2 variantes, sendo a orientação vertical e a orientação horizontal.
-
-``` xml
-
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:orientation="vertical">         <!--Define que ficará um botão abaixo do outro -->
-
-    <Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Botão 1" />
-    <Button
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Botão 2" />
-</LinearLayout>
-
-```
-
-## ListView
+### ListView
 
 Esse componente permite o programador criar uma lista de informações que será exibida na tela, a lista pode conter valores default, como String ou até mesmo personalizar ela com a inserção de informações como imagem, formatação, etc...
 
-## Altura e Largura
+### Altura e Largura
 
 Dentro de uma View (qualquer componente), é necessário informar a altura e a largura do componente, caso o contrário, o código não irá compilar.
 
