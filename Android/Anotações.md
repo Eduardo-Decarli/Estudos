@@ -544,6 +544,36 @@ Esse componente permite mostrar imagens dentro de uma activity, as imagens podem
 
 Esse componente permite o programador criar uma lista de informações que será exibida na tela, a lista pode conter valores default, como String ou até mesmo personalizar ela com a inserção de informações como imagem, formatação, etc...
 
+### Adapter
+
+Um adapter é um componente responsável por converter individualmente cada item para uma lista de View Objects que serão mostrados na tela. Ou seja, ele serve como um intermediador entre os **Dados** (lista String, objetos ou banco de dados) e a própria **Interface de Usuário (UI)**. 
+
+Ele é frequentemente utilizado dentro de componentes que necessitam de coleções para mostrar dados, e existem diferentes tipos de Adapters, sendo ArrayAdapter, BaseAdapter e ListAdapter.
+
+### ArrayAdapter
+
+É uma lista presente dentro do Android SDK que podemos utilizar para fornecer dados para uma ***AdapterView***, que seria uma superclasse de Spinner, Gallery, ListView e GridView. Essa classe possui os mesmos métodos que uma classe normal e pode armazenar qualquer tipo de valor, como um array genérico.
+
+Com ela podemos recuperar dados estáticos provindos de um XML ou até de um banco de dados e fornecer como opções para o **AdapterView**. Por padrão o ArrayAdapter lê o método toString() de cada objeto contido dentro dele (caso seja um Adapter de Objetos).
+
+Para criar um ArrayAdapter, é necessário 3 parâmetros obrigatórios, sendo um **contexto** que geralmente é a prória Activity (this), **Layout do Item** que é um arquivo XML separado que define o formado e a aparência de cada linha, embora o Android ofereça algumas opções prontas pelo caminho ***android.R.layout.simple_list_item_1*** e a **fonte de dados** que seria um Array ou List (Objects).
+
+``` kotlin
+
+val linguagens = listOf("Kotlin", "Java", "Python", "Swift", "C++")
+
+val adapter = ArrayAdapter(
+    this,                                   // Contexto
+    android.R.layout.simple_list_item_1,    // Layout padrão do Android (apenas um texto)
+    linguagens                              // Nossa fonte de dados
+)
+
+// Vinculando o adapter à View (ex: um ListView no seu XML)
+val minhaLista = findViewById<ListView>(R.id.listViewPrincipal)
+minhaLista.adapter = adapter
+
+```
+
 ### Altura e Largura
 
 Dentro de uma View (qualquer componente), é necessário informar a altura e a largura do componente, caso o contrário, o código não irá compilar.
@@ -567,32 +597,3 @@ O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do 
 
 ---
 
-# Adapter
-
-Um adapter é um componente responsável por converter individualmente cada item para uma lista de View Objects que serão mostrados na tela. Ou seja, ele serve como um intermediador entre os **Dados** (lista String, objetos ou banco de dados) e a própria **Interface de Usuário (UI)**. 
-
-Ele é frequentemente utilizado dentro de componentes que necessitam de coleções para mostrar dados, e existem diferentes tipos de Adapters, sendo ArrayAdapter, BaseAdapter e ListAdapter.
-
-## ArrayAdapter
-
-É uma lista presente dentro do Android SDK que podemos utilizar para fornecer dados para uma ***AdapterView***, que seria uma superclasse de Spinner, Gallery, ListView e GridView. Essa classe possui os mesmos métodos que uma classe normal e pode armazenar qualquer tipo de valor, como um array genérico.
-
-Com ela podemos recuperar dados estáticos provindos de um XML ou até de um banco de dados e fornecer como opções para o **AdapterView**. Por padrão o ArrayAdapter lê o método toString() de cada objeto contido dentro dele (caso seja um Adapter de Objetos).
-
-Para criar um ArrayAdapter, é necessário 3 parâmetros obrigatórios, sendo um **contexto** que geralmente é a prória Activity (this), **Layout do Item** que é um arquivo XML separado que define o formado e a aparência de cada linha, embora o Android ofereça algumas opções prontas pelo caminho ***android.R.layout.simple_list_item_1*** e a **fonte de dados** que seria um Array ou List (Objects).
-
-``` kotlin
-
-val linguagens = listOf("Kotlin", "Java", "Python", "Swift", "C++")
-
-val adapter = ArrayAdapter(
-    this,                                   // Contexto
-    android.R.layout.simple_list_item_1,    // Layout padrão do Android (apenas um texto)
-    linguagens                              // Nossa fonte de dados
-)
-
-// Vinculando o adapter à View (ex: um ListView no seu XML)
-val minhaLista = findViewById<ListView>(R.id.listViewPrincipal)
-minhaLista.adapter = adapter
-
-```
