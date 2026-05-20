@@ -6,10 +6,11 @@
 [Estrutura de um Projeto Android](#estrutura-de-um-projeto-kotlin-android)   
 [Activities](#activities)   
 - [Como criar uma Activity](#como-criar-uma-activity)   
-- [Tipos de Herança de uma Activity](#tipos-de-herança-de-activity)   
-- [Intent e StartActivity()](#intent-e-startactivity)   
+- [Tipos de Herança de uma Activity](#tipos-de-herança-de-activity)    
 - [Lifecicle de uma Activity](#lifecicle-activities)   
 - [Variável SavedInstancestate](#variável-savedinstanceState)   
+
+[Intent](#intent)
 
 [Android Manifest](#androidmanifest)   
 [Método setContentView()](#setconcentview)   
@@ -183,42 +184,6 @@ A Activity anterior retorna:
 
 Esse comportamento permite que o Android controle memória, desempenho e experiência do usuário de forma eficiente, reutilizando Activities quando possível e destruindo aquelas que não são mais necessárias.
 
-## Intent e StartActivity()
-
-Para podermos abrir uma activity a partir de outra, precisamos utilizar o método chamado startActivity() e esse método utiliza um Intent para saber como abrir a activity.
-
-**Intent:** É um objeto de mensagem assíncrona que guarda informações e é usado para solicitar uma ação de outro componente ou do próprio sistema. Funciona como uma intenção ou ordem de execução, possui três utilidades fundamentais
-
-- Informar como iniciar uma nova activity
-- Iniciar um serviço de JobScheduler
-- Realizar uma Transmissão Broadcast
-
-As intent podem ser classificadas como implícitas ou explícitas. Uma explícita é quando especificamos qual componente de qual aplicativo irá atender a essa intent (solicitação). Normalmente utilizamos as **intent explícitas** para iniciar um componente dentro do próprio app, pois aqui, nós sabemos os nomes das classes da activities ou do service que quer iniciar.
-
-``` kotlin
-
-val intent = Intent(
-    this,                   // Definimos que é uma intent explícita e que será o nosso app que será chamado
-    MyOtherActivity.class   // Define qual classe será responsável por realizar a ação       
-)
-
-```
-
-Agora, sobre as **Intent Implícitas**, são intents em que não nomeamos um componente específico para realizar a ação, então o Android irá definir qual app irá processar ela. Por exemplo, se você quiser mostrar um local em um mapa, utilize uma intent implícita para que outro aplicativo faça o serviço de mostrar a informação. As intent implícitas trabalham da seguinte forma
-
-![Intent Implícita](imgs/intent-implicita.png)
-
-```
-
-val url = "https://www.google.com";
-val intent = Intent(
-    Intent.ACTION_VIEW,             // Tipo de ação que será executada (várias predefinições) 
-    Uri.parse(url)                  // Dado que será processado.
-)
-startActivity(intent)
-
-```
-
 ## Variável SavedInstanceState
 
 É uma variável que é utilizada pelo Oncrate, ela serve para recuperar um estado anterior do aplicativo, caso ele tenha sido pausado ou encerrado, dessa forma, o Android pode armazenar o estado anterior e recriar ele quando necessário. Ele é normalmente utilizado como parâmetro do método onCreate().
@@ -235,6 +200,71 @@ class MainActivity : Activity() {
         println("Restaurado: $texto")
     }
 }
+
+```
+
+---
+
+# Intent
+
+Uma Intent no Android é um objeto de mensagem usado para solicitar uma ação de outro componente do sistema ou da aplicação.
+Ela funciona como um mecanismo de comunicação entre componentes Android, permitindo iniciar telas, serviços, enviar dados e interagir com o sistema operacional Uma Intent também possui a capacidade de iniciar activities ou realizar navegação entre elas, como veremos mais abaixo nas intents explícitas. As principais utilizações da Intent são:
+
+- Iniciar uma nova Activity
+- Iniciar ou comunicar um Service
+- Enviar ou compartilhar dados
+- Solicitar ações do sistema Android, como abrir câmera, fazer ligação, abrir navegador ou compartilhar arquivos
+
+Uma Intent carrega informações sobre qual ação deve acontecer, qual componente deve executar e quais dados serão enviados, essas informações são postas dentro de um construtor na declaração da Intent.
+
+``` kotlin
+
+Intent intent = new Intent(this, SegundaActivity.class);
+startActivity(intent);
+
+```
+Nesse caso encontramos a **Intent** defindo a intenção de abrir outra tela, a ***SegundaActivity.class*** sendo o destino e a startActivity() executando a ação.
+
+As intent podem ser classificadas como **implícitas** ou **explícitas**. Uma explícita é quando especificamos qual componente de qual aplicativo irá atender a essa intent (solicitação). Normalmente utilizamos as **intent explícitas** para iniciar um componente dentro do próprio app, pois aqui, nós sabemos os nomes das classes da activities ou do service que quer iniciar.
+
+``` kotlin
+
+val intent = Intent(
+    this,                   // Definimos que é uma intent explícita e que será o nosso app que será chamado
+    MyOtherActivity.class   // Define qual classe será responsável por realizar a ação       
+)
+
+```
+
+Agora, sobre as **Intent Implícitas**, são intents em que não nomeamos um componente específico para realizar a ação, então o Android irá definir qual app irá processar ela. Por exemplo, se você quiser mostrar um local em um mapa, utilize uma intent implícita para que outro aplicativo faça o serviço de mostrar a informação. As intent implícitas trabalham da seguinte forma
+
+![Intent Implícita](imgs/intent-implicita.png)
+
+```
+
+Intent intent = new Intent(Intent.ACTION_VIEW);
+intent.setData(Uri.parse("https://google.com"));
+startActivity(intent);
+
+```
+
+Uma Intent também pode realizar uma ação diferente, que seria a passagem de dados entre activities, sendo mais expecífico, ao realizar a inicialização de uma activity com a Intent, podemos enviar dados no esquema de chave valor para ela.
+
+```
+
+// Activity X
+
+Intent intent = new Intent(this, PerfilActivity.class);
+
+intent.putExtra("nome", "Eduardo");
+intent.putExtra("idade", 20);
+
+startActivity(intent);
+
+// Activity Y
+
+String nome = getIntent().getStringExtra("nome");
+int idade = getIntent().getIntExtra("idade", 0);
 
 ```
 
@@ -558,15 +588,6 @@ Podemos definir essas informações de 3 maneiras diferentes, sendo:
 
 ---
 
-# Jetpack Compose
-
-O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando linguagem declarativa, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
-
-
-
-
----
-
 # Adapter
 
 Um adapter é um componente responsável por converter individualmente cada item para uma lista de View Objects que serão mostrados na tela. Ou seja, ele serve como um intermediador entre os **Dados** (lista String, objetos ou banco de dados) e a própria **Interface de Usuário (UI)**. 
@@ -596,3 +617,10 @@ val minhaLista = findViewById<ListView>(R.id.listViewPrincipal)
 minhaLista.adapter = adapter
 
 ```
+
+---
+
+# Jetpack Compose
+
+O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando linguagem declarativa, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
+
