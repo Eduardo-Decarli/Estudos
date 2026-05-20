@@ -594,7 +594,7 @@ Um adapter é um componente responsável por converter individualmente cada item
 
 Ele é frequentemente utilizado dentro de componentes que necessitam de coleções para mostrar dados, e existem diferentes tipos de Adapters, sendo ArrayAdapter, BaseAdapter e ListAdapter.
 
-## ArrayAdapter
+### ArrayAdapter
 
 É uma lista presente dentro do Android SDK que podemos utilizar para fornecer dados para uma ***AdapterView***, que seria uma superclasse de Spinner, Gallery, ListView e GridView. Essa classe possui os mesmos métodos que uma classe normal e pode armazenar qualquer tipo de valor, como um array genérico.
 
