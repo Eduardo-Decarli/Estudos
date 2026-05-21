@@ -112,7 +112,7 @@ Para criar uma activity, utilizamos o sistema de herança, onde criamos uma clas
 
 Agora teremos uma classe que representa uma Activity e o Android já irá entender ela como uma.
 
-``` Kotlin
+``` Java
 
 import android.app.Activity         // Importação da Activity provinda da API Android
 
@@ -217,7 +217,7 @@ Ela funciona como um mecanismo de comunicação entre componentes Android, permi
 
 Uma Intent carrega informações sobre qual ação deve acontecer, qual componente deve executar e quais dados serão enviados, essas informações são postas dentro de um construtor na declaração da Intent.
 
-``` kotlin
+``` Java
 
 Intent intent = new Intent(this, SegundaActivity.class);
 startActivity(intent);
@@ -227,7 +227,7 @@ Nesse caso encontramos a **Intent** defindo a intenção de abrir outra tela, a 
 
 As intent podem ser classificadas como **implícitas** ou **explícitas**. Uma explícita é quando especificamos qual componente de qual aplicativo irá atender a essa intent (solicitação). Normalmente utilizamos as **intent explícitas** para iniciar um componente dentro do próprio app, pois aqui, nós sabemos os nomes das classes da activities ou do service que quer iniciar.
 
-``` kotlin
+``` Java
 
 val intent = Intent(
     this,                   // Definimos que é uma intent explícita e que será o nosso app que será chamado
@@ -320,7 +320,7 @@ O conteúdo pode ser mostrado pela função ***setContentView(texto)***, esse m�
 
 Há duas formas de mostrar o conteúdo do aplicativo na tela, a primeira se refere a criação de uma estrutura visual diretamente no código fonte, utilizando métodos da API Android, porém não retorna muitas vantagens, pois o código se torna maior, complexo e misturado com a lógica.
 
-``` kotlin
+``` Java
 
 import android.app.Activity
 import android.os.Bundle
@@ -352,7 +352,7 @@ A segunda opção é a criação de telas separadas dentro de um arquivo XML, qu
 
 ```
 
-``` kotlin
+``` Java
 
 import android.app.Activity
 import android.os.Bundle
@@ -383,7 +383,7 @@ android:id="@+id/btn_login" />
 
 ```
 
-``` kotlin
+``` Java
 
 import android.widget.Button
 ...
@@ -546,7 +546,7 @@ android:text="cadastrar" />
 
 Um Button possui alguns métodos que podemos chamar dentro do código Kotlin, o SDK do Android disponibiliza uma função chamada ***setOnClickListener***, onde podemos executar algum comando dentro das chaves que será realizado sempre que o botão for clicado.
 
-``` kotlin
+``` Java
 
 btn_calcular.setOnClickListener {
     //aqui vai o código que será executado quando houver um click
@@ -602,7 +602,7 @@ Com ela podemos recuperar dados estáticos provindos de um XML ou até de um ban
 
 Para criar um ArrayAdapter, é necessário 3 parâmetros obrigatórios, sendo um **contexto** que geralmente é a prória Activity (this), **Layout do Item** que é um arquivo XML separado que define o formado e a aparência de cada linha, embora o Android ofereça algumas opções prontas pelo caminho ***android.R.layout.simple_list_item_1*** e a **fonte de dados** que seria um Array ou List (Objects).
 
-``` kotlin
+``` Java
 
 val linguagens = listOf("Kotlin", "Java", "Python", "Swift", "C++")
 
@@ -622,5 +622,134 @@ minhaLista.adapter = adapter
 
 # Jetpack Compose
 
-O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando linguagem declarativa, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
+O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando **paradigma declarativo**, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
 
+
+Para começar a desenvolver utilizando Jetpack Compose, devemos utilizar a criação de tela **Empty Activity** dentro do Android Studio. E quando criamos um projeto em Jetpack Compose, inicialmente podemos identificar uma função chamada **setContent**, que é a função de ponto de partida para criar telas. Podemos dizer que a função **setContent** serve para substituir o **setContentView** que é utilizado para renderizar telas XML.
+
+Criando Telas XML -> Renderiza pela SetContentView
+Criando Telas Compose -> Renderiza pela SetContent
+
+``` Java
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            // Chamando o seu componente personalizado
+            MensagemBoasVindas(nome = "Desenvolvedor")
+        }
+    }
+}
+
+```
+
+Como o Jetpack compose é declarativo, então a função setContent é aberta com chaves para que possamos declarar funções **@composable**.
+
+## Composable
+
+A anotação @Composable é feita para identificar uma função que foi criada para transformar dados declarados como código em elementos de interface de tela.
+
+Qualquer função que possui a anotação @Composable pode chamar outras funções que possuem @Composable, fazendo uma componentização.
+
+``` Java
+
+@Composable
+fun MensagemBoasVindas(nome: String) {
+    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(text = "Olá, $nome! Bem-vindo ao Compose.")
+    }
+}
+
+```
+
+Para uma função Composable, ela sempre deve iniciar com a primeira letra maiúscula.
+
+## Componentes Básicos
+
+O Jetpack Compose oferece alguns componentes nativos que permitem colocar widgets na tela, como texto, imagens, botões, etc...
+
+Text -> A forma mais simples de imprimir um texto na tela é utilizando o elemento ***Text*** combinado com uma String, como no exemplo abaixo:
+
+``` Java
+
+@Composable
+fun SimpleText() {
+    Text("Hello World")
+}
+
+```
+
+Button -> O Jetpack Compose oferece 5 tipos diferentes de botões, de acordo com um tipo, sendo sólido, Tonal Sólido, Elevada, Delineado e Texto. Cada um possui uma estilização e exibição diferente. Para imprimir um botão dentro da tela, precisamos usar o elemento: 
+
+``` Java
+
+// Definindo um componente botão que não realiza nenhuma ação
+@Composable
+fun SimpleButton() {
+    Button(onClick = { /* Ação de Click */ }) {
+        Text("Meu Botão")
+    }
+}
+
+```
+
+- O elemento de botão exige que você passe para ele a ação de onClick obrigatoriamente.
+
+Image -> Essa é a forma de carregar fotos dentro do Composable, devemos definir uma foto e passar 2 parâmetros, sendo o Painter, que é a localização da foto vinda diretamente da pasta drawable e o contentDescription, que é o conteúdo como String.
+
+``` Java
+
+Image(
+    painter = painterResource(id = R.drawable.dog),
+    contentDescription = stringResource(id = R.string.dog_content_description)
+)
+
+```
+
+## Layouts
+
+Os layouts, também chamados de containers servem para definir como o conteúdo será montado na tela, e para isso, podemos usar vários tipos diferentes de containers.
+
+**Column** -> Dentro de um Column, podemos colocar elementos que serão alinhados sempre um abaixo do outro. A coluna pode receber 4 parâmetros no método: 
+
+- Modifier -> Se refere as estilizações CSS que poderiamos fazer na coluna. Espera receber um Objeto Modifier.
+- VerticalArrangement -> Essa é uma propriedade que serve para realizarmos orientações verticais, ela espera receber um Arrangement.
+- HorizontalAligment -> Orienta como os itens devem ser mostrados na coluna, como no final, no início ou no meio, espera receber um objeto Alignment
+
+``` Java
+
+Column(
+    modifier = Modifier
+        .fillMaxWidth()                         // Define que ocupará todo o Width
+        .height(100.dp)                         // Terá 100dp de altura
+        .background(color = Color.Green),       // Terá a cor green
+    verticalArrangement = Arrangement.Center,   // Os elementos serão alinhados verticalmente no centro.
+    horizontalAlignment = Alignment.End
+){
+    Surface(
+        modifier = Modifier.size(100.dp)
+            .weight(3f),                        // Declara que o componente ocupará 3x mais espaço do que os demais componentes dentro da coluna.
+        color = Color.Green
+    ){}
+}
+
+```
+
+O column possui vários parâmetros diferentes que alteram o comportamento:
+
+- fillMaxSize -> Serve para utilizar 100% de altura e largura disponível na tela.
+
+**Row** -> Esse elemento serve para que possamos inserir elementos um ao lado do outro. Ele possui os mesmos 4 elementos que a coluna e funciona de forma similar, apenas invertendo a orientação.
+
+``` Java
+
+Row(
+    modifier = Modifier
+        .fillMaxSize()
+        .background(color = Color.Red)
+) {
+    // Elementos 
+}
+
+```
