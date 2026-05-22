@@ -620,6 +620,29 @@ minhaLista.adapter = adapter
 
 ---
 
+# Services
+
+No Android, um serviço tem um conceito diferente do que estamos acostumados, no Android, um serviço não serve para empacotar lógica ou realizar ponte para o banco de dados, mas sim para executar tarefas mesmo sem interação direta com a Activity/Interface. 
+
+Por exemplo, podemos utilizar um serviço para
+
+- Reproduzir música
+- Download/Upload de arquivos
+- Rastreamento de localização
+- Comunicação contínua
+- Sincronização de dados
+- Execução de tarefas longas
+
+Um serviço pode receber três níveis diferentes, e em cada nível o serviço terá certas restrições e obrigações.
+
+**Serviço de Primeiro Plano** -> É um serviço que realiza uma operação perceptível ao usuário, o serviço em primeiro plano precisa mostrar uma notificação e podem continuar em execução mesmo que o usuário não esteja interagindo com o app. A notificação deve ser travada, informando que o serviço está em execução e a notificação não pode sair, amenos que o serviço seja interrompido ou finalizado.
+
+**Serviço de Segundo Plano** -> Esse tipo de serviço roda por baixo dos panos no Android e não necessita que o usuário saiba da sua existência, é utilizado para tarefas simples, como sincronizar e-mails ou receber mensagens, sem exigir que o aplicativo esteja aberto ou na tela principal consumindo atenção do usuário.
+
+**Serviço Vinculado** -> Ele serve para oferecer funcionalidades compartilhadas entre activities, é comumente associado a um servidor com arquitetura cliente-servidor, pois ele oferece funcionalidades que diversas telas podem compartilhar. Exemplos seriam, gerenciamento bluetooth, controle de download, cache de memória, etc... Ele ainda não serve para manter lógica de negócio ou lógica do sistema, pois essa não é a função de um serviço no Android.
+
+---
+
 # Jetpack Compose
 
 O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando **paradigma declarativo**, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
