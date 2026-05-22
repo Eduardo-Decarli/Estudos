@@ -688,6 +688,8 @@ fun MensagemBoasVindas(nome: String) {
 
 Para uma função Composable, ela sempre deve iniciar com a primeira letra maiúscula.
 
+// @Preview
+
 ## Componentes Básicos
 
 O Jetpack Compose oferece alguns componentes nativos que permitem colocar widgets na tela, como texto, imagens, botões, etc...
@@ -776,3 +778,23 @@ Row(
 }
 
 ```
+
+Box -> O box é um elemento de layout que serve para juntar mais de um elemento em uma área e realizar sobreposição, onde normalmente o primeiro elemento fica no fundo. Ele serve para empilhar elementos, colocando itens em Canadá, realizando **Overlay**.
+
+``` Java
+
+Box() {
+   Text("Texto de Fundo")
+
+   Button(
+      onClick = {},
+      modifier = Modifier.align(Alignment.BottonEnd) {
+      Text("Botão")
+   }
+}
+
+```
+
+## LounchedEffect
+
+
