@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LoginJetpackComposable</string>
+    <string name="title_activity_intro_composable">IntroComposable</string>
+</resources>

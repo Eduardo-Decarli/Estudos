@@ -698,7 +698,60 @@ fun MensagemBoasVindas(nome: String) {
 
 Para uma função Composable, ela sempre deve iniciar com a primeira letra maiúscula.
 
-// @Preview
+## @Preview
+
+Quando estamos desenvolvendo uma tela composable, podemos utilizar a anotação @Preview para podermos visualizar como a tela está sendo desenvolvida através da split screen do Android Studio. Para utilizar essa anotação, criamos uma função que recebe o Composable que queremos visualizar
+
+``` java
+
+@Composable
+fun SimpleComposable() {
+    Text("Hello Word");
+}
+
+@Preview
+@Composable
+fun SimpleComposablePreview() {
+    SimplesComposable()
+}
+
+```
+
+Usando a ferramenta @Preview, você pode conferir atualizações em tempo real na tela.
+
+O @Preview já possui um tamanho padrão adaptavel na tela para visualizar os componentes, mas podemos especificar um tamanho fixo para entender como os componentes estão se ajustando a tela.
+
+``` java
+
+@Preview(widthDp = 50, heightDp = 50)
+@Composable
+fun SquareComposablePreview() {
+    Box(Modifier.background(Color.Yellow)) {
+        Text("Hello World");
+    }
+}
+
+```
+
+Abaixo podemos visualizar melhor as principais propriedades que o @Preview pode possuir:
+
+| Propriedade       | Tipo      | Função                                  |
+| ----------------- | --------- | --------------------------------------- |
+| `name`            | `String`  | Define um nome para o preview           |
+| `group`           | `String`  | Agrupa previews na interface            |
+| `showBackground`  | `Boolean` | Mostra um fundo atrás do componente     |
+| `backgroundColor` | `Long`    | Define a cor do fundo                   |
+| `showSystemUi`    | `Boolean` | Simula status bar e navigation bar      |
+| `device`          | `String`  | Simula um dispositivo específico        |
+| `widthDp`         | `Int`     | Largura manual do preview               |
+| `heightDp`        | `Int`     | Altura manual do preview                |
+| `locale`          | `String`  | Simula idioma/região                    |
+| `fontScale`       | `Float`   | Simula tamanho da fonte do sistema      |
+| `uiMode`          | `Int`     | Simula modo claro/escuro                |
+| `apiLevel`        | `Int`     | Simula versão do Android                |
+| `wallpaper`       | `Int`     | Define wallpaper do preview             |
+| `dynamicColor`    | `Boolean` | Ativa Material You                      |
+| `showDecoration`  | `Boolean` | Mostra bordas/decorações do dispositivo |
 
 ## Componentes Básicos
 
@@ -741,6 +794,59 @@ Image(
 )
 
 ```
+
+TextField -> Esse é um componente de entrada de texto, sendo a implementação adequada para o input, ele exige um gerenciamento de estado para preservar o texto inserido e exibir na tela.
+
+``` java 
+
+@Composable
+fun MeuInput() {
+    var texto by remeber { 
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = texto,
+        onValueChange = {
+            novoTexto = texto = novoTexto
+        },
+        label = {
+            Text("Digite seu Nome" )
+        }
+    )
+}
+
+```
+
+Suas propriedades são
+
+| Propriedade            | Função                              |
+| ---------------------- | ----------------------------------- |
+| `value`                | Valor atual do texto                |
+| `modifier`             | Define tamanho, padding, etc...     |
+| `onValueChange`        | Callback chamado ao alterar o texto |
+| `label`                | Texto flutuante acima do campo      |
+| `placeholder`          | Texto de dica enquanto vazio        |
+| `leadingIcon`          | Ícone no início                     |
+| `trailingIcon`         | Ícone no final                      |
+| `prefix`               | Texto antes do conteúdo             |
+| `suffix`               | Texto após o conteúdo               |
+| `shape`                | Define formato das bordas           |
+| `colors`               | Personalização de cores             |
+| `textStyle`            | Estilo do texto                     |
+| `enabled`              | Habilita/desabilita                 |
+| `readOnly`             | Permite apenas leitura              |
+| `singleLine`           | Campo de uma linha                  |
+| `maxLines`             | Máximo de linhas                    |
+| `minLines`             | Mínimo de linhas                    |
+| `isError`              | Estado visual de erro               |
+| `keyboardOptions`      | Tipo/configuração do teclado        |
+| `keyboardActions`      | Ações do teclado                    |
+| `visualTransformation` | Máscara/ocultação do texto          |
+
+
+
+
 
 ## Layouts
 
@@ -801,6 +907,36 @@ Box() {
       modifier = Modifier.align(Alignment.BottonEnd) {
       Text("Botão")
    }
+}
+
+```
+
+## Remember
+
+No Compose, a interface pode ser redesenhada várias vezes automaticamente quando os dados mudam e sempre que o estado muda, a função @composable pode executar novamente.
+
+E no Jetpack Compose o **remember state** é uma função que permite armazenar objetos na memória durante a composição inicial das telas, permitindo utilizar esses objetos em recomposições posteriores sem que eles reiniciem seus valores a cada recomposição. Existem 2 maneiras de definir a lembrança, que seria através do equals (=) ou através da palavra-chave de delegação (by).
+
+Utilizando o By, podemos armazenar um valor que será mantido pelo estado e utilizado/alterado posteriormente.
+
+``` java 
+
+@Composable
+fun CampoNome() {
+
+    var nome by remember {      // Agora o nome irá permanecer na memória mesmo após a recomposição.
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = nome,
+        onValueChange = {
+            nome = it
+        },
+        label = {
+            Text("Nome")
+        }
+    )
 }
 
 ```
