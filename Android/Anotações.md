@@ -669,6 +669,16 @@ class MainActivity : ComponentActivity() {
 
 Como o Jetpack compose é declarativo, então a função setContent é aberta com chaves para que possamos declarar funções **@composable**.
 
+## Ciclo de Vida
+
+Diferente de uma ctivity que possui um Clico com onStart, onResume, etc... O jetpack Compose possui 3 estampas no ciclo de vida.
+
+**Enter** -> Aqui se refere a entrada da composição, onde o jetpack carrega os métodos  na memória e inicializa as telas.
+
+**Recomposition** -> Aqui é o estado intermediário, onde o Jetpack Compose irá remontar os componentes que tiveram alteração nos dados e estados. Atualizando o que for necessário.
+
+**Leave** -> Aqui o Jetpack remove os componentes da tela e libera a memória.
+
 ## Composable
 
 A anotação @Composable é feita para identificar uma função que foi criada para transformar dados declarados como código em elementos de interface de tela.
