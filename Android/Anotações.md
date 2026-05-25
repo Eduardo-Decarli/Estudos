@@ -669,7 +669,7 @@ Para uma função Composable, ela sempre deve iniciar com a primeira letra maiú
 
 O Jetpack Compose oferece alguns componentes nativos que permitem colocar widgets na tela, como texto, imagens, botões, etc...
 
-Text -> A forma mais simples de imprimir um texto na tela é utilizando o elemento ***Text*** combinado com uma String, como no exemplo abaixo:
+**Text** -> A forma mais simples de imprimir um texto na tela é utilizando o elemento ***Text*** combinado com uma String, como no exemplo abaixo:
 
 ``` Java
 
@@ -680,7 +680,53 @@ fun SimpleText() {
 
 ```
 
-Button -> O Jetpack Compose oferece 5 tipos diferentes de botões, de acordo com um tipo, sendo sólido, Tonal Sólido, Elevada, Delineado e Texto. Cada um possui uma estilização e exibição diferente. Para imprimir um botão dentro da tela, precisamos usar o elemento: 
+**TextField** -> O TextField é um campo de input dentro do composable, ele possui uma série de propriedades possíveis que podem ser personalizadas, mas sua definição simples seria essa:
+
+``` java
+
+var text;
+TextField(
+    value = text,
+    onValueChange = { newText ->
+        text = newText
+    }
+)
+
+````
+
+Dessa forma podemos criar um campo de entrada de texto símples, e ainda adicionar outras caracterisitcas através das propriedades, como enable, readOnly, label, etc... Abaixo vamos deixar um código contendo todas as propriedades possíveis.
+
+``` java
+
+@Composable
+fun TextField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape =
+        MaterialTheme.shapes.small.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors()
+)
+
+```
+
+Para mais informações do TextField, acesse o seguinte link [TextField-Jetpack-Compose](https://www.jetpackcompose.net/textfield-in-jetpack-compose)
+
+**Button** -> O Jetpack Compose oferece 5 tipos diferentes de botões, de acordo com um tipo, sendo sólido, Tonal Sólido, Elevada, Delineado e Texto. Cada um possui uma estilização e exibição diferente. Para imprimir um botão dentro da tela, precisamos usar o elemento: 
 
 ``` Java
 
@@ -696,7 +742,7 @@ fun SimpleButton() {
 
 - O elemento de botão exige que você passe para ele a ação de onClick obrigatoriamente.
 
-Image -> Essa é a forma de carregar fotos dentro do Composable, devemos definir uma foto e passar 2 parâmetros, sendo o Painter, que é a localização da foto vinda diretamente da pasta drawable e o contentDescription, que é o conteúdo como String.
+**Image** -> Essa é a forma de carregar fotos, como Bitmaps ou vetores, dentro do Composable, devemos definir uma foto e passar 2 parâmetros, sendo o Painter, que é a localização da foto vinda diretamente da pasta drawable e o contentDescription, que é o conteúdo como String.
 
 ``` Java
 
@@ -750,6 +796,18 @@ Row(
         .background(color = Color.Red)
 ) {
     // Elementos 
+}
+
+```
+
+Spacer -> O spacer é um elemento que serve para dar uma margem ou espaçamento entre dois outros elementos na tela, podemos definir um tamanho do espaçamento pela sua propriedade.
+
+``` java
+
+Column {
+    Text("Texto 1")
+    Spacer(modifier = Modifier.height(16.dp)) // Separa os textos em 16dp
+    Text("Texto 2")
 }
 
 ```
