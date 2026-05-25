@@ -620,6 +620,104 @@ minhaLista.adapter = adapter
 
 ---
 
+# Services
+
+No Android, um serviço tem um conceito diferente do que estamos acostumados, no Android, um serviço não serve para empacotar lógica ou realizar ponte para o banco de dados, mas sim para executar tarefas mesmo sem interação direta com a Activity/Interface. 
+
+Por exemplo, podemos utilizar um serviço para
+
+- Reproduzir música
+- Download/Upload de arquivos
+- Rastreamento de localização
+- Comunicação contínua
+- Sincronização de dados
+- Execução de tarefas longas
+
+Um serviço pode receber três níveis diferentes, e em cada nível o serviço terá certas restrições e obrigações.
+
+**Serviço de Primeiro Plano** -> É um serviço que realiza uma operação perceptível ao usuário, o serviço em primeiro plano precisa mostrar uma notificação e podem continuar em execução mesmo que o usuário não esteja interagindo com o app. A notificação deve ser travada, informando que o serviço está em execução e a notificação não pode sair, amenos que o serviço seja interrompido ou finalizado.
+
+**Serviço de Segundo Plano** -> Esse tipo de serviço roda por baixo dos panos no Android e não necessita que o usuário saiba da sua existência, é utilizado para tarefas simples, como sincronizar e-mails ou receber mensagens, sem exigir que o aplicativo esteja aberto ou na tela principal consumindo atenção do usuário.
+
+**Serviço Vinculado** -> Ele serve para oferecer funcionalidades compartilhadas entre activities, é comumente associado a um servidor com arquitetura cliente-servidor, pois ele oferece funcionalidades que diversas telas podem compartilhar. Exemplos seriam, gerenciamento bluetooth, controle de download, cache de memória, etc... Ele ainda não serve para manter lógica de negócio ou lógica do sistema, pois essa não é a função de um serviço no Android.
+
+## Ciclo de Vida de um Service
+
+Dentro de um serviço, podemos encontrar seu funcionamento dentro de seu ciclo de vida, que pode ser representado por 4 passos, criação -> iniciação do serviço -> execução -> destruição.
+
+O ciclo de vida de um serviço no android apresenta 3 diferentes níveis, sendo:
+
+**onCreate()** -> Esse método é chamado 1 vez quando o serviço é criado, ideal para inicialização de threads e variáveis. Se você chamar o service várias vezes, o onCreate ocorre apenas na primeira chamada.
+
+**onStartCommand()** -> Esse é o método que executa quando o serviço é inicializado por algum componente. Aqui devemos inserir toda a lógica do serviço e o que ele deve fazer. Esse método possui 3 valores de retorno que informam o que o android deve fazer se o processo morrer:
+
+- START_STICKY ->  Tenta recriar o serviço depois.
+- START_NOT_STICKY -> Não recria automaticamente.
+- START_REDELIVER_INTENT -> Recria o serviço e reenviará o último intent.
+
+**onDestroy()** -> O serviço é destruido e realiza a limpeza da memória, parando threads, fechando conexões, etc...
+
+## Criando um Service
+
+Vamos criar um serviço simples que conta números e escreve no **Logcat** para entendermos como criar um serviço.
+
+``` java
+
+class ContadorService : Service() {                 // Todo serviço precisa extender da classe Service()
+
+    private var executando = true                   // Essa variável controla o Loop da Coroutine
+
+    override fun onCreate() {
+        super.onCreate()
+
+        Log.d("SERVICO", "onCreate chamado")
+    }
+
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int
+    ): Int {
+
+        Log.d("SERVICO", "onStartCommand chamado")
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            var contador = 0
+
+            while (executando) {
+
+                Log.d(
+                    "SERVICO",
+                    "Serviço rodando: $contador"
+                )
+
+                contador++
+
+                delay(1000)
+            }
+        }
+
+        return START_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        executando = false
+
+        Log.d("SERVICO", "onDestroy chamado")
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
+}
+
+```
+
+---
+
 # Jetpack Compose
 
 O Jetpack Compose é um toolkit moderno que permite criar interfaces nativas do Android usando **paradigma declarativo**, é atualmente a forma mais moderna e adequada de programar interfaces no Android, e sem nem precisar editar nenhum layout XML.
@@ -646,6 +744,16 @@ class MainActivity : ComponentActivity() {
 
 Como o Jetpack compose é declarativo, então a função setContent é aberta com chaves para que possamos declarar funções **@composable**.
 
+## Ciclo de Vida
+
+Diferente de uma ctivity que possui um Clico com onStart, onResume, etc... O jetpack Compose possui 3 estampas no ciclo de vida.
+
+**Enter** -> Aqui se refere a entrada da composição, onde o jetpack carrega os métodos  na memória e inicializa as telas.
+
+**Recomposition** -> Aqui é o estado intermediário, onde o Jetpack Compose irá remontar os componentes que tiveram alteração nos dados e estados. Atualizando o que for necessário.
+
+**Leave** -> Aqui o Jetpack remove os componentes da tela e libera a memória.
+
 ## Composable
 
 A anotação @Composable é feita para identificar uma função que foi criada para transformar dados declarados como código em elementos de interface de tela.
@@ -664,6 +772,61 @@ fun MensagemBoasVindas(nome: String) {
 ```
 
 Para uma função Composable, ela sempre deve iniciar com a primeira letra maiúscula.
+
+## @Preview
+
+Quando estamos desenvolvendo uma tela composable, podemos utilizar a anotação @Preview para podermos visualizar como a tela está sendo desenvolvida através da split screen do Android Studio. Para utilizar essa anotação, criamos uma função que recebe o Composable que queremos visualizar
+
+``` java
+
+@Composable
+fun SimpleComposable() {
+    Text("Hello Word");
+}
+
+@Preview
+@Composable
+fun SimpleComposablePreview() {
+    SimplesComposable()
+}
+
+```
+
+Usando a ferramenta @Preview, você pode conferir atualizações em tempo real na tela.
+
+O @Preview já possui um tamanho padrão adaptavel na tela para visualizar os componentes, mas podemos especificar um tamanho fixo para entender como os componentes estão se ajustando a tela.
+
+``` java
+
+@Preview(widthDp = 50, heightDp = 50)
+@Composable
+fun SquareComposablePreview() {
+    Box(Modifier.background(Color.Yellow)) {
+        Text("Hello World");
+    }
+}
+
+```
+
+Abaixo podemos visualizar melhor as principais propriedades que o @Preview pode possuir:
+
+| Propriedade       | Tipo      | Função                                  |
+| ----------------- | --------- | --------------------------------------- |
+| `name`            | `String`  | Define um nome para o preview           |
+| `group`           | `String`  | Agrupa previews na interface            |
+| `showBackground`  | `Boolean` | Mostra um fundo atrás do componente     |
+| `backgroundColor` | `Long`    | Define a cor do fundo                   |
+| `showSystemUi`    | `Boolean` | Simula status bar e navigation bar      |
+| `device`          | `String`  | Simula um dispositivo específico        |
+| `widthDp`         | `Int`     | Largura manual do preview               |
+| `heightDp`        | `Int`     | Altura manual do preview                |
+| `locale`          | `String`  | Simula idioma/região                    |
+| `fontScale`       | `Float`   | Simula tamanho da fonte do sistema      |
+| `uiMode`          | `Int`     | Simula modo claro/escuro                |
+| `apiLevel`        | `Int`     | Simula versão do Android                |
+| `wallpaper`       | `Int`     | Define wallpaper do preview             |
+| `dynamicColor`    | `Boolean` | Ativa Material You                      |
+| `showDecoration`  | `Boolean` | Mostra bordas/decorações do dispositivo |
 
 ## Componentes Básicos
 
@@ -753,6 +916,55 @@ Image(
 
 ```
 
+TextField -> Esse é um componente de entrada de texto, sendo a implementação adequada para o input, ele exige um gerenciamento de estado para preservar o texto inserido e exibir na tela.
+
+``` java 
+
+@Composable
+fun MeuInput() {
+    var texto by remeber { 
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = texto,
+        onValueChange = {
+            novoTexto = texto = novoTexto
+        },
+        label = {
+            Text("Digite seu Nome" )
+        }
+    )
+}
+
+```
+
+Suas propriedades são
+
+| Propriedade            | Função                              |
+| ---------------------- | ----------------------------------- |
+| `value`                | Valor atual do texto                |
+| `modifier`             | Define tamanho, padding, etc...     |
+| `onValueChange`        | Callback chamado ao alterar o texto |
+| `label`                | Texto flutuante acima do campo      |
+| `placeholder`          | Texto de dica enquanto vazio        |
+| `leadingIcon`          | Ícone no início                     |
+| `trailingIcon`         | Ícone no final                      |
+| `prefix`               | Texto antes do conteúdo             |
+| `suffix`               | Texto após o conteúdo               |
+| `shape`                | Define formato das bordas           |
+| `colors`               | Personalização de cores             |
+| `textStyle`            | Estilo do texto                     |
+| `enabled`              | Habilita/desabilita                 |
+| `readOnly`             | Permite apenas leitura              |
+| `singleLine`           | Campo de uma linha                  |
+| `maxLines`             | Máximo de linhas                    |
+| `minLines`             | Mínimo de linhas                    |
+| `isError`              | Estado visual de erro               |
+| `keyboardOptions`      | Tipo/configuração do teclado        |
+| `keyboardActions`      | Ações do teclado                    |
+| `visualTransformation` | Máscara/ocultação do texto          |
+
 ## Layouts
 
 Os layouts, também chamados de containers servem para definir como o conteúdo será montado na tela, e para isso, podemos usar vários tipos diferentes de containers.
@@ -800,6 +1012,23 @@ Row(
 
 ```
 
+Box -> O box é um elemento de layout que serve para juntar mais de um elemento em uma área e realizar sobreposição, onde normalmente o primeiro elemento fica no fundo. Ele serve para empilhar elementos, colocando itens em Canadá, realizando **Overlay**.
+
+``` Java
+
+Box() {
+   Text("Texto de Fundo")
+
+   Button(
+      onClick = {},
+      modifier = Modifier.align(Alignment.BottonEnd) {
+      
+        Text("Botão")
+   }
+}
+
+```
+
 Spacer -> O spacer é um elemento que serve para dar uma margem ou espaçamento entre dois outros elementos na tela, podemos definir um tamanho do espaçamento pela sua propriedade.
 
 ``` java
@@ -811,3 +1040,325 @@ Column {
 }
 
 ```
+
+## Remember
+
+No Compose, a interface pode ser redesenhada várias vezes automaticamente quando os dados mudam e sempre que o estado muda, a função @composable pode executar novamente.
+
+E no Jetpack Compose o **remember state** é uma função que permite armazenar objetos na memória durante a composição inicial das telas, permitindo utilizar esses objetos em recomposições posteriores sem que eles reiniciem seus valores a cada recomposição. Existem 2 maneiras de definir a lembrança, que seria através do equals (=) ou através da palavra-chave de delegação (by).
+
+Utilizando o By, podemos armazenar um valor que será mantido pelo estado e utilizado/alterado posteriormente.
+
+``` java 
+
+@Composable
+fun CampoNome() {
+
+    var nome by remember {      // Agora o nome irá permanecer na memória mesmo após a recomposição.
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = nome,
+        onValueChange = {
+            nome = it
+        },
+        label = {
+            Text("Nome")
+        }
+    )
+}
+
+```
+
+O remember se torna um valor necessário praticamente em 99% dos casos que você cria um TextField ou outro input de valor.
+
+# Armazenamento de Dados e Arquivos
+
+O Android possui 4 tipos diferentes de armazenar dados do App dentro do sistema, sendo os seguintes tipos:
+
+- Armazenamento Específico do App: Permite armazenar arquivos que serão utilizados pelo App, sendo armazenado em um diretório dedicado.
+
+- Armazenamento Compartilhado: Permite armazenar dados que podem ser utilizados por outros apicativos, como mídias, documentos e outros arquivos.
+
+- Preferências: Armazene dados particulares e primitivos usando sistema de pares chave-valor.
+
+- Bancos de Dados: Armazene dados estruturados em um banco de dados particular usando a biblioteca de persistência do Room.
+
+Através do seguinte link [Click Aqui](https://developer.android.com/training/data-storage?hl=pt-br) você pode consultar as informações estudadas na persistência de dados.
+
+## Banco de Dados
+
+A biblioteca de persistência Room oferece uma camada de abstração para acessar o SQLite do Android. Para utilizar o Room no aplicativo, precisamos adicionar algumas dependências no Gradle do app.
+
+``` bash
+
+dependencies {
+    val room_version = "2.8.4"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // optional - RxJava2 support for Room
+    implementation("androidx.room:room-rxjava2:$room_version")
+
+    // optional - RxJava3 support for Room
+    implementation("androidx.room:room-rxjava3:$room_version")
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation("androidx.room:room-guava:$room_version")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
+
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$room_version")
+}
+
+```
+
+Dentro do Room, há 3 principais componentes, sendo
+
+- Entidades de Dados -> Representam tabelas no banco de dados do app.
+
+``` java
+
+@Entity
+data class User(
+    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
+)
+
+```
+
+- Objetos de Acesso a Dados (DAO) -> Fornece métodos para realizar consulta, atualização, inserção e exclusão de dados. 
+
+``` java
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
+
+    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
+    fun loadAllByIds(userIds: IntArray): List<User>
+
+    @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
+           "last_name LIKE :last LIMIT 1")
+    fun findByName(first: String, last: String): User
+
+    @Insert
+    fun insertAll(vararg users: User)
+
+    @Delete
+    fun delete(user: User)
+}
+
+```
+
+- Classe de Banco de Dados -> Serve como ponto de partida acessar a conexão com os dados persistidos e mantem a configurações necessárias para acessar o banco.
+
+``` java
+
+// Definimos a classe bastrata de configuração do banco
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+
+// Definimos uma variável que representará o banco
+val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
+
+// Realizamos consultas com o DAO específico
+val userDao = db.userDao()
+val users: List<User> = userDao.getAll()
+
+```
+
+### Entidades
+
+
+
+
+
+Box -> O box é um elemento de layout que serve para juntar mais de um elemento em uma área e realizar sobreposição, onde normalmente o primeiro elemento fica no fundo. Ele serve para empilhar elementos, colocando itens em Canadá, realizando **Overlay**.
+
+``` Java
+
+Box() {
+   Text("Texto de Fundo")
+
+   Button(
+      onClick = {},
+      modifier = Modifier.align(Alignment.BottonEnd) {
+      
+        Text("Botão")
+   }
+}
+
+```
+
+## Remember
+
+No Compose, a interface pode ser redesenhada várias vezes automaticamente quando os dados mudam e sempre que o estado muda, a função @composable pode executar novamente.
+
+E no Jetpack Compose o **remember state** é uma função que permite armazenar objetos na memória durante a composição inicial das telas, permitindo utilizar esses objetos em recomposições posteriores sem que eles reiniciem seus valores a cada recomposição. Existem 2 maneiras de definir a lembrança, que seria através do equals (=) ou através da palavra-chave de delegação (by).
+
+Utilizando o By, podemos armazenar um valor que será mantido pelo estado e utilizado/alterado posteriormente.
+
+``` java 
+
+@Composable
+fun CampoNome() {
+
+    var nome by remember {      // Agora o nome irá permanecer na memória mesmo após a recomposição.
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = nome,
+        onValueChange = {
+            nome = it
+        },
+        label = {
+            Text("Nome")
+        }
+    )
+}
+
+```
+
+O remember se torna um valor necessário praticamente em 99% dos casos que você cria um TextField ou outro input de valor.
+
+# Armazenamento de Dados e Arquivos
+
+O Android possui 4 tipos diferentes de armazenar dados do App dentro do sistema, sendo os seguintes tipos:
+
+- Armazenamento Específico do App: Permite armazenar arquivos que serão utilizados pelo App, sendo armazenado em um diretório dedicado.
+
+- Armazenamento Compartilhado: Permite armazenar dados que podem ser utilizados por outros apicativos, como mídias, documentos e outros arquivos.
+
+- Preferências: Armazene dados particulares e primitivos usando sistema de pares chave-valor.
+
+- Bancos de Dados: Armazene dados estruturados em um banco de dados particular usando a biblioteca de persistência do Room.
+
+Através do seguinte link [Click Aqui](https://developer.android.com/training/data-storage?hl=pt-br) você pode consultar as informações estudadas na persistência de dados.
+
+## Banco de Dados
+
+A biblioteca de persistência Room oferece uma camada de abstração para acessar o SQLite do Android. Para utilizar o Room no aplicativo, precisamos adicionar algumas dependências no Gradle do app.
+
+``` bash
+
+dependencies {
+    val room_version = "2.8.4"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // optional - RxJava2 support for Room
+    implementation("androidx.room:room-rxjava2:$room_version")
+
+    // optional - RxJava3 support for Room
+    implementation("androidx.room:room-rxjava3:$room_version")
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation("androidx.room:room-guava:$room_version")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
+
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$room_version")
+}
+
+```
+
+Dentro do Room, há 3 principais componentes, sendo
+
+- Entidades de Dados -> Representam tabelas no banco de dados do app.
+
+``` java
+
+@Entity
+data class User(
+    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
+)
+
+```
+
+- Objetos de Acesso a Dados (DAO) -> Fornece métodos para realizar consulta, atualização, inserção e exclusão de dados. 
+
+``` java
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
+
+    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
+    fun loadAllByIds(userIds: IntArray): List<User>
+
+    @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
+           "last_name LIKE :last LIMIT 1")
+    fun findByName(first: String, last: String): User
+
+    @Insert
+    fun insertAll(vararg users: User)
+
+    @Delete
+    fun delete(user: User)
+}
+
+```
+
+- Classe de Banco de Dados -> Serve como ponto de partida acessar a conexão com os dados persistidos e mantem a configurações necessárias para acessar o banco.
+
+``` java
+
+// Definimos a classe bastrata de configuração do banco
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+
+// Definimos uma variável que representará o banco
+val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
+
+// Realizamos consultas com o DAO específico
+val userDao = db.userDao()
+val users: List<User> = userDao.getAll()
+
+```
+
+### Entidades
+
