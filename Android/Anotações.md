@@ -641,6 +641,81 @@ Um serviço pode receber três níveis diferentes, e em cada nível o serviço t
 
 **Serviço Vinculado** -> Ele serve para oferecer funcionalidades compartilhadas entre activities, é comumente associado a um servidor com arquitetura cliente-servidor, pois ele oferece funcionalidades que diversas telas podem compartilhar. Exemplos seriam, gerenciamento bluetooth, controle de download, cache de memória, etc... Ele ainda não serve para manter lógica de negócio ou lógica do sistema, pois essa não é a função de um serviço no Android.
 
+## Ciclo de Vida de um Service
+
+Dentro de um serviço, podemos encontrar seu funcionamento dentro de seu ciclo de vida, que pode ser representado por 4 passos, criação -> iniciação do serviço -> execução -> destruição.
+
+O ciclo de vida de um serviço no android apresenta 3 diferentes níveis, sendo:
+
+**onCreate()** -> Esse método é chamado 1 vez quando o serviço é criado, ideal para inicialização de threads e variáveis. Se você chamar o service várias vezes, o onCreate ocorre apenas na primeira chamada.
+
+**onStartCommand()** -> Esse é o método que executa quando o serviço é inicializado por algum componente. Aqui devemos inserir toda a lógica do serviço e o que ele deve fazer. Esse método possui 3 valores de retorno que informam o que o android deve fazer se o processo morrer:
+
+- START_STICKY ->  Tenta recriar o serviço depois.
+- START_NOT_STICKY -> Não recria automaticamente.
+- START_REDELIVER_INTENT -> Recria o serviço e reenviará o último intent.
+
+**onDestroy()** -> O serviço é destruido e realiza a limpeza da memória, parando threads, fechando conexões, etc...
+
+## Criando um Service
+
+Vamos criar um serviço simples que conta números e escreve no **Logcat** para entendermos como criar um serviço.
+
+``` java
+
+class ContadorService : Service() {                 // Todo serviço precisa extender da classe Service()
+
+    private var executando = true                   // Essa variável controla o Loop da Coroutine
+
+    override fun onCreate() {
+        super.onCreate()
+
+        Log.d("SERVICO", "onCreate chamado")
+    }
+
+    override fun onStartCommand(
+        intent: Intent?,
+        flags: Int,
+        startId: Int
+    ): Int {
+
+        Log.d("SERVICO", "onStartCommand chamado")
+
+        CoroutineScope(Dispatchers.IO).launch {
+
+            var contador = 0
+
+            while (executando) {
+
+                Log.d(
+                    "SERVICO",
+                    "Serviço rodando: $contador"
+                )
+
+                contador++
+
+                delay(1000)
+            }
+        }
+
+        return START_STICKY
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        executando = false
+
+        Log.d("SERVICO", "onDestroy chamado")
+    }
+
+    override fun onBind(intent: Intent?): IBinder? {
+        return null
+    }
+}
+
+```
+
 ---
 
 # Jetpack Compose
@@ -905,7 +980,8 @@ Box() {
    Button(
       onClick = {},
       modifier = Modifier.align(Alignment.BottonEnd) {
-      Text("Botão")
+      
+        Text("Botão")
    }
 }
 
@@ -941,6 +1017,126 @@ fun CampoNome() {
 
 ```
 
-## LounchedEffect
+O remember se torna um valor necessário praticamente em 99% dos casos que você cria um TextField ou outro input de valor.
+
+# Armazenamento de Dados e Arquivos
+
+O Android possui 4 tipos diferentes de armazenar dados do App dentro do sistema, sendo os seguintes tipos:
+
+- Armazenamento Específico do App: Permite armazenar arquivos que serão utilizados pelo App, sendo armazenado em um diretório dedicado.
+
+- Armazenamento Compartilhado: Permite armazenar dados que podem ser utilizados por outros apicativos, como mídias, documentos e outros arquivos.
+
+- Preferências: Armazene dados particulares e primitivos usando sistema de pares chave-valor.
+
+- Bancos de Dados: Armazene dados estruturados em um banco de dados particular usando a biblioteca de persistência do Room.
+
+Através do seguinte link [Click Aqui](https://developer.android.com/training/data-storage?hl=pt-br) você pode consultar as informações estudadas na persistência de dados.
+
+## Banco de Dados
+
+A biblioteca de persistência Room oferece uma camada de abstração para acessar o SQLite do Android. Para utilizar o Room no aplicativo, precisamos adicionar algumas dependências no Gradle do app.
+
+``` bash
+
+dependencies {
+    val room_version = "2.8.4"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // optional - RxJava2 support for Room
+    implementation("androidx.room:room-rxjava2:$room_version")
+
+    // optional - RxJava3 support for Room
+    implementation("androidx.room:room-rxjava3:$room_version")
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation("androidx.room:room-guava:$room_version")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
+
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$room_version")
+}
+
+```
+
+Dentro do Room, há 3 principais componentes, sendo
+
+- Entidades de Dados -> Representam tabelas no banco de dados do app.
+
+``` java
+
+@Entity
+data class User(
+    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
+)
+
+```
+
+- Objetos de Acesso a Dados (DAO) -> Fornece métodos para realizar consulta, atualização, inserção e exclusão de dados. 
+
+``` java
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
+
+    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
+    fun loadAllByIds(userIds: IntArray): List<User>
+
+    @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
+           "last_name LIKE :last LIMIT 1")
+    fun findByName(first: String, last: String): User
+
+    @Insert
+    fun insertAll(vararg users: User)
+
+    @Delete
+    fun delete(user: User)
+}
+
+```
+
+- Classe de Banco de Dados -> Serve como ponto de partida acessar a conexão com os dados persistidos e mantem a configurações necessárias para acessar o banco.
+
+``` java
+
+// Definimos a classe bastrata de configuração do banco
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+
+// Definimos uma variável que representará o banco
+val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
+
+// Realizamos consultas com o DAO específico
+val userDao = db.userDao()
+val users: List<User> = userDao.getAll()
+
+```
+
+### Entidades
+
+
 
 
