@@ -118,3 +118,40 @@ public class Cachorro extends Animal {
 }
 
 ```
+
+# Classe IO
+
+## File Class
+
+Essa é a classe do java que representa arquivos e diretórios de disco. Essa classe não abre arquivos de dados e não possui capacidade de processar os dados dentro de arquivos. A classe File possui 4 construtores diferentes.
+
+``` java
+
+public File(String name) // Especifica o name de um arquivo ou diretório para associar com o objeto instanciado
+public File(String pathtoname, String name) // Utiliza o pathtoname para localizar o arquivo pelo name
+public File(File directory, String name) // Utiliza um objeto File como diretório para localizar um arquivo
+public File(URI uri) // Utiliza um objeto URI para localizar o arquivo
+
+```
+
+A classe File possui diversos métodos utilitários que permitem manipular arquivos dentro do dispositivo.
+
+``` java 
+
+boolean canRead()           // retorna true se o aplicativo pode ler o arquivo especificado; false, caso contrário;
+boolean canWrite()          // retorna true se o aplicativo pode modificar o arquivo especificado; false, caso contrário;
+boolean delete()            // exclui o arquivo ou diretório especificado pelo aplicativo retornando true se a exclusão foi realizada com sucesso; false, caso contrário;
+boolean exits()             // retorna true se o nome usado como argumento no construtor File indica um arquivo ou diretório existente; false, caso contrário;
+String getAbsolutePath()    // retorna uma String com o caminho absoluto do arquivo ou diretório. Um caminho absoluto contém o caminho completo com todos os diretórios desde o diretório-raiz até o arquivo ou o diretório especificado;
+String getName()            // retorna uma String com o nome do arquivo ou diretório;
+String getParent()          // retorna uma String com o diretório-pai do arquivo ou diretório;
+String getPath()            // retorna uma String com o caminho do arquivo ou diretório;
+boolean isFile()            // retorna true se o nome usado como argumento no construtor File é um arquivo; false, caso contrário;
+boolean isDirectory()       // retorna true se o nome usado como argumento no construtor File é um diretório; false, caso contrário;
+long lastModified()         // retorna um inteiro longo que representa a data/hora em que o arquivo ou diretório foi modificado pela última vez;
+long length()               // retorna o comprimento do arquivo em bytes. Se for um diretório, o valor 0 será retornado;
+String[] list()             // retorna um array de strings com os nomes de arquivos e diretórios que representam o conteúdo de um diretório. Retorna null se o objeto File for um arquivo;
+boolean mkdir()             // cria o diretório especificado pelo aplicativo retornando true se a operação foi realizada com sucesso; false, caso contrário;
+boolean mkdirs()            // cria toda a estrutura do diretório especificado pelo aplicativo retornando true se a operação foi realizada com sucesso; false, caso contrário.
+
+```
