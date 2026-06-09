@@ -155,3 +155,17 @@ boolean mkdir()             // cria o diretório especificado pelo aplicativo re
 boolean mkdirs()            // cria toda a estrutura do diretório especificado pelo aplicativo retornando true se a operação foi realizada com sucesso; false, caso contrário.
 
 ```
+
+# Java Net
+
+O pacote java.net fornece classes com métodos que permite o programador implementar aplicações com rede em java, divide as classes em 2 aspectos, o **nível de socket** (transmissão de dados) e o **alto nível** (URLs e URIs).
+
+As principais classes desse pacote incluem:
+
+- Socket -> Implementa sockets TCP para conexão bidirecional
+- ServerSocket -> Implementa sockets TCP do lado do servidor
+- DatagramSocket -> Representa um socket para envio e recepção de pacotes UDP
+- DatagramPacket -> Representa o pacote de dados enviado ou recebido via UDP.
+- URI -> Representa um Uniform Resource Identifier genérico.
+- URL -> Representa um Uniform Resource Locator e permite acessar recursos na web.
+- InetAddress -> Abstração que representa um endereço IP (tanto IPv4 quanto IPv6).
