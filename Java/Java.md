@@ -169,3 +169,38 @@ As principais classes desse pacote incluem:
 - URI -> Representa um Uniform Resource Identifier genérico.
 - URL -> Representa um Uniform Resource Locator e permite acessar recursos na web.
 - InetAddress -> Abstração que representa um endereço IP (tanto IPv4 quanto IPv6).
+
+# Anotations
+
+As anotations são formas de você marcar algum código com uma informação adicional, o Java fornece algumas anotations padrões e outras podem ser definidas diretamente pelo usuário.
+O java fornece anotations de uso comum, que se tornam próprias da linguagem e disponíveis para uso, são elas:
+
+- @Override -> Indica que um método está sobrescrevendo um método da superclasse.
+- @Deprecated -> Informa que o elemento se tornou depreciado e está obsoleto.
+- @Documented -> Garante que a anotação escrita será incluida na documentação gerada pelo Javadoc
+- @Inherited -> Permite que a anotação seja herdada para subclasses.
+- @Repeatable -> Permite que a anotação seja aplicada várias vezes para o mesmo elemento.
+
+## Anotation Costumizada
+
+O java nos fornece um tipo de arquivo se torna algo similar a uma interface, mas é feita para montar anotações, é chamada de **@interface**, mas para utilizar o @interface, devemos criar também 2 anotações específicas, que seria a **@Retention**, que define até que ponto da aplicação, a anotação ficará ativa e a **@Target**, que define quais dados poderão ser recebidos pela anotation.
+
+``` java
+
+@Retention()
+@Target()
+public @interface MyAnotation() {
+
+}
+
+```
+
+Os valores possíveis para o Target seriam:
+
+- ElementType.TYPE -> Define para classes, interfaces ou enum.
+- ElementType.FIELD -> Define para campos (variáveis)
+- ElementType.METHOD -> Define para métodos
+- ElementType.PARAMETER -> Define para parâmetros dentro de métodos ou construtores.
+- ElementType.TYPE_USE -> Qualquer tipo de dado pode utilizar.
+
+Os parâmetros de uma anotação são definidas como métodos, dessa forma, para representar um valor manipulatório dentro da anotation, devemos usar ***tipo nome()***, e isso faz com que seja obrigatório o uso do parâmetro.
