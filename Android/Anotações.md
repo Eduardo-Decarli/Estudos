@@ -832,7 +832,7 @@ Abaixo podemos visualizar melhor as principais propriedades que o @Preview pode 
 
 O Jetpack Compose oferece alguns componentes nativos que permitem colocar widgets na tela, como texto, imagens, botões, etc...
 
-Text -> A forma mais simples de imprimir um texto na tela é utilizando o elemento ***Text*** combinado com uma String, como no exemplo abaixo:
+**Text** -> A forma mais simples de imprimir um texto na tela é utilizando o elemento ***Text*** combinado com uma String, como no exemplo abaixo:
 
 ``` Java
 
@@ -843,7 +843,53 @@ fun SimpleText() {
 
 ```
 
-Button -> O Jetpack Compose oferece 5 tipos diferentes de botões, de acordo com um tipo, sendo sólido, Tonal Sólido, Elevada, Delineado e Texto. Cada um possui uma estilização e exibição diferente. Para imprimir um botão dentro da tela, precisamos usar o elemento: 
+**TextField** -> O TextField é um campo de input dentro do composable, ele possui uma série de propriedades possíveis que podem ser personalizadas, mas sua definição simples seria essa:
+
+``` java
+
+var text;
+TextField(
+    value = text,
+    onValueChange = { newText ->
+        text = newText
+    }
+)
+
+````
+
+Dessa forma podemos criar um campo de entrada de texto símples, e ainda adicionar outras caracterisitcas através das propriedades, como enable, readOnly, label, etc... Abaixo vamos deixar um código contendo todas as propriedades possíveis.
+
+``` java
+
+@Composable
+fun TextField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: @Composable (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions(),
+    singleLine: Boolean = false,
+    maxLines: Int = Int.MAX_VALUE,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    shape: Shape =
+        MaterialTheme.shapes.small.copy(bottomEnd = ZeroCornerSize, bottomStart = ZeroCornerSize),
+    colors: TextFieldColors = TextFieldDefaults.textFieldColors()
+)
+
+```
+
+Para mais informações do TextField, acesse o seguinte link [TextField-Jetpack-Compose](https://www.jetpackcompose.net/textfield-in-jetpack-compose)
+
+**Button** -> O Jetpack Compose oferece 5 tipos diferentes de botões, de acordo com um tipo, sendo sólido, Tonal Sólido, Elevada, Delineado e Texto. Cada um possui uma estilização e exibição diferente. Para imprimir um botão dentro da tela, precisamos usar o elemento: 
 
 ``` Java
 
@@ -859,7 +905,7 @@ fun SimpleButton() {
 
 - O elemento de botão exige que você passe para ele a ação de onClick obrigatoriamente.
 
-Image -> Essa é a forma de carregar fotos dentro do Composable, devemos definir uma foto e passar 2 parâmetros, sendo o Painter, que é a localização da foto vinda diretamente da pasta drawable e o contentDescription, que é o conteúdo como String.
+**Image** -> Essa é a forma de carregar fotos, como Bitmaps ou vetores, dentro do Composable, devemos definir uma foto e passar 2 parâmetros, sendo o Painter, que é a localização da foto vinda diretamente da pasta drawable e o contentDescription, que é o conteúdo como String.
 
 ``` Java
 
@@ -919,10 +965,6 @@ Suas propriedades são
 | `keyboardActions`      | Ações do teclado                    |
 | `visualTransformation` | Máscara/ocultação do texto          |
 
-
-
-
-
 ## Layouts
 
 Os layouts, também chamados de containers servem para definir como o conteúdo será montado na tela, e para isso, podemos usar vários tipos diferentes de containers.
@@ -969,6 +1011,189 @@ Row(
 }
 
 ```
+
+Box -> O box é um elemento de layout que serve para juntar mais de um elemento em uma área e realizar sobreposição, onde normalmente o primeiro elemento fica no fundo. Ele serve para empilhar elementos, colocando itens em Canadá, realizando **Overlay**.
+
+``` Java
+
+Box() {
+   Text("Texto de Fundo")
+
+   Button(
+      onClick = {},
+      modifier = Modifier.align(Alignment.BottonEnd) {
+      
+        Text("Botão")
+   }
+}
+
+```
+
+Spacer -> O spacer é um elemento que serve para dar uma margem ou espaçamento entre dois outros elementos na tela, podemos definir um tamanho do espaçamento pela sua propriedade.
+
+``` java
+
+Column {
+    Text("Texto 1")
+    Spacer(modifier = Modifier.height(16.dp)) // Separa os textos em 16dp
+    Text("Texto 2")
+}
+
+```
+
+## Remember
+
+No Compose, a interface pode ser redesenhada várias vezes automaticamente quando os dados mudam e sempre que o estado muda, a função @composable pode executar novamente.
+
+E no Jetpack Compose o **remember state** é uma função que permite armazenar objetos na memória durante a composição inicial das telas, permitindo utilizar esses objetos em recomposições posteriores sem que eles reiniciem seus valores a cada recomposição. Existem 2 maneiras de definir a lembrança, que seria através do equals (=) ou através da palavra-chave de delegação (by).
+
+Utilizando o By, podemos armazenar um valor que será mantido pelo estado e utilizado/alterado posteriormente.
+
+``` java 
+
+@Composable
+fun CampoNome() {
+
+    var nome by remember {      // Agora o nome irá permanecer na memória mesmo após a recomposição.
+        mutableStateOf("")
+    }
+
+    TextField(
+        value = nome,
+        onValueChange = {
+            nome = it
+        },
+        label = {
+            Text("Nome")
+        }
+    )
+}
+
+```
+
+O remember se torna um valor necessário praticamente em 99% dos casos que você cria um TextField ou outro input de valor.
+
+# Armazenamento de Dados e Arquivos
+
+O Android possui 4 tipos diferentes de armazenar dados do App dentro do sistema, sendo os seguintes tipos:
+
+- Armazenamento Específico do App: Permite armazenar arquivos que serão utilizados pelo App, sendo armazenado em um diretório dedicado.
+
+- Armazenamento Compartilhado: Permite armazenar dados que podem ser utilizados por outros apicativos, como mídias, documentos e outros arquivos.
+
+- Preferências: Armazene dados particulares e primitivos usando sistema de pares chave-valor.
+
+- Bancos de Dados: Armazene dados estruturados em um banco de dados particular usando a biblioteca de persistência do Room.
+
+Através do seguinte link [Click Aqui](https://developer.android.com/training/data-storage?hl=pt-br) você pode consultar as informações estudadas na persistência de dados.
+
+## Banco de Dados
+
+A biblioteca de persistência Room oferece uma camada de abstração para acessar o SQLite do Android. Para utilizar o Room no aplicativo, precisamos adicionar algumas dependências no Gradle do app.
+
+``` bash
+
+dependencies {
+    val room_version = "2.8.4"
+
+    implementation("androidx.room:room-runtime:$room_version")
+
+    // If this project uses any Kotlin source, use Kotlin Symbol Processing (KSP)
+    // See Add the KSP plugin to your project
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // If this project only uses Java source, use the Java annotationProcessor
+    // No additional plugins are necessary
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+
+    // optional - RxJava2 support for Room
+    implementation("androidx.room:room-rxjava2:$room_version")
+
+    // optional - RxJava3 support for Room
+    implementation("androidx.room:room-rxjava3:$room_version")
+
+    // optional - Guava support for Room, including Optional and ListenableFuture
+    implementation("androidx.room:room-guava:$room_version")
+
+    // optional - Test helpers
+    testImplementation("androidx.room:room-testing:$room_version")
+
+    // optional - Paging 3 Integration
+    implementation("androidx.room:room-paging:$room_version")
+}
+
+```
+
+Dentro do Room, há 3 principais componentes, sendo
+
+- Entidades de Dados -> Representam tabelas no banco de dados do app.
+
+``` java
+
+@Entity
+data class User(
+    @PrimaryKey val uid: Int,
+    @ColumnInfo(name = "first_name") val firstName: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
+)
+
+```
+
+- Objetos de Acesso a Dados (DAO) -> Fornece métodos para realizar consulta, atualização, inserção e exclusão de dados. 
+
+``` java
+
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM user")
+    fun getAll(): List<User>
+
+    @Query("SELECT * FROM user WHERE uid IN (:userIds)")
+    fun loadAllByIds(userIds: IntArray): List<User>
+
+    @Query("SELECT * FROM user WHERE first_name LIKE :first AND " +
+           "last_name LIKE :last LIMIT 1")
+    fun findByName(first: String, last: String): User
+
+    @Insert
+    fun insertAll(vararg users: User)
+
+    @Delete
+    fun delete(user: User)
+}
+
+```
+
+- Classe de Banco de Dados -> Serve como ponto de partida acessar a conexão com os dados persistidos e mantem a configurações necessárias para acessar o banco.
+
+``` java
+
+// Definimos a classe bastrata de configuração do banco
+@Database(entities = [User::class], version = 1)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun userDao(): UserDao
+}
+
+// Definimos uma variável que representará o banco
+val db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "database-name"
+        ).build()
+
+// Realizamos consultas com o DAO específico
+val userDao = db.userDao()
+val users: List<User> = userDao.getAll()
+
+```
+
+### Entidades
+
+
+
+
 
 Box -> O box é um elemento de layout que serve para juntar mais de um elemento em uma área e realizar sobreposição, onde normalmente o primeiro elemento fica no fundo. Ele serve para empilhar elementos, colocando itens em Canadá, realizando **Overlay**.
 
@@ -1136,7 +1361,4 @@ val users: List<User> = userDao.getAll()
 ```
 
 ### Entidades
-
-
-
 

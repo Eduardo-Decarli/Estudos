@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# SpringBoot
-=======
 # Guia de Comandos Git
 
 Bem-vindo ao repositório de comandos Git! Este repositório foi criado para melhorar meu entendimento do GIT e para estudantes que queiram se aprofundar nos comandos mais utilizados no Git de maneira prática e eficiente.
@@ -42,4 +39,3 @@ Você pode navegar pelo arquivo `.md` deste repositório e encontrar os comandos
 
 Se você quiser contribuir para o projeto, fique à vontade para abrir um pull request ou sugerir novas melhorias. Todo o tipo de contribuição é bem-vinda!
 
->>>>>>> git/main

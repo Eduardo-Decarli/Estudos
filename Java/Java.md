@@ -118,3 +118,89 @@ public class Cachorro extends Animal {
 }
 
 ```
+
+# Classe IO
+
+## File Class
+
+Essa é a classe do java que representa arquivos e diretórios de disco. Essa classe não abre arquivos de dados e não possui capacidade de processar os dados dentro de arquivos. A classe File possui 4 construtores diferentes.
+
+``` java
+
+public File(String name) // Especifica o name de um arquivo ou diretório para associar com o objeto instanciado
+public File(String pathtoname, String name) // Utiliza o pathtoname para localizar o arquivo pelo name
+public File(File directory, String name) // Utiliza um objeto File como diretório para localizar um arquivo
+public File(URI uri) // Utiliza um objeto URI para localizar o arquivo
+
+```
+
+A classe File possui diversos métodos utilitários que permitem manipular arquivos dentro do dispositivo.
+
+``` java 
+
+boolean canRead()           // retorna true se o aplicativo pode ler o arquivo especificado; false, caso contrário;
+boolean canWrite()          // retorna true se o aplicativo pode modificar o arquivo especificado; false, caso contrário;
+boolean delete()            // exclui o arquivo ou diretório especificado pelo aplicativo retornando true se a exclusão foi realizada com sucesso; false, caso contrário;
+boolean exits()             // retorna true se o nome usado como argumento no construtor File indica um arquivo ou diretório existente; false, caso contrário;
+String getAbsolutePath()    // retorna uma String com o caminho absoluto do arquivo ou diretório. Um caminho absoluto contém o caminho completo com todos os diretórios desde o diretório-raiz até o arquivo ou o diretório especificado;
+String getName()            // retorna uma String com o nome do arquivo ou diretório;
+String getParent()          // retorna uma String com o diretório-pai do arquivo ou diretório;
+String getPath()            // retorna uma String com o caminho do arquivo ou diretório;
+boolean isFile()            // retorna true se o nome usado como argumento no construtor File é um arquivo; false, caso contrário;
+boolean isDirectory()       // retorna true se o nome usado como argumento no construtor File é um diretório; false, caso contrário;
+long lastModified()         // retorna um inteiro longo que representa a data/hora em que o arquivo ou diretório foi modificado pela última vez;
+long length()               // retorna o comprimento do arquivo em bytes. Se for um diretório, o valor 0 será retornado;
+String[] list()             // retorna um array de strings com os nomes de arquivos e diretórios que representam o conteúdo de um diretório. Retorna null se o objeto File for um arquivo;
+boolean mkdir()             // cria o diretório especificado pelo aplicativo retornando true se a operação foi realizada com sucesso; false, caso contrário;
+boolean mkdirs()            // cria toda a estrutura do diretório especificado pelo aplicativo retornando true se a operação foi realizada com sucesso; false, caso contrário.
+
+```
+
+# Java Net
+
+O pacote java.net fornece classes com métodos que permite o programador implementar aplicações com rede em java, divide as classes em 2 aspectos, o **nível de socket** (transmissão de dados) e o **alto nível** (URLs e URIs).
+
+As principais classes desse pacote incluem:
+
+- Socket -> Implementa sockets TCP para conexão bidirecional
+- ServerSocket -> Implementa sockets TCP do lado do servidor
+- DatagramSocket -> Representa um socket para envio e recepção de pacotes UDP
+- DatagramPacket -> Representa o pacote de dados enviado ou recebido via UDP.
+- URI -> Representa um Uniform Resource Identifier genérico.
+- URL -> Representa um Uniform Resource Locator e permite acessar recursos na web.
+- InetAddress -> Abstração que representa um endereço IP (tanto IPv4 quanto IPv6).
+
+# Anotations
+
+As anotations são formas de você marcar algum código com uma informação adicional, o Java fornece algumas anotations padrões e outras podem ser definidas diretamente pelo usuário.
+O java fornece anotations de uso comum, que se tornam próprias da linguagem e disponíveis para uso, são elas:
+
+- @Override -> Indica que um método está sobrescrevendo um método da superclasse.
+- @Deprecated -> Informa que o elemento se tornou depreciado e está obsoleto.
+- @Documented -> Garante que a anotação escrita será incluida na documentação gerada pelo Javadoc
+- @Inherited -> Permite que a anotação seja herdada para subclasses.
+- @Repeatable -> Permite que a anotação seja aplicada várias vezes para o mesmo elemento.
+
+## Anotation Costumizada
+
+O java nos fornece um tipo de arquivo se torna algo similar a uma interface, mas é feita para montar anotações, é chamada de **@interface**, mas para utilizar o @interface, devemos criar também 2 anotações específicas, que seria a **@Retention**, que define até que ponto da aplicação, a anotação ficará ativa e a **@Target**, que define quais dados poderão ser recebidos pela anotation.
+
+``` java
+
+@Retention()
+@Target()
+public @interface MyAnotation() {
+
+}
+
+```
+
+Os valores possíveis para o Target seriam:
+
+- ElementType.TYPE -> Define para classes, interfaces ou enum.
+- ElementType.FIELD -> Define para campos (variáveis)
+- ElementType.METHOD -> Define para métodos
+- ElementType.PARAMETER -> Define para parâmetros dentro de métodos ou construtores.
+- ElementType.TYPE_USE -> Qualquer tipo de dado pode utilizar.
+
+Os parâmetros de uma anotação são definidas como métodos, dessa forma, para representar um valor manipulatório dentro da anotation, devemos usar ***tipo nome()***, e isso faz com que seja obrigatório o uso do parâmetro.
