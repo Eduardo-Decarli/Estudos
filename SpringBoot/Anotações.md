@@ -1,3 +1,15 @@
+# Comandos do Spring Boot
+
+Assim como outros programas, o spring boot pode receber comandos via CLI para poder executar funções específicas. Para executar funções específicas do spring, fazemos isso via **Spring Boot CLI**, **gerenciador de pacotes** ou via **jar** na classe main do target gerado após a compilação.
+
+- Inicialização do Spring via Maven
+
+``` bash
+
+mvn spring-boot:run
+
+```
+
 # Exceptions no Spring
 
 O Spring lida com 3 mundos diferentes, e precisa lidar entre o java, Http e regras de negócio, para isso, o Spring produziu um sistema próprio para lidar com exceptions no ambiente. Onde ele capta as exceptions e automatiza as respostas de erro como respostas da API Rest.
