@@ -28,3 +28,16 @@ A superclasse Throwable oferece alguns métodos úteis para poder entender melho
 - getMessage(): Retorna uma mensagem contendo o motivo do erro gerado.
 
 No Java, ele disponibiliza um System.err, que permite imprimir erros no console com uma cor destaque (vermelho).
+
+# Spring Security
+
+## Interface Autentication
+
+A interface Authentication atua como um **contrato** que guarda as informações do usuário logado durante o ciclo de vida da requisição. Seus principais elementos são:
+
+- Principal: Identifica o usuário (pode ser uma String, como um username, ou um objeto completo que implementa UserDetails).
+- Credentials: Geralmente a senha ou token usado para provar a identidade do usuário (é limpa após a autenticação bem-sucedida).
+- Authorities: As permissões, papéis (roles) ou escopos atribuídos ao usuário (ex: ROLE_ADMIN).
+- Authenticated: Um booleano que indica se a identidade foi verificada com sucesso.
+
+Quando alguém tenta fazer login, o AuthenticationManager recebe essas informações, valida com o sistema (como um banco de dados) e, se estiver correto, retorna um objeto Authentication preenchido. Esse objeto é armazenado no SecurityContextHolder para que o restante da aplicação saiba quem está fazendo a requisição

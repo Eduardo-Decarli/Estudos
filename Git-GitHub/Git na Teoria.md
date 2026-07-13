@@ -2,7 +2,8 @@
 
 ## 🚀 GIT
 
-**Git** é um sistema de controle de versão que permite:
+Essencialmente o **Git** é um sistema de controle de versão, que foi desenvolvido por Linus Torvalds, o mesmo criador do Linux, Linus utilizou esse sistema para manter e gerenciar o próprio código do Linux.
+Hoje em dia, o Git foi extremamente difundido no mundo da programação e suas principais características são:
 
 - Rastrear alterações em arquivos.
 - Coordenar o trabalho em projetos entre várias pessoas.
