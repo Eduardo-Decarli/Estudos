@@ -10,6 +10,37 @@ JRE -> Significa Java Runtime Environment, e dentro desse ambiente, podemos enco
 
 Kit de Desenvolvimento Java -> Esse kit fornece o compilador Javac, Jar, Javadoc, JDB, JavaP, KeyTool e Jarsigner. 
 
+# Como instalar o Java
+
+Para instalar o Java, devemos baixar o JDK do Java dentro do site oficial da Oracle, podemos baixar a versão **installer** para que o JDK decida as configurações de instalação, ou podemos utilizar o **Compressed Archive**, que irá baixar os arquivos necessários em um arquivo compactado. 
+
+Ao baixar o **Installer**, basta seguir com uma instalação normal.
+
+Ao baixar o **Compressed Archive**, irá ser baixado um arquivo .zip que deverá ser descompactado dentro de uma pasta a sua escolha no computador.
+
+Ao seguir com o Compressed Archive, devemos configurar as variáveis de ambiente do windows. Digite "variáveis de Ambientes". Se você for um administrador do sistema, poderá criar uma variável no escopo do sistema, caso contrário, apenas no escopo do seu próprio usuário.
+
+Clique em "NOVO" e defina 
+
+- Nome da Variável=JAVA_HOME
+- Valor da variável="caminho onde foi armazenado o JDK.
+
+Após definir as variáveis, devemos editar o path do windows para que ele possa encontrar o executável do Java dentro do caminho atribuido a JAVA_HOME. Edite a variável de ambiente chamada **path** e crie uma nova linha da seguinte forma:
+
+``` bash
+
+%JAVA_HOME%\bin
+
+```
+
+Independente do tipo de instalação, podemos verificar se o Java foi corretamente instalado executando o comando:
+
+``` bash
+
+java -version
+
+```
+
 # LifeCicle do Java
 
 Para um programa Java ser desenvolvido, ele passa por diversas etapas e processos para transformar um código-fonte em algo intendível pelo computador.
