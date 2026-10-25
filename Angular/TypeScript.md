@@ -4,8 +4,6 @@
 
 # Conceitos Fundamentais
 
-
-
 **TypeScript:** É um superset para o JavaScript, ou seja, uma forma de mascarar a programação do javascript para uma forma mais fortemente tipada e escapando um pouco das regras e convenções naturais da linguagem. O TypeScript pode ser utilizado a partir da instalação via npm rodando o comando ``npm install typescript --save-dev``. 
 
 - O typescript é um dos projetos que mais possuem contribuições no GitHub.
