@@ -2,6 +2,7 @@
 
 [Instalando o Angular CLI](#instalação-do-angular)   
 [Conceitos Importantes do Angular](#conceitos-importantes-do-angular)   
+[Arquitetura do Angular](#arquitetura-do-angular)     
 [Anatomia de um Componente](#componentes)   
 [Estilizando com o Angular](#estilização-com-angular)   
 [Angular Material](#angular-material)   
@@ -9,6 +10,7 @@
 [Comunicação Entre Componentes (Input and Output)](#comunicação-entre-componentes)  
 [Ciclo de vida do Componente](#ciclo-de-vida-do-componente)  
 [Encapsulamento de Estilos](#encapsulamento-de-estilos)  
+[POO com Angular](#POO-com-angular)   
 
 [Diretivas](#diretivas)  
   - [Diretivas de Atributos](#diretivas-de-atributo)  

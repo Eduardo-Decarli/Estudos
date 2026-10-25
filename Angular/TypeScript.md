@@ -1,6 +1,36 @@
-TypeScript: É um superset para o JavaScript, ou seja, uma forma de mascarar a programação do javascript para uma forma mais fortemente tipada e escapando um pouco das regras e convenções naturais da linguagem. O TypeScript pode ser utilizado a partir da instalação via npm rodando o comando ``npm install typescript --save-dev``. 
+# Sumário
 
-Compilação Typescript para JavaScript: O TypeScript pode ser compilado e convertido para JavaScript utilizando o seguinte comando:
+[Conceitos Fundamentais](#conceitos-fundamentais)
+
+# Conceitos Fundamentais
+
+
+
+**TypeScript:** É um superset para o JavaScript, ou seja, uma forma de mascarar a programação do javascript para uma forma mais fortemente tipada e escapando um pouco das regras e convenções naturais da linguagem. O TypeScript pode ser utilizado a partir da instalação via npm rodando o comando ``npm install typescript --save-dev``. 
+
+- O typescript é um dos projetos que mais possuem contribuições no GitHub.
+
+**JavaScript XML (JSX):** É uma extensão do JavaScript que permite escrever código muito semelhante ao HTML dentro de um arquivo de lógica, foi criado pela equipe do **React** para facilitar a criação de **Interfaces de Usuários (UI)**.
+
+- **Combinação de Lógica e Visual:** Permite criar o comportamento e a estrutura visual em um mesmo ambiente (no mesmo lugar).
+
+- **Uso de Chaves({}):** Pode-se incorporar qualquer expressão javascript apenas utilizando chaves no arquivo de código.
+
+- **Leitura do Navegador:** O navegador não irá ler o JSX e sim um código montado por um processo de transpilação que converte o JSX em chamadas de função JavaScript, como variable.createElement().
+
+
+``` javascript
+
+// Exemplo de código JSX
+const nome = "Maria";
+const elemento = <h1>Olá, {nome}!</h1>;
+
+// Após a Conversão
+const elemento = React.createElement('h1', null, 'Olá, ', nome, '!');
+
+```
+
+- **Compilação Typescript para JavaScript:** O TypeScript pode ser compilado e convertido para JavaScript utilizando o seguinte comando:
 
 ``` bash
 
