@@ -1,6 +1,8 @@
 # Sumário
 
-[Conceitos Fundamentais](#conceitos-fundamentais)
+[Conceitos Fundamentais](#conceitos-fundamentais)   
+[Ambiente Inicial](#ambiente-inicial)   
+[TSConfig.ts](#tsconfigts)
 
 # Conceitos Fundamentais
 
@@ -39,6 +41,61 @@ npx tsc
 Isso fará a geração de uma arquivo .js contendo o novo código gerado a partir do typescript
 
 - Por padrão, ao realizar o comando de instalação, será gerado os arquivos do node e utilitários de dependências, podemos dar o comando ``npx tsc --init`` para que o npx possa nos servir o arquivo de configuração do typescript
+
+# Ambiente Inicial
+
+O typescript é instalado através do Node.JS, para isso, precisa-se dele instalado no dispositivo para dar início ao processo de configuração de ambiente do typescript. No site do TypeScript, há uma área de instação global onde possui as linhas de comando necessárias para baixar o typescript usando o NPM.
+
+``` bash
+
+# Baixa a ultima versão do typescript de forma global
+npm install -g typescript
+
+# Verificar a versão do TypeScript
+tsc --version
+
+```
+
+# TSConfig.ts
+
+O arquivo TSConfig.ts é um arquivo de configuração interna do próprio Typescript que é gerado quando inicializamos um projeto typescript. Ele apresenta uma estrutura simples em um arquivo .json demonstrada da seguinte forma:
+
+``` json
+
+{
+    // O compilerOptions define as opções/configurações que o compilador irá seguir para compilar
+    "compilerOptions":{
+        "lib": ["es2015"],
+        "module": "commonjs",
+        "outDir": "dist",   // Define a pasta onde o JavaScript transpilado ficará armazenado
+        "sourceMap": true,
+        "strict": true,     // Define como verdadeiro o uso das verificações de tipos durante o processo de transpilação
+        "target": "es2015"  // Define a versão do JavaScript transpilado
+    },
+    // O include define onde o typescript irá procurar arquivos typescript para transpilar
+    "include": [
+        "src"
+    ],
+    // Define pastas e arquivos que serão excluidos da verificação e busca para transpilar
+    "exclude": [
+
+    ]
+}
+
+```
+
+Para mais informações sobre o uso do TSConfig.json, pode-se utiliar o site oficial do typescript para consultar configurações: [Site Oficial das referências do TSConfig.json](https://www.typescriptlang.org/tsconfig/#references).
+
+# Comandos TypeScript
+
+Para realizar ações dentro do TypeScript, devemos fazer uso do terminal e das linhas de comando que o próprio software do npm e do typescript (tsc) oferecem para nós:
+
+``` bash
+
+tsc ./app.ts    # Realiza a Transpilação de um arquivo específico que seja .ts
+tsc --init      # Inicializa o typescript no diretório atual e cria o arquivo tsconfig.json
+
+```
 
 ## Tipos de dados em TypeScript
 
