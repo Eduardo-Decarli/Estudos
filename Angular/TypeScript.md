@@ -2,7 +2,10 @@
 
 [Conceitos Fundamentais](#conceitos-fundamentais)   
 [Ambiente Inicial](#ambiente-inicial)   
-[TSConfig.ts](#tsconfigts)
+[TSConfig.ts](#tsconfigts)   
+[Tipos de Dados TypeScript](#tipos-de-dados-em-typescript)   
+[Wrapper Classes](#wrapper-classes)   
+
 
 # Conceitos Fundamentais
 
@@ -56,6 +59,17 @@ tsc --version
 
 ```
 
+# Comandos TypeScript
+
+Para realizar ações dentro do TypeScript, devemos fazer uso do terminal e das linhas de comando que o próprio software do npm e do typescript (tsc) oferecem para nós:
+
+``` bash
+
+tsc ./app.ts    # Realiza a Transpilação de um arquivo específico que seja .ts
+tsc --init      # Inicializa o typescript no diretório atual e cria o arquivo tsconfig.json
+
+```
+
 # TSConfig.ts
 
 O arquivo TSConfig.ts é um arquivo de configuração interna do próprio Typescript que é gerado quando inicializamos um projeto typescript. Ele apresenta uma estrutura simples em um arquivo .json demonstrada da seguinte forma:
@@ -86,44 +100,40 @@ O arquivo TSConfig.ts é um arquivo de configuração interna do próprio Typesc
 
 Para mais informações sobre o uso do TSConfig.json, pode-se utiliar o site oficial do typescript para consultar configurações: [Site Oficial das referências do TSConfig.json](https://www.typescriptlang.org/tsconfig/#references).
 
-# Comandos TypeScript
+# Tipos de dados em TypeScript
 
-Para realizar ações dentro do TypeScript, devemos fazer uso do terminal e das linhas de comando que o próprio software do npm e do typescript (tsc) oferecem para nós:
+Os tipos do Typescript são os mesmos tipos do JavaScript, apenas mudaremos a forma de declarar as variáveis para que fiquem explicitamente tipadas.
 
-``` bash
-
-tsc ./app.ts    # Realiza a Transpilação de um arquivo específico que seja .ts
-tsc --init      # Inicializa o typescript no diretório atual e cria o arquivo tsconfig.json
-
-```
-
-## Tipos de dados em TypeScript
-
-String: Utilizado para definir sequencia de caracteres
-Number: Representa Integer e Float 
-Boolean: Representa true ou false
-BigInt: Representa valores maiores que 2⁵³ - 1; é necessário identificar com um 'n' no final do número.
-Symbol: Utilizado para representar o tipo Symbol, ou seja, um identificador único de objetos.
-
-- Em typescript existem duas formas de declarar tipos de variáveis, a forma declarativa explícita e a inferência, usamos o tipo atribuido quando explicitamente falamos o tipo da variável e a forma inferência quando deixamos o contexto interpretar que variável terá que ser usada.
+Em typescript existem duas formas de declarar tipos de variáveis, a forma declarativa **explícita** e a **inferência**, usamos o tipo atribuido quando explicitamente falamos o tipo da variável e a forma inferência quando deixamos o contexto interpretar que variável terá que ser usada.
 
 ``` typescript
 
 // Tipo explícito
-let age: number = 23;
+let nome: string = 'Eduardo'
+let age: number = 22;
+let isValido: boolean = true;
 
+let animais: string[] = ['Elefante', 'Cachorro'];
+
+// Tipagem de objetos anônimos
+let carro: {
+    nome: string,
+    ano: number,
+    preco: number
+};
+
+// Instanciação de um objeto tipado
+carro = { nome: 'Toyota Yaris Sedan XS', ano: 2019, preco: 80000 };
+
+// Tipagem em Parâmetros
 function dizOi(nome: string, sobrenome: string): void {
     return nome + " " + sobrenome + ", Olá";
 }
 
 // Tipo inferência
-let nome = "Eduardo";
+let nomeInferido = "Eduardo";
 
 nome = 100 // Erro de conversão, o TS entende o contexto
-
-function dizOi(nome, sobrenome) {
-    return null;
-}
 
 ```
 
@@ -132,6 +142,8 @@ function dizOi(nome, sobrenome) {
 **Any e Void:** Em Typescript, pode-se determinar que o retorno de uma variável ou função é do tipo any ou void, o tipo any determina qualquer retorno, seja numero, string, vetor ou misturado, semelhante ao comportamento do JS, e tipo void não retorna nada.
 
 - Se utilizar um comentário e definir **@ts-ignore** acima de uma variávei, o typescript irá ignorar a validação de tipo da variável
+  
+![diagrama](image/image.png)
 
 ## Definição de Variáveis
 
@@ -169,3 +181,45 @@ class ImplementaPessoa {
         sexo: 'masculino'
     }
 }
+
+```
+
+# Wrapper Classes
+
+Assim como o Java ou o C#, o Typescript também possui tipos Wrapper, onde os tipos primitivos ascendem a um tipo objeto.
+
+No dia a dia, o typescript realiza o autoboxing automaticamente, então não há necessidade de ficar utilizando os tipos objetos (wrapper), pois ele faz isso automaticamente. Por exemplo, o tipo **string** consegue utilizar métodos que apenas o tipo **String** deveria poder.
+
+``` typescript
+
+let nome: string = "TypeScript";
+console.log(nome.toUpperCase()); // "TYPESCRIPT"
+
+```
+
+# Arrays
+
+Há duas formas de declarar arrays dentro do typescript, o primeiro é o método dos Colchetes, que representa um tipo primitivo de uso do array, o outro meio é o uso do **Array Object** que funciona de forma similar a um **List** do Java
+
+``` typescript
+
+// Arrays por Colchetes
+let frutas: string[] = ["abacaxi", "maça", "banana"];
+
+// Array Object
+let frutas: Array<string> = ["abacaxi", "maça", "banana"];
+
+// Array com New
+let frutas: string[] = new Array('abacaxi', 'maça', 'banana')
+
+```
+
+## Arrays com Spread Operator
+
+Quando se utiliza um array onde os valores internos são fixos e possuem um valor que não deve mudar, quando precisarmos manipular esse array no JS, podemos fazer uso do **Spread Operator**, que clona o array, nos permitindo motificar uma versão separada do original.
+
+``` typescript
+
+let litaNumeros: number[] = [1, 2, 3, 4, 5];
+let listaNumeros2: number[] = [...listaNumeros, 6, 7, 8, 9, 10];
+listaNumeros2[3] = 100;     // Não afetará o listaNumeros
