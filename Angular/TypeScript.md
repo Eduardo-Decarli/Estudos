@@ -216,7 +216,7 @@ let frutas: string[] = new Array('abacaxi', 'maça', 'banana')
 
 ## Arrays com Spread Operator
 
-Quando se utiliza um array onde os valores internos são fixos e possuem um valor que não deve mudar, quando precisarmos manipular esse array no JS, podemos fazer uso do **Spread Operator**, que clona o array, nos permitindo motificar uma versão separada do original.
+Quando se utiliza um array onde os valores internos são fixos e possuem um dvalor que não deve mudar, quando precisarmos manipular esse array no JS, podemos fazer uso do **Spread Operator**, que clona o array, nos permitindo motificar uma versão separada do original.
 
 ``` typescript
 
